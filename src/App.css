@@ -1,5 +1,138 @@
+a {
+  text-decoration: none;
+  color: black;
+}
+body::-webkit-scrollbar{
+  display:none;
+}
+body {
+  margin: 0;
+  padding: 5px;
+  height: 100vh;
+}
+
 .App {
   text-align: center;
+}
+
+.postcard-container {
+  /* border: 2px solid orange; */
+  overflow: hidden;
+  position: relative;
+  height : 100vh;
+}
+.postcard-container *{
+  object-fit: contain;
+}
+
+.controller {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  z-index: 9999;
+
+}
+
+.controller button {
+  border: 0;
+  background-color: transparent;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.controller button:hover{
+
+}
+
+
+.controller button span {
+  color: gray;
+}
+
+.photo-frame {
+  width: 100%;
+  height: 40vh;
+  background-color: black;
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+.poto-frame .swiper{
+  width:100%;
+  height:100%;
+}
+.photo-frame .swiper .swiper-wrapper{
+  width:100%;
+  height:100%;
+ 
+}
+.photo-frame .swiper .swiper-wrapper .swiper-slide{
+  width:100%;
+  height:100%;
+  
+}
+
+.photo-frame  img{
+  width :100%;
+  height : 40vh;  
+  object-fit :contain;
+
+}
+
+
+.calendar-container {
+  
+}
+
+.calendar-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin : 5px auto;
+
+  
+}
+button{
+  background-color: transparent;
+  border : 1px solid;
+}
+.calendar-header .title{
+  font-size:2rem;
+ 
+}
+.calendar-header button{
+  display:flex;
+  justify-content: center;
+  align-items : center;
+  width:50px;
+  height:50px;
+}
+
+.calendar-body::-webkit-scrollbar{
+  display:none;
+}
+
+.calendar-body{
+  height : 50vh;
+}
+
+.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard{
+  height : 50vh;
+}
+
+
+.today-button {
+  position: absolute;
+  right: 1px;
+  bottom: 0;
+  font-size : .8rem;
+  width : 50px !important;
+  text-align:right !important;
+  padding : 0 !important;
+  border : 1px solid lightblue
 }
 
 .App-logo {
@@ -7,6 +140,12 @@
   pointer-events: none;
 }
 
+/* MODAL */
+
+
+
+
+/*  */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -15,7 +154,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: calc(100vh - 10px);
   display: flex;
   flex-direction: column;
   align-items: center;
