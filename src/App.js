@@ -153,7 +153,7 @@ function App() {
   };
 
   // 업로드 버튼 클릭 시 호출
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (previewImages.length === 0) {
       alert("업로드할 이미지가 없습니다.");
       return;
@@ -161,6 +161,52 @@ function App() {
 
     // 기존 업로드된 이미지를 상태에 저장
     setUploadedImages(previewImages);
+
+    //GITHUB ACTION을 이용해서 다른 REPOSITORY 로 전달할예정 PRIVATE to PRIVATE REPOSITORY 가능한지 확인할 것
+
+    /*
+      가능함 - !
+        Personal Access Token 생성
+        GitHub에서 Personal Access Token을 생성:
+
+        Settings > Developer Settings > Personal Access Tokens > Tokens (classic) 경로에서 생성.
+        권한:
+        repo: Private Repository 접근 권한.
+        write:packages: 패키지 업로드 권한(필요 시).
+        생성된 토큰을 복사해 두세요.
+        생성한 토큰을 업로드를 시작하는 저장소의 Secrets에 저장:
+
+        Settings > Secrets and variables > Actions > New repository secret로 이동.
+        SECRET_NAME: TARGET_REPO_PAT 등으로 저장.
+    */
+
+
+    // GITHUB ACTION 
+    // GitHub Actions를 트리거하는 API 호출
+    try {
+      // const response = await fetch("https://api.github.com/repos/<YOUR_USERNAME>/<REPO_NAME>/actions/workflows/target-repo-upload.yml/dispatches", {
+        const response = await fetch("https://api.github.com/repos/ALL-MY-PROJECTS-2025/CALENDAR/actions/workflows/target-repo-upload.yml/dispatches", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer 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`, // 이 값을 안전하게 관리해야 합니다.
+          Accept: "application/vnd.github.v3+json",
+        },
+        body: JSON.stringify({
+          ref: "main", // Actions가 실행될 브랜치
+        }),
+      });
+
+      if (response.ok) {
+        console.log("GitHub Actions 트리거 성공");
+        alert("이미지 업로드가 요청되었습니다.");
+      } else {
+        console.error("GitHub Actions 트리거 실패", response);
+        alert("업로드 요청에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("API 호출 중 오류 발생:", error);
+    }
+
 
     // 서버에 업로드 요청 처리 (여기서는 콘솔로 시뮬레이션)
     console.log("업로드된 이미지:", previewImages);
@@ -432,7 +478,7 @@ function App() {
                   {previewImages.length > 0 ? (
                     <div className="preview-container">
                       {previewImages.map((src, index) => (
-                        <div key={index} className="preview-image" style={{position:"relative"}}>
+                        <div key={index} className="preview-image" style={{ position: "relative" }}>
                           <img
                             src={src}
                             alt={`preview-${index}`}
@@ -459,7 +505,7 @@ function App() {
                           >
                             -
                           </button>
-                          
+
                         </div>
                       ))}
                     </div>
