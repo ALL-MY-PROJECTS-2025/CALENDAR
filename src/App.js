@@ -181,6 +181,13 @@ function App() {
     */
 
 
+    // FormData에 파일 추가
+    const formData = new FormData();
+    previewImages.forEach((file, index) => {
+      formData.append(`file-${index}`, file);
+    });
+
+
     // GITHUB ACTION 
     // GitHub Actions를 트리거하는 API 호출
     try {
@@ -192,7 +199,10 @@ function App() {
           Accept: "application/vnd.github.v3+json",
         },
         body: JSON.stringify({
-          ref: "main", // Actions가 실행될 브랜치
+          ref: "main", // 대상 브랜치
+          inputs: {
+            files: files.map((file) => file.path), // 파일 경로 전달
+          },
         }),
       });
 
