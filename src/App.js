@@ -147,9 +147,11 @@ function App() {
       return;
     }
 
+    setPreviewImages(imageFiles); // 실제 파일 객체 저장
+    
     // 이미지 파일을 미리보기 URL로 변환
-    const imagePreviews = imageFiles.map((file) => URL.createObjectURL(file));
-    setPreviewImages((prev) => [...prev, ...imagePreviews]); // 미리보기 업데이트
+    // const imagePreviews = imageFiles.map((file) => URL.createObjectURL(file));
+    // setPreviewImages((prev) => [...prev, ...imagePreviews]); // 미리보기 업데이트
   };
 
   // 업로드 버튼 클릭 시 호출
@@ -201,11 +203,13 @@ function App() {
         body: JSON.stringify({
           ref: "main", // 대상 브랜치
           inputs: {
-            files: previewImages.map((file) => file.name), // 전달할 파일 이름
+            files: previewImages.map((file) => file.name).join(","), // 파일 이름을 쉼표로 구분
           },
         }),
       });
 
+
+      
       if (response.ok) {
         console.log("GitHub Actions 트리거 성공");
         alert("이미지 업로드가 요청되었습니다.");

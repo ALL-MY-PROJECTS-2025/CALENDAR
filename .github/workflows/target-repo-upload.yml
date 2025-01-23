@@ -18,16 +18,27 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git clone https://${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE.git
 
-      # 2. 파일 복사
-      - name: Copy uploaded files
+     # 2. 준비 단계: 파일 다운로드 또는 복사
+      - name: Download or prepare files
         run: |
           echo "${{ github.event.inputs.files }}" | tr ',' '\n' > file-list.txt
+          mkdir -p prepared-files
           while read file; do
-            cp "$file" ./target-repo/
+            # 파일 경로가 절대 경로인지 확인하고 준비
+            if [ -f "$file" ]; then
+              cp "$file" ./prepared-files/
+            else
+              echo "파일을 찾을 수 없습니다: $file"
+            fi
           done < file-list.txt
 
-      # 3. Push 변경 사항
-      - name: Push files to target repository
+      # 3. 파일 복사
+      - name: Copy files to target repository
+        run: |
+          cp -r ./prepared-files/* ./target-repo/
+
+      # 4. Push 변경 사항
+      - name: Push to target repository
         run: |
           cd target-repo
           git add .
