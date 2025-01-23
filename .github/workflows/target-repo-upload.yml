@@ -1,4 +1,4 @@
-name: Upload Images to Repository
+name: Upload Images
 
 on:
   workflow_dispatch:
@@ -6,45 +6,43 @@ on:
       files:
         description: 'Comma-separated list of file names'
         required: true
-        default: ''
-
-permissions:
-  contents: write
+      file_contents:
+        description: 'Comma-separated list of base64 encoded file contents'
+        required: true
 
 jobs:
-  upload-images:
+  upload:
     runs-on: ubuntu-latest
 
     steps:
-    # Check out the repository
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    # Set up Node.js (optional if scripts are Node-based)
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
 
-    # Create a directory to store images
-    - name: Create images directory
-      run: |
-        mkdir -p images/uploads
+      - name: Upload images
+        run: |
+          # Convert the comma-separated file names and contents into arrays
+          IFS=',' read -r -a file_names <<< "${{ github.event.inputs.files }}"
+          IFS=',' read -r -a file_contents <<< "${{ github.event.inputs.file_contents }}"
 
-    # Decode and save each uploaded file
-    - name: Save uploaded files
-      run: |
-        IFS=',' read -r -a fileArray <<< "${{ github.event.inputs.files }}"
-        for fileName in "${fileArray[@]}"; do
-          echo "Saving file: $fileName"
-          echo "$fileName" > images/uploads/"$fileName"
-        done
+          # Create a directory for uploads if it doesn't exist
+          mkdir -p images/uploads
 
-    # Commit and push changes
-    - name: Commit and push changes
-      run: |
-        git config --global user.name "jungwoogyun"
-        git config --global user.email "jwg8910@naver.com"
-        git add images/uploads/*
-        git commit -m "Add uploaded images"
-        git push https://x-access-token:${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR.git main
+          # Loop through the files and create them
+          for i in "${!file_names[@]}"; do
+            echo "${file_contents[$i]}" | base64 --decode > "images/uploads/${file_names[$i]}"
+          done
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "jwg8910@naver.com"
+          git config --local user.name "jungwoogyun"
+          git add images/uploads/*
+          git commit -m "Upload images"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
