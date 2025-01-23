@@ -1,0 +1,50 @@
+name: Upload Images to Repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      files:
+        description: 'Comma-separated list of file names'
+        required: true
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  upload-images:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Check out the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Set up Node.js (optional if scripts are Node-based)
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    # Create a directory to store images
+    - name: Create images directory
+      run: |
+        mkdir -p images/uploads
+
+    # Decode and save each uploaded file
+    - name: Save uploaded files
+      run: |
+        IFS=',' read -r -a fileArray <<< "${{ github.event.inputs.files }}"
+        for fileName in "${fileArray[@]}"; do
+          echo "Saving file: $fileName"
+          echo "$fileName" > images/uploads/"$fileName"
+        done
+
+    # Commit and push changes
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "jungwoogyun"
+        git config --global user.email "jwg8910@naver.com"
+        git add images/uploads/*
+        git commit -m "Add uploaded images"
+        git push https://x-access-token:${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE.git main
