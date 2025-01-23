@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import googleCalendarPlugin from '@fullcalendar/google-calendar'; // //GOOGLE CALENDAR
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import './App.css';
@@ -12,32 +13,58 @@ function App() {
   const [images, setImages] = useState([]); // State to hold images for the current month
   const calendarRef = useRef(null); // FullCalendar를 제어하기 위한 ref
 
+  // 이벤트표시모달(GOOGLE CALENDAR)
+  const [selectedEvent, setSelectedEvent] = useState(null); // !!! 선택된 이벤트 정보
+  const [showEventModal, setShowEventModal] = useState(false); // !!! 모달 표시 여부
+
+
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
+
+
   const handlePrevMonth = () => {
-    const newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
-    setCurrentDate(newDate);
     if (calendarRef.current) {
-      calendarRef.current.getApi().prev();
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.prev(); // FullCalendar의 이전 달로 이동
+      const currentCenterDate = new Date(
+        calendarApi.getDate().getFullYear(),
+        calendarApi.getDate().getMonth(),
+        15 // 중앙 날짜(15일)로 설정
+      );
+      setCurrentDate(currentCenterDate);
+      console.log(`!!!!!!!!!!!!!!! 이전 달 이동: ${currentCenterDate.toISOString().split('T')[0]}`);
     }
   };
 
   const handleNextMonth = () => {
-    const newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
-    setCurrentDate(newDate);
     if (calendarRef.current) {
-      calendarRef.current.getApi().next();
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.next(); // FullCalendar의 다음 달로 이동
+      const currentCenterDate = new Date(
+        calendarApi.getDate().getFullYear(),
+        calendarApi.getDate().getMonth(),
+        15 // 중앙 날짜(15일)로 설정
+      );
+      setCurrentDate(currentCenterDate);
+      console.log(`!!!!!!!!!!!!!!! 다음 달 이동: ${currentCenterDate.toISOString().split('T')[0]}`);
     }
   };
 
   const handleToday = () => {
-    const newDate = new Date();
-    setCurrentDate(newDate);
     if (calendarRef.current) {
-      calendarRef.current.getApi().today();
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.today(); // FullCalendar의 오늘 날짜로 이동
+      const todayDate = new Date(
+        calendarApi.getDate().getFullYear(),
+        calendarApi.getDate().getMonth(),
+        15 // 중앙 날짜(15일)로 설정
+      );
+      setCurrentDate(todayDate); // 상태 동기화
+      console.log(`!!!!!!!!!!!!!!! 오늘 날짜로 이동: ${todayDate.toISOString().split('T')[0]}`);
     }
   };
+
 
   // Fetch images for the current year and month
   useEffect(() => {
@@ -63,6 +90,36 @@ function App() {
     fetchImages();
   }, [currentYear, currentMonth]);
 
+
+
+  //GOOGLE MODAL
+  const handleEventClick = (info) => {
+    info.jsEvent.preventDefault(); // !!! 기본 동작 방지
+    setSelectedEvent(info.event); // !!! 선택한 이벤트 정보 저장
+    setShowEventModal(true); // !!! 모달 표시
+    console.log("!!!!!!!! 이벤트 클릭:", info.event);
+  };
+  //GOOGLE MODAL
+  const closeModal = () => {
+    setShowEventModal(false); // !!! 모달 숨김
+    setSelectedEvent(null); // !!! 선택한 이벤트 초기화
+  };
+
+
+  const convertToKST = (date) => {
+    if (!date) return '시간 정보 없음';
+    const options = { 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      timeZone: 'Asia/Seoul' // KST로 변환
+    };
+    return new Date(date).toLocaleString('ko-KR', options);
+  };
+
   return (
     <div className="App">
       <div className="postcard-container">
@@ -78,11 +135,13 @@ function App() {
         </div>
 
         <div className="photo-frame">
-          {images.length > 0 ? (
+
+          {/* SWIPER 를 사용한 슬라이드 구현 */}
+          {/* {images.length > 0 ? (
             <Swiper
-              spaceBetween={10}
+              spaceBetween={0}
               slidesPerView={1}
-              effect="fade"
+              // effect="fade"
               autoplay={{
                 delay: 1000,
                 disableOnInteraction: false,
@@ -109,7 +168,34 @@ function App() {
               alt='Default Image'
               className='month-image default-image'
             />
+          )} */}
+
+          {/* SLIDE 없이 배치 */}
+
+          {images.length > 0 ? (
+            <div className="items">
+              {images.map((img, index) => (
+                <div key={index} className="item">
+                  <img
+                    src={img}
+                    alt={`${currentYear}년 ${currentMonth}월 이미지 ${index + 1}`}
+                    className="month-image"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ objectFit: "cover" }}>
+              <img
+                style={{ width: "100vw", height: "40vh", objectFit: "contain" }}
+                src='/images/default.png'
+                alt='Default Image'
+                className='month-image default-image'
+              />
+            </div>
           )}
+
+
         </div>
 
         <div className="calendar-container">
@@ -120,21 +206,87 @@ function App() {
             <button onClick={handleToday} className="today-button">오늘</button>
           </div>
 
+          {/*  */}
           <FullCalendar
             ref={calendarRef}
-            plugins={[dayGridPlugin, interactionPlugin]}
+            plugins={[dayGridPlugin, interactionPlugin, googleCalendarPlugin]} // 플러그인 추가
             initialView="dayGridMonth"
             headerToolbar={false}
-            events={[]}
+            googleCalendarApiKey="AIzaSyA_rJ5q1Jjde3tdinjhSUx9m-ZbpCSkS58" // API 키 설정
+            events={{
+              googleCalendarId: '505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com', // Google Calendar ID
+            }}
             initialDate={currentDate.toISOString().split('T')[0]}
             datesSet={(dateInfo) => {
               const newDate = new Date(dateInfo.startStr);
-              setCurrentDate(newDate);
+              const viewCenterDate = new Date(
+                newDate.getFullYear(),
+                newDate.getMonth() + 1,
+                15 // 매달 중앙 날짜로 설정
+              );
+              setCurrentDate(viewCenterDate);
+
+              console.log(`!!!!!!!!!!!!!!! FullCalendar 날짜 설정 (중앙 날짜): ${viewCenterDate.toISOString().split('T')[0]}`);
             }}
+
+
+            dateClick={(info) => {
+              console.log("clicked...", info.date)
+            }}
+
+            //GOOGLE CALENDAR(// npm install @fullcalendar/google-calendar)
+            eventClick={handleEventClick} // !!! 이벤트 클릭 핸들러 추가
           />
         </div>
 
-        {/* Modal */}
+
+
+        {/* GOOGLE EVENT MODAL        */}
+        {/* !!! Event Modal */}
+        {/* GOOGLE EVENT MODAL */}
+        {/* GOOGLE EVENT MODAL */}
+        {showEventModal && selectedEvent && (
+          <div
+            className="modal fade show"
+            style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+            tabIndex="-1"
+          >
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    {selectedEvent.title || '이벤트 정보 없음'}
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={closeModal}
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p><strong>이벤트 시작:</strong> {convertToKST(selectedEvent.start)}</p>
+                  <p><strong>이벤트 끝:</strong> {convertToKST(selectedEvent.end) || '종료 시간 없음'}</p>
+                  <p><strong>설명:</strong> {selectedEvent.extendedProps.description || '설명 없음'}</p>
+                  <p><strong>위치:</strong> {selectedEvent.extendedProps.location || '위치 정보 없음'}</p>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" onClick={closeModal}>
+                    닫기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+
+        {/* END */}
+
+
+
+        {/* SETTING Modal */}
         <div
           className="modal fade"
           id="staticBackdrop"
@@ -144,7 +296,7 @@ function App() {
           aria-labelledby="staticBackdropLabel"
           aria-hidden="true"
         >
-          <div className="modal-dialog">
+          <div className="modal-dialog  modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="staticBackdropLabel">Settings</h5>
@@ -156,7 +308,11 @@ function App() {
                 ></button>
               </div>
               <div className="modal-body">
-                Settings content goes here.
+                <div>
+                  <div>MENU : </div>
+                  <div>VALUE : AA</div>
+                </div>
+
               </div>
               <div className="modal-footer">
                 <button

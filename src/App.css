@@ -9,6 +9,8 @@ body {
   margin: 0;
   padding: 5px;
   height: 100vh;
+  width:1280px;
+  margin : 0 auto;
 }
 
 .App {
@@ -49,6 +51,8 @@ body {
   color: gray;
 }
 
+
+/* SWIPER 가 있는경우 */
 .photo-frame {
   width: 100%;
   height: 40vh;
@@ -80,9 +84,21 @@ body {
 
 }
 
-
-.calendar-container {
+/* SWIPER 가 없는 경우 */
+.photo-frame>.items{
   
+  padding : 10px;
+
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  gap : 10px;
+}
+.photo-frame>.items>.item{}
+
+
+.fc-scroller.fc-scroller-liquid-absolute::-webkit-scrollbar{
+  display:none !important;
 }
 
 .calendar-header {
@@ -97,7 +113,7 @@ body {
 }
 button{
   background-color: transparent;
-  border : 1px solid;
+  
 }
 .calendar-header .title{
   font-size:2rem;
@@ -109,6 +125,7 @@ button{
   align-items : center;
   width:50px;
   height:50px;
+  border : 0;
 }
 
 .calendar-body::-webkit-scrollbar{
@@ -132,7 +149,7 @@ button{
   width : 50px !important;
   text-align:right !important;
   padding : 0 !important;
-  border : 1px solid lightblue
+  border : 1px solid lightblue !important
 }
 
 .App-logo {
@@ -140,8 +157,7 @@ button{
   pointer-events: none;
 }
 
-/* MODAL */
-
+/* SETTING MODAL */
 
 
 
@@ -151,6 +167,8 @@ button{
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+
 
 .App-header {
   background-color: #282c34;
@@ -167,6 +185,51 @@ button{
   color: #61dafb;
 }
 
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 반응형 코드 */
+
+/* 태블릿 환경 (화면 너비: 768px ~ 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .App-logo {
+    width: 150px; /* 태블릿 크기에 맞게 로고 크기 조정 */
+    height: 150px;
+    animation: App-logo-spin infinite 15s linear; /* 속도 약간 빠르게 */
+  }
+  body{
+    width:600px !important;
+  }
+}
+
+/* 모바일 환경 (화면 너비: 767px 이하) */
+@media (max-width: 767px) {
+  .App-logo {
+    width: 100px; /* 모바일 크기에 맞게 로고 크기 조정 */
+    height: 100px;
+    animation: App-logo-spin infinite 10s linear; /* 더 빠른 애니메이션 */
+  }
+  body{
+    width:380px !important;
+    margin : 0 auto !important;
+
+  }
+}
+
+/* 모션 감소 설정에 따른 대응 */
+@media (prefers-reduced-motion: reduce) {
+  .App-logo {
+    animation: none; /* 애니메이션 제거 */
+  }
+}
+
+/* 애니메이션 정의 */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
