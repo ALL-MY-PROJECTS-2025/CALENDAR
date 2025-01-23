@@ -7,10 +7,6 @@ on:
         description: 'Comma-separated list of file names'
         required: true
         default: ''
-      file_contents:
-        description: 'Comma-separated list of base64 encoded file contents'
-        required: true
-        default: ''
 
 permissions:
   contents: write
@@ -39,12 +35,9 @@ jobs:
     - name: Save uploaded files
       run: |
         IFS=',' read -r -a fileArray <<< "${{ github.event.inputs.files }}"
-        IFS=',' read -r -a contentArray <<< "${{ github.event.inputs.file_contents }}"
-        for index in "${!fileArray[@]}"; do
-          fileName="${fileArray[$index]}"
-          fileContent="${contentArray[$index]}"
+        for fileName in "${fileArray[@]}"; do
           echo "Saving file: $fileName"
-          echo "$fileContent" | base64 --decode > images/uploads/"$fileName"
+          echo "$fileName" > images/uploads/"$fileName"
         done
 
     # Commit and push changes
