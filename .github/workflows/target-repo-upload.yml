@@ -1,4 +1,4 @@
-name: Upload Files to Target Repo
+name: Upload Files to Public Repo
 
 on:
   workflow_dispatch: # 수동 트리거
@@ -16,7 +16,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git clone https://${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE.git target-repo
+          git clone https://github.com/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE.git target-repo
 
       # 3. 파일 복사
       - name: Copy files to target repository
@@ -28,6 +28,8 @@ jobs:
 
       # 4. Push 변경 사항
       - name: Push to target repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub Actions에서 기본 제공
         run: |
           cd target-repo
           git push
