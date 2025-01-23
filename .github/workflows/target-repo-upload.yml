@@ -1,22 +1,22 @@
 name: Upload Files to Target Repo
 
 on:
-  workflow_dispatch: # 수동 트리거 또는 API 호출 가능
+  workflow_dispatch: # 수동 트리거
 
 jobs:
   upload-files:
     runs-on: ubuntu-latest
     steps:
-      # 1. 소스 저장소에서 체크아웃
+      # 1. 소스 저장소 체크아웃
       - name: Checkout source repository
         uses: actions/checkout@v3
 
-      # 2. 대상 저장소에 접근하기 위한 준비
+      # 2. 대상 저장소 클론
       - name: Clone target repository
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git clone https://x-access-token:${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE.git target-repo
+          git clone https://${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE.git target-repo
 
       # 3. 파일 복사
       - name: Copy files to target repository
@@ -25,8 +25,9 @@ jobs:
           cd target-repo
           git add .
           git commit -m "Upload images via GitHub Actions"
-      
+
       # 4. Push 변경 사항
       - name: Push to target repository
         run: |
+          cd target-repo
           git push
