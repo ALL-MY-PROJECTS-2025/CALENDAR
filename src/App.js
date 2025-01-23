@@ -108,13 +108,13 @@ function App() {
 
   const convertToKST = (date) => {
     if (!date) return '시간 정보 없음';
-    const options = { 
-      year: 'numeric', 
-      month: '2-digit', 
-      day: '2-digit', 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      second: '2-digit', 
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
       timeZone: 'Asia/Seoul' // KST로 변환
     };
     return new Date(date).toLocaleString('ko-KR', options);
@@ -124,15 +124,28 @@ function App() {
     <div className="App">
       <div className="postcard-container">
         <div className="controller">
+          
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary setting-btn"
             data-bs-toggle="modal"
             data-bs-target="#staticBackdrop"
           >
             <span className="material-symbols-outlined">settings</span>
           </button>
+
+          <button
+            type="button"
+            className="btn btn-primary upload-btn"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop2"
+          >
+            <span className="material-symbols-outlined">upload</span>
+          </button>
+
         </div>
+
+   
 
         <div className="photo-frame">
 
@@ -242,9 +255,6 @@ function App() {
 
 
         {/* GOOGLE EVENT MODAL        */}
-        {/* !!! Event Modal */}
-        {/* GOOGLE EVENT MODAL */}
-        {/* GOOGLE EVENT MODAL */}
         {showEventModal && selectedEvent && (
           <div
             className="modal fade show"
@@ -265,10 +275,15 @@ function App() {
                   ></button>
                 </div>
                 <div className="modal-body">
-                  <p><strong>이벤트 시작:</strong> {convertToKST(selectedEvent.start)}</p>
-                  <p><strong>이벤트 끝:</strong> {convertToKST(selectedEvent.end) || '종료 시간 없음'}</p>
-                  <p><strong>설명:</strong> {selectedEvent.extendedProps.description || '설명 없음'}</p>
-                  <p><strong>위치:</strong> {selectedEvent.extendedProps.location || '위치 정보 없음'}</p>
+                  <div className="img-block">
+                    <img src="/modal_1.png" alt="Example" />
+                  </div>
+                  <div className="modal-schedule">
+                    <div><strong>일정 시작:</strong> {convertToKST(selectedEvent.start)}</div>
+                    <div><strong>일정 끝:</strong> {convertToKST(selectedEvent.end) || '종료 시간 없음'}</div>
+                    <div><strong>설명:</strong> {selectedEvent.extendedProps.description || '설명 없음'}</div>
+                    <div><strong>위치:</strong> {selectedEvent.extendedProps.location || '위치 정보 없음'}</div>
+                  </div>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" onClick={closeModal}>
@@ -299,7 +314,7 @@ function App() {
           <div className="modal-dialog  modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="staticBackdropLabel">Settings</h5>
+                <h5 className="modal-title" id="staticBackdropLabel">환경설정</h5>
                 <button
                   type="button"
                   className="btn-close"
@@ -329,6 +344,58 @@ function App() {
             </div>
           </div>
         </div>
+        {/* END */}
+
+
+        {/* UPLOAD MODAL */}
+        <div
+          className="modal fade"
+          id="staticBackdrop2"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabIndex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog  modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="staticBackdropLabel">UPLOAD </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div>
+                  <div>- : </div>
+                  <div>0 : </div>
+                  1. 업로드 요청<br/>
+                  2. 
+                </div>
+
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" className="btn btn-primary">
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* END */}
+
+
+
       </div>
     </div>
   );
