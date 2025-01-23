@@ -47,4 +47,4 @@ jobs:
         git config --global user.email "jwg8910@naver.com"
         git add images/uploads/*
         git commit -m "Add uploaded images"
-        git push https://x-access-token:${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE.git main
+        git push https://x-access-token:${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR.git main
