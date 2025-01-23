@@ -147,11 +147,10 @@ function App() {
       return;
     }
 
-    setPreviewImages(imageFiles); // 실제 파일 객체 저장
-    
-    // 이미지 파일을 미리보기 URL로 변환
-    // const imagePreviews = imageFiles.map((file) => URL.createObjectURL(file));
-    // setPreviewImages((prev) => [...prev, ...imagePreviews]); // 미리보기 업데이트
+    // !!!!!!!!!!!!!! 미리보기와 업로드 파일 리스트 분리
+    const previewUrls = imageFiles.map((file) => URL.createObjectURL(file));
+    setPreviewImages(previewUrls); // 미리보기용 URL 저장
+    setUploadedImages(imageFiles); // 실제 업로드용 파일 객체 저장
   };
 
   // 업로드 버튼 클릭 시 호출
@@ -163,7 +162,6 @@ function App() {
 
     // 기존 업로드된 이미지를 상태에 저장
     setUploadedImages(previewImages);
-
     //GITHUB ACTION을 이용해서 다른 REPOSITORY 로 전달할예정 PRIVATE to PRIVATE REPOSITORY 가능한지 확인할 것
 
     /*
@@ -194,7 +192,7 @@ function App() {
     // GitHub Actions를 트리거하는 API 호출
     try {
       // const response = await fetch("https://api.github.com/repos/<YOUR_USERNAME>/<REPO_NAME>/actions/workflows/target-repo-upload.yml/dispatches", {
-        const response = await fetch("https://api.github.com/repos/ALL-MY-PROJECTS-2025/CALENDAR/actions/workflows/target-repo-upload.yml/dispatches", {
+        const response = await fetch("https://api.github.com/repos/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE/actions/workflows/target-repo-upload.yml/dispatches", {
         method: "POST",
         headers: {
           Authorization: `Bearer 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`, // 이 값을 안전하게 관리해야 합니다.
@@ -203,7 +201,7 @@ function App() {
         body: JSON.stringify({
           ref: "main", // 대상 브랜치
           inputs: {
-            files: previewImages.map((file) => file.name).join(","), // 파일 이름을 쉼표로 구분
+            files: uploadedImages.map((file) => file.name).join(','), // 쉼표로 구분된 파일 이름 전달
           },
         }),
       });
