@@ -40,6 +40,7 @@ body {
 }
 
 
+
 .controller button {
   border: 0;
   background-color: transparent;
@@ -58,6 +59,7 @@ body {
 .controller button span {
   color: gray;
 }
+
 
 
 /* SWIPER 가 있는경우 */
@@ -184,6 +186,43 @@ button{
 .modal-schedule>div{
   margin-bottom: 5px;
 }
+
+/* UPLOAD MODAL */
+.uploadmodal .modal-body .upload-block{
+  height : 200px;
+  border : 1px dotted gray;
+  color:gray;
+  font-size : 2rem;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.preview-container {
+  border : 1px solid lightgray;
+  border-radius : 3px;
+  margin-top : 10px;
+  display: flex;
+  flex-wrap: wrap; /* 여러 줄로 감싸기 */
+  gap: 10px; /* 이미지 간 간격 */
+  justify-content: left; /* 가로 정렬 */
+  align-items: center;
+  padding : 10px;
+}
+
+.preview-image {
+  width: calc(33.33% - 10px); /* 3등분: 3열 */
+
+}
+
+.preview-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid lightgray;
+}
+
+
 /*  */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

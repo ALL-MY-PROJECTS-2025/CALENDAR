@@ -21,6 +21,10 @@ function App() {
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
+  // 미리보기 이미지 리스트
+  const [previewImages, setPreviewImages] = useState([]); // 미리보기 이미지 리스트
+  const [uploadedImages, setUploadedImages] = useState([]); // 업로드된 이미지 리스트
+
 
 
   const handlePrevMonth = () => {
@@ -105,7 +109,7 @@ function App() {
     setSelectedEvent(null); // !!! 선택한 이벤트 초기화
   };
 
-
+  //GOOGLE MODAL 이벤트 시간 변경
   const convertToKST = (date) => {
     if (!date) return '시간 정보 없음';
     const options = {
@@ -120,11 +124,61 @@ function App() {
     return new Date(date).toLocaleString('ko-KR', options);
   };
 
+  // UPLOAD MODAL 드래그시 스타일링
+  const handleUploadModalDragEnter = (e) => {
+    e.target.setAttribute('style', 'border: 1px dotted lightgray;color:lightgray;')
+
+  }
+  const handleUploadModalDragLeave = (e) => {
+    e.target.setAttribute('style', 'border: 1px  dotted gray;color:gray;')
+
+  }
+
+  // 
+  // 파일을 드롭했을 때 처리하는 핸들러
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+
+    const files = Array.from(e.dataTransfer.files);
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+
+    if (imageFiles.length === 0) {
+      alert("이미지 파일만 업로드할 수 있습니다.");
+      return;
+    }
+
+    // 이미지 파일을 미리보기 URL로 변환
+    const imagePreviews = imageFiles.map((file) => URL.createObjectURL(file));
+    setPreviewImages((prev) => [...prev, ...imagePreviews]); // 미리보기 업데이트
+  };
+
+  // 업로드 버튼 클릭 시 호출
+  const handleUpload = () => {
+    if (previewImages.length === 0) {
+      alert("업로드할 이미지가 없습니다.");
+      return;
+    }
+
+    // 기존 업로드된 이미지를 상태에 저장
+    setUploadedImages(previewImages);
+
+    // 서버에 업로드 요청 처리 (여기서는 콘솔로 시뮬레이션)
+    console.log("업로드된 이미지:", previewImages);
+
+    // 업로드 요청 후 미리보기 이미지 초기화
+    setPreviewImages([]);
+  };
+
+  // 특정 이미지를 제거하는 함수
+  const handleRemoveImage = (index) => {
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index)); // 선택한 이미지 제외
+  };
+
   return (
     <div className="App">
       <div className="postcard-container">
         <div className="controller">
-          
+
           <button
             type="button"
             className="btn btn-primary setting-btn"
@@ -145,7 +199,9 @@ function App() {
 
         </div>
 
-   
+
+
+
 
         <div className="photo-frame">
 
@@ -349,7 +405,7 @@ function App() {
 
         {/* UPLOAD MODAL */}
         <div
-          className="modal fade"
+          className="modal fade  uploadmodal"
           id="staticBackdrop2"
           data-bs-backdrop="static"
           data-bs-keyboard="false"
@@ -369,14 +425,51 @@ function App() {
                 ></button>
               </div>
               <div className="modal-body">
-                <div>
-                  <div>- : </div>
-                  <div>0 : </div>
-                  1. 업로드 요청<br/>
-                  2. 
+                <div className="upload-block" onDragEnter={handleUploadModalDragEnter} onDragLeave={handleUploadModalDragLeave} onDragOver={(e) => e.preventDefault()} onDrop={handleFileDrop}>
+                  +
+                </div>
+                <div className="preview">
+                  {previewImages.length > 0 ? (
+                    <div className="preview-container">
+                      {previewImages.map((src, index) => (
+                        <div key={index} className="preview-image" style={{position:"relative"}}>
+                          <img
+                            src={src}
+                            alt={`preview-${index}`}
+                            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                          />
+                          {/* 삭제 버튼 */}
+                          <button
+                            style={{
+                              position: "absolute",
+                              top: "0px",
+                              right: "20px",
+                              backgroundColor: "red",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "25%",
+                              width: "20px",
+                              height: "20px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => handleRemoveImage(index)}
+                          >
+                            -
+                          </button>
+                          
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>-</p>
+                  )}
                 </div>
 
               </div>
+
               <div className="modal-footer">
                 <button
                   type="button"
@@ -385,10 +478,16 @@ function App() {
                 >
                   Close
                 </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleUpload} // 업로드 처리
+                >
+                  Upload
                 </button>
               </div>
+
+
             </div>
           </div>
         </div>
