@@ -1,50 +1,50 @@
-name: Upload Images to Repository
+name: Upload Images
 
 on:
   workflow_dispatch:
     inputs:
       files:
-        description: 'Comma-separated list of file names'
+        description: 'Comma-separated list of file names to upload'
         required: true
         default: ''
 
-permissions:
-  contents: write
-
 jobs:
-  upload-images:
+  upload:
     runs-on: ubuntu-latest
 
     steps:
-    # Check out the repository
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    # Set up Node.js (optional if scripts are Node-based)
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
 
-    # Create a directory to store images
-    - name: Create images directory
-      run: |
-        mkdir -p images/uploads
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
-    # Decode and save each uploaded file
-    - name: Save uploaded files
-      run: |
-        IFS=',' read -r -a fileArray <<< "${{ github.event.inputs.files }}"
-        for fileName in "${fileArray[@]}"; do
-          echo "Saving file: $fileName"
-          echo "$fileName" > images/uploads/"$fileName"
-        done
+      - name: Upload images
+        run: |
+          # Convert the comma-separated file names into an array
+          IFS=',' read -r -a files <<< "${{ github.event.inputs.files }}"
 
-    # Commit and push changes
-    - name: Commit and push changes
-      run: |
-        git config --global user.name "jungwoogyun"
-        git config --global user.email "jwg8910@naver.com"
-        git add images/uploads/*
-        git commit -m "Add uploaded images"
-        git push https://x-access-token:${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR.git main
+          # Create a directory for uploads if it doesn't exist
+          mkdir -p uploads
+
+          # Loop through each file and download it
+          for file in "${files[@]}"; do
+            # Here you would typically download the file from a source
+            # For demonstration, we will just create a dummy file
+            echo "This is a dummy file for $file" > "uploads/$file"
+          done
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "you@example.com"
+          git config --local user.name "Your Name"
+          git add uploads/
+          git commit -m "Upload images: ${{ github.event.inputs.files }}"
+          git push
