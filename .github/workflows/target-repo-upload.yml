@@ -44,7 +44,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git config --local user.email "jwg8910@naver.com"
-          git config --local user.name "Your Name"
+          git config --local user.name "jungwoogyun"
           git add uploads/
           git commit -m "Upload images: ${{ github.event.inputs.files }}"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR.git HEAD:main
