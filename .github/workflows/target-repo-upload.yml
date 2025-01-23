@@ -8,6 +8,8 @@ on:
         required: true
         default: ''
 
+permissions:
+  contents: write
 jobs:
   upload:
     runs-on: ubuntu-latest
