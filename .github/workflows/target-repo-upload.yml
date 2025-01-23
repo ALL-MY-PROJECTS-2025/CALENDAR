@@ -16,7 +16,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git clone https://x-access-token:${{ secrets.TARGET_REPO_PAT }}@github.com/<TARGET_ORGANIZATION>/<TARGET_REPOSITORY>.git target-repo
+          git clone https://x-access-token:${{ secrets.TARGET_REPO_PAT }}@github.com/ALL-MY-PROJECTS-2025/CALENDAR_PHOTO_SAVE.git target-repo
 
       # 3. 파일 복사
       - name: Copy files to target repository
