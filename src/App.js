@@ -201,7 +201,7 @@ function App() {
         body: JSON.stringify({
           ref: "main", // 대상 브랜치
           inputs: {
-            files: files.map((file) => file.path), // 파일 경로 전달
+            files: previewImages.map((file) => file.name), // 전달할 파일 이름
           },
         }),
       });
