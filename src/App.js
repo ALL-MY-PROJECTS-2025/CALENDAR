@@ -35,8 +35,7 @@ function App() {
       );
       setCurrentDate(currentCenterDate);
       console.log(
-        `!!!!!!!!!!!!!!! 이전 달 이동: ${
-          currentCenterDate.toISOString().split("T")[0]
+        `!!!!!!!!!!!!!!! 이전 달 이동: ${currentCenterDate.toISOString().split("T")[0]
         }`
       );
     }
@@ -53,8 +52,7 @@ function App() {
       );
       setCurrentDate(currentCenterDate);
       console.log(
-        `!!!!!!!!!!!!!!! 다음 달 이동: ${
-          currentCenterDate.toISOString().split("T")[0]
+        `!!!!!!!!!!!!!!! 다음 달 이동: ${currentCenterDate.toISOString().split("T")[0]
         }`
       );
     }
@@ -71,8 +69,7 @@ function App() {
       );
       setCurrentDate(todayDate); // 상태 동기화
       console.log(
-        `!!!!!!!!!!!!!!! 오늘 날짜로 이동: ${
-          todayDate.toISOString().split("T")[0]
+        `!!!!!!!!!!!!!!! 오늘 날짜로 이동: ${todayDate.toISOString().split("T")[0]
         }`
       );
     }
@@ -183,20 +180,20 @@ function App() {
     try {
       // const response = await fetch("https://api.github.com/repos/<YOUR_USERNAME>/<REPO_NAME>/actions/workflows/target-repo-upload.yml/dispatches", {
       const response = await fetch(
-        "https://api.github.com/repos/ALL-MY-PROJECTS-2025/CALENDAR/actions/workflows/target-repo-upload.yml/dispatches",
+        "https://api.github.com/repos/ALL-MY-PROJECTS-2025/CALENDAR/", // 업로드 디렉토리 경로,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             Authorization: `Bearer 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`, // PAT
             Accept: "application/vnd.github.v3+json",
-            "Content-Type": "application/json", // JSON 형식으로 전송
           },
-          body: JSON.stringify({
-            ref: "main", // 대상 브랜치
-            inputs: {
-              files: uploadedImages.map((file) => file.name).join(","), // 쉼표로 구분된 파일 이름 전달
-            },
-          }),
+          body: JSON.stringify(
+            uploadedImages.map((file) => ({
+              message: `Upload ${file.name}`,
+              content: file, // 파일을 Base64로 변환하여 전달 필요
+              branch: "main", // 업로드할 브랜치
+            }))
+          ),
         }
       );
 
@@ -289,11 +286,13 @@ function App() {
                 <div key={index} className="item">
                   <img
                     src={img}
-                    alt={`${currentYear}년 ${currentMonth}월 이미지 ${
-                      index + 1
-                    }`}
+                    alt={`${currentYear}년 ${currentMonth}월 이미지 ${index + 1
+                      }`}
                     className="month-image"
                   />
+                  <video autoPlay muted loop>
+                      <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
+                  </video>
                 </div>
               ))}
             </div>
@@ -347,8 +346,7 @@ function App() {
               setCurrentDate(viewCenterDate);
 
               console.log(
-                `!!!!!!!!!!!!!!! FullCalendar 날짜 설정 (중앙 날짜): ${
-                  viewCenterDate.toISOString().split("T")[0]
+                `!!!!!!!!!!!!!!! FullCalendar 날짜 설정 (중앙 날짜): ${viewCenterDate.toISOString().split("T")[0]
                 }`
               );
             }}
@@ -383,6 +381,10 @@ function App() {
                 <div className="modal-body">
                   <div className="img-block">
                     <img src="/modal_1.png" alt="Example" />
+                    <video autoPlay muted loop>
+                      <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_01.mp4" />
+                    </video>
+
                   </div>
                   <div className="modal-schedule">
                     <div>
