@@ -300,7 +300,7 @@ function App() {
             <div style={{ objectFit: "cover" }}>
               <img
                 style={{ width: "100vw", height: "40vh", objectFit: "contain" }}
-                src="/images/default.png"
+                src={`${process.env.PUBLIC_URL}/images/default.png`}
                 alt="Default Image"
                 className="month-image default-image"
               />
@@ -380,7 +380,7 @@ function App() {
                 </div>
                 <div className="modal-body">
                   <div className="img-block">
-                    <img src="/modal_1.png" alt="Example" />
+                    <img src={`${process.env.PUBLIC_URL}/modal_1.png`} alt="Example" />
                     <video autoPlay muted loop>
                       <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_01.mp4" />
                     </video>
