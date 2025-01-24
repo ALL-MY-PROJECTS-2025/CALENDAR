@@ -79,7 +79,7 @@ function App() {
   useEffect(() => {
     const fetchImages = async () => {
       const monthString = currentMonth.toString().padStart(2, "0");
-      const folderPath = `/images/${currentYear}/${monthString}`;
+      const folderPath = `${process.env.PUBLIC_URL}/images/${currentYear}/${monthString}`;
 
       try {
         // Fetch image list dynamically (simulate fetching)
@@ -311,13 +311,14 @@ function App() {
         <div className="calendar-container">
           <div className="calendar-header">
             <button onClick={handlePrevMonth} className="nav-button">
-              <span className="material-symbols-outlined">arrow_left</span>
+              <span className="material-symbols-outlined" style={{fontSize:"2.5rem"}}>arrow_left</span>
             </button>
-            <h2>
+            <h2 style={{height:"80px", display:"flex",alignItems :"center"}}>
+              
               {currentYear}년 {currentMonth}월
             </h2>
             <button onClick={handleNextMonth} className="nav-button">
-              <span className="material-symbols-outlined">arrow_right</span>
+              <span className="material-symbols-outlined" style={{fontSize:"2.5rem"}}>arrow_right</span>
             </button>
             <button onClick={handleToday} className="today-button">
               오늘
