@@ -184,7 +184,7 @@ function App() {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer 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`, // PAT
+            Authorization: `Bearer `, // PAT
             Accept: "application/vnd.github.v3+json",
           },
           body: JSON.stringify(
