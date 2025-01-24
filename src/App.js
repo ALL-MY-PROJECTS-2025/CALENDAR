@@ -405,15 +405,6 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={closeModal}
-                  >
-                    닫기
-                  </button>
-                </div>
               </div>
             </div>
           </div>
