@@ -142,10 +142,44 @@ body {
   align-items: center;
   gap: 10px;
   margin: 5px auto;
-
-
 }
-
+.calendar-header .weather-block{
+  position:absolute;
+  left:0;
+  top: 0;
+  /* border : 1px solid; */
+  width : calc(25%);
+  height : 100%;
+}
+.calendar-header .weather-block .items{
+  display:flex;
+  justify-content: left;
+  align-items: center; 
+  height:100%;
+  gap:15px;
+}
+.calendar-header .weather-block .items .item{
+  width:50px; 
+  height:90%;
+  border : 1px solid lightblue;
+  border-radius: 5px;
+  
+}
+.calendar-header .weather-block .items .item img{
+  width:100%;
+  height:100%;
+  object-fit: contain;
+}
+.calendar-header .weather-block .items .item:nth-child(2){
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-size:1.3rem;
+  font-weight: 600;
+}
+.calendar-header .weather-block .items .item:nth-child(3){
+  width : 200px;
+}
 button {
   background-color: transparent;
 
@@ -195,12 +229,12 @@ button {
 }
 
 .img-block {
-  width: 100%;
-  height: 50vh;
+
   margin-bottom: 15px;
   position : relative;
 }
 .img-block video{
+  height : 300px;
   width: 100%;
   position: absolute;
   left: 0;

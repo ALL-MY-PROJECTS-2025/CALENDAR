@@ -310,6 +310,21 @@ function App() {
 
         <div className="calendar-container">
           <div className="calendar-header">
+            <div className="weather-block">
+              <div className="items">
+                  <div className="item">
+                    <img src={`${process.env.PUBLIC_URL}/images/weather/1.gif`} />
+                    <span></span>
+                  </div>
+                  <div className="item">
+                    <span>12</span> <span style={{fontSize:"1rem"}}>℃</span>
+                  </div>
+                  <div className="item">
+                    <span>위치 : </span><span>대구 달서구</span>
+                  </div>
+
+              </div>
+            </div>
             <button onClick={handlePrevMonth} className="nav-button">
               <span className="material-symbols-outlined">arrow_left</span>
             </button>
@@ -325,37 +340,39 @@ function App() {
           </div>
 
           {/*  */}
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[dayGridPlugin, interactionPlugin, googleCalendarPlugin]} // 플러그인 추가
-            initialView="dayGridMonth"
-            headerToolbar={false}
-            googleCalendarApiKey="AIzaSyA_rJ5q1Jjde3tdinjhSUx9m-ZbpCSkS58" // API 키 설정
-            events={{
-              googleCalendarId:
-                "505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com", // Google Calendar ID
-            }}
-            initialDate={currentDate.toISOString().split("T")[0]}
-            datesSet={(dateInfo) => {
-              const newDate = new Date(dateInfo.startStr);
-              const viewCenterDate = new Date(
-                newDate.getFullYear(),
-                newDate.getMonth() + 1,
-                15 // 매달 중앙 날짜로 설정
-              );
-              setCurrentDate(viewCenterDate);
+         
+            <FullCalendar
+              ref={calendarRef}
+              plugins={[dayGridPlugin, interactionPlugin, googleCalendarPlugin]} // 플러그인 추가
+              initialView="dayGridMonth"
+              headerToolbar={false}
+              googleCalendarApiKey="AIzaSyA_rJ5q1Jjde3tdinjhSUx9m-ZbpCSkS58" // API 키 설정
+              events={{
+                googleCalendarId:
+                  "505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com", // Google Calendar ID
+              }}
+              initialDate={currentDate.toISOString().split("T")[0]}
+              datesSet={(dateInfo) => {
+                const newDate = new Date(dateInfo.startStr);
+                const viewCenterDate = new Date(
+                  newDate.getFullYear(),
+                  newDate.getMonth() + 1,
+                  15 // 매달 중앙 날짜로 설정
+                );
+                setCurrentDate(viewCenterDate);
 
-              console.log(
-                `!!!!!!!!!!!!!!! FullCalendar 날짜 설정 (중앙 날짜): ${viewCenterDate.toISOString().split("T")[0]
-                }`
-              );
-            }}
-            dateClick={(info) => {
-              console.log("clicked...", info.date);
-            }}
-            //GOOGLE CALENDAR(// npm install @fullcalendar/google-calendar)
-            eventClick={handleEventClick} // !!! 이벤트 클릭 핸들러 추가
-          />
+                console.log(
+                  `!!!!!!!!!!!!!!! FullCalendar 날짜 설정 (중앙 날짜): ${viewCenterDate.toISOString().split("T")[0]
+                  }`
+                );
+              }}
+              dateClick={(info) => {
+                console.log("clicked...", info.date);
+              }}
+              //GOOGLE CALENDAR(// npm install @fullcalendar/google-calendar)
+              eventClick={handleEventClick} // !!! 이벤트 클릭 핸들러 추가
+            />
+ 
         </div>
 
         {/* GOOGLE EVENT MODAL        */}
@@ -379,8 +396,8 @@ function App() {
                   ></button>
                 </div>
                 <div className="modal-body">
-                  <div className="img-block">
-                    <img src={`${process.env.PUBLIC_URL}/modal_1.png`} alt="Example" />
+                  <div className="img-block" style={{width:"100%",height:"450px",aspectRatio:"16 / 9"}}>
+                    <img style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"100% 10%"}} src={`${process.env.PUBLIC_URL}/modal_1.png`} alt="Example" />
                     <video autoPlay muted loop>
                       <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_01.mp4" />
                     </video>
