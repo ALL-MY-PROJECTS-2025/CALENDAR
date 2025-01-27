@@ -1,0 +1,1 @@
+docker build -t mysql-custom:1.0 .

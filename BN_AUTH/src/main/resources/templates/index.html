@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>INDEX PAGE</h1>
+
+
+    <a sec:authorize="isAnonymous()" href="/login">로그인</a>
+
+<!--    -->
+<!--    <th:block sec:authorize="isAuthenticated()">-->
+<!--        <th:block th:if="${#authentication.principal.userDto.provider == 'kakao'}">-->
+<!--            <a href="/logout">카카오 로그아웃</a>-->
+<!--        </th:block>-->
+<!--        <th:block th:if="${#authentication.principal.userDto.provider == 'naver'}">-->
+<!--            <a href="javascript:void(0)" class="naver-logout-btn">네이버 로그아웃</a>-->
+<!--        </th:block>-->
+
+<!--            <a href="/logout">일반 로그아웃</a>-->
+<!--    </th:block>-->
+<!--    -->
+
+
+    <a sec:authorize="isAnonymous()" href="/join">회원가입</a>
+    <a sec:authorize="hasAuthority('ROLE_ADMIN')" href="/admin">내정보</a><br>
+    <a sec:authorize="hasAuthority('ROLE_USER')" href="/user">내정보</a><br>
+<script>
+    const naverLogoutBtnEl = document.querySelector(".naver-logout-btn");
+    naverLogoutBtnEl.addEventListener("click", () => {
+        const popup = window.open("/logout","NAVER_LOGOUT","width=1,height=1,top=-10000,left=-10000");
+        setTimeout(()=>{
+
+            if(!popup.closed){
+                popup.close();
+            }
+            location.href = "/";
+        },7000);
+    });
+</script>
+
+</body>
+</html>

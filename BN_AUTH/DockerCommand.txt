@@ -1,0 +1,38 @@
+
+# 1. Docker 이미지 빌드
+docker build -t bn_auth .
+
+# 2. Docker 이미지 확인(삭제 docker rmi <IMAGE_ID>)
+docker images
+
+# 3. 컨테이너 실행
+docker run -d -p 3000:80 --name react-container react-docker-app
+
+
+# 3-1 컨테이너 내부로 들어가기
+docker exec -it <CONTAINER_NAME_OR_ID> /bin/bash
+
+
+# 4. 애플리케이션 접속
+http://localhost:3000
+
+# 5. 컨테이너 상태 확인
+docker ps
+
+# 6. 컨테이너 로그 확인 (필요 시)
+docker logs react-container
+
+# 7. 컨테이너 정지 및 삭제 
+docker stop react-container
+docker rm react-container
+
+
+#----------------------------------------------------
+# 8. Docker 이미지 저장 및 배포 (선택 사항)
+#----------------------------------------------------
+
+# 이미지 저장 (파일로 저장):
+docker save -o react-docker-app.tar react-docker-app
+
+# 이미지 로드 (다른 환경에서):
+docker load -i react-docker-app.tar

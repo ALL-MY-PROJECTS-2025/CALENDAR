@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>USER</h1>
+    <div th:text="${authentication}"></div>
+    <hr/>
+    <div th:text="${principalDetails}"></div>
+    <hr/>
+    <div sec:isAuthenticated()>인증완료됨!</div>
+    <div sec:authorize="hasRole('USER')">ROLE : ROLE_USER</div>
+</body>
+</html>
