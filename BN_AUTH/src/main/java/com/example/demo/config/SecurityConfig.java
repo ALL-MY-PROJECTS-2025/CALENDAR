@@ -74,13 +74,15 @@ public class SecurityConfig {
 
         //권한 체크
         http.authorizeHttpRequests((auth)->{
+            auth.requestMatchers("*").permitAll();
 
-            auth.requestMatchers("/","/join","/login","/validate").permitAll();
-            auth.requestMatchers("/user").hasRole("USER");
-            auth.requestMatchers("/member").hasRole("MEMBER");
-            auth.requestMatchers("/admin").hasRole("ADMIN");
-
-            auth.anyRequest().authenticated();
+//
+//            auth.requestMatchers("/","/join","/login","/validate").permitAll();
+//            auth.requestMatchers("/user").hasRole("USER");
+//            auth.requestMatchers("/member").hasRole("MEMBER");
+//            auth.requestMatchers("/admin").hasRole("ADMIN");
+//
+//            auth.anyRequest().authenticated();
         });
 
 

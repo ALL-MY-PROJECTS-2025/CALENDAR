@@ -10,5 +10,6 @@ import org.springframework.stereotype.Component;
 @Data
 public class RedisProperties {
     public static final int port = 6379 ;
-    public static final String host = "bn_redis-container";
+//    public static final String host = "bn_redis-container";
+    public static final String host = "localhost";
 }

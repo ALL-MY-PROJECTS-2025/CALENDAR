@@ -1,0 +1,44 @@
+/* PHOTO BLOCK TIMER */
+.postcard-container>.calendar-header .timer-block{
+    display:flex;
+    justify-content: left;
+    flex-direction: column;
+    /* border : 1px solid; */
+    position:absolute;
+    left:5px;
+    bottom : 0;
+    margin : auto;
+    background-color: transparent;
+    /* border : 1px solid; */
+    width : 50%;
+    text-align: left;
+    height:100%;
+    
+  }
+  
+  .postcard-container>.calendar-header .timer-block .timer{
+    font-size : 4rem;
+    font-weight: 600;;
+    /* border : 1px solid; */
+    position:relative;
+    width:100%;
+    height:100%;
+  }
+  .postcard-container>.calendar-header .timer-block .timer .pmam{
+    font-size : 3rem;
+    position:absolute;
+    top:5px;
+    left:0;
+    width:75px;
+    
+    
+    }
+
+    .postcard-container>.calendar-header .timer-block .timer .hourminutesecond{
+        position:absolute;
+        left:0;
+        bottom : 0;
+    }
+
+    
+  

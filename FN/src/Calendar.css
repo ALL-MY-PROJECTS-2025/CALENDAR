@@ -1,0 +1,298 @@
+*{
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+  padding: 0px;
+  height: 100vh;
+  width: 1280px;
+  margin: 0 auto;
+}
+
+.App {
+  text-align: center;
+  display:flex;
+  justify-content: start;
+  align-items: start;
+  gap : 10px;
+
+}
+
+
+/* LEFT */
+.App>.photo-frame{
+  width : 40%;
+  height : 100vh;
+}
+.App>.photo-frame{
+
+}
+
+.photo-frame {
+  width: 100%;
+  background: url('/public/images/default-background.jpg');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position:relative;
+}
+
+.poto-frame .swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-frame .swiper .swiper-wrapper {
+  width: 100%;
+  height: 100%;
+
+}
+
+.photo-frame .swiper .swiper-wrapper .swiper-slide {
+  width: 100%;
+  height: 100%;
+
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100vh;
+  object-fit: contain;
+}
+
+/* SWIPER 가 없는 경우 */
+.photo-frame>.items {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  width : 100%;
+  height : 100%;
+}
+
+.photo-frame>.items>.item {
+  position: relative;
+}
+.photo-frame>.items>.item img{
+  width : 100%;
+  height : 100%;
+  object-fit: cover;
+}
+
+.photo-frame>.items>.item video {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  visibility: initial;
+  mix-blend-mode: screen;
+}
+
+
+
+
+
+
+
+.img-block {
+
+  margin-bottom: 15px;
+  position : relative;
+}
+.img-block video{
+  height : 300px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  visibility: initial;
+
+  mix-blend-mode: screen;
+}
+
+.img-block img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+ 
+
+/* RIGHT */
+.postcard-container {
+  width : 60%;
+  
+  overflow: hidden;
+  position: relative;
+  
+}
+
+.postcard-container>.calendar-header{
+  height : 20vh;
+}
+
+
+
+
+
+/*  */
+.postcard-container * {
+  object-fit: contain;
+}
+
+
+
+.controller {
+  position: absolute;
+  right: 0px;
+  top: 10px;
+  z-index: 100;
+  height: 20vh;
+  /* border : 1px solid white; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.controller button {
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.controller button:hover {}
+
+
+.controller button span {
+  color: gray;
+}
+
+
+
+
+
+/* 캘린더 헤더 */
+.calendar-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin : 10px auto;
+
+  
+  background-color: rgb(230, 234, 218);
+  border-radius: 5px;
+}
+
+
+.calendar-body::-webkit-scrollbar {
+  display: none;
+
+}
+
+.calendar-body {
+ 
+}
+
+.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
+  height: 100vh;
+}
+.fc-scroller.fc-scroller-liquid-absolute::-webkit-scrollbar {
+  display: none !important;
+}
+
+
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+
+
+
+/* SETTING MODAL */
+.modal-schedule {
+  width: 100%;
+  text-align: left;
+}
+
+.modal-schedule>div {
+  margin-bottom: 5px;
+}
+
+/* UPLOAD MODAL */
+.uploadmodal .modal-body .upload-block {
+  height: 200px;
+  border: 1px dotted gray;
+  color: gray;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-container {
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  /* 여러 줄로 감싸기 */
+  gap: 10px;
+  /* 이미지 간 간격 */
+  justify-content: left;
+  /* 가로 정렬 */
+  align-items: center;
+  padding: 10px;
+}
+
+.preview-image {
+  width: calc(33.33% - 10px);
+  /* 3등분: 3열 */
+
+}
+
+.preview-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid lightgray;
+}
+
+.modal-header{
+  background-color: royalblue;
+  color : white;
+}
+.modal-header button{
+  background-color : white !important;
+  border : 1px solid white;
+  outline : white;
+}
+
+
+

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-const Weather = () => {
+import "./Timer.css";
+
+const Timer = () => {
   const [currentTime, setCurrentTime] = useState(""); // 현재 시간
   const [currentDay, setCurrentDay] = useState(""); // 현재 요일과 날짜
 
@@ -33,15 +35,19 @@ const Weather = () => {
   }, []);
 
   return (
-    <div className="weather-block" >
-      <div className="items">
-          <div className="item"></div>
-          <div className="item"></div>
-          <div className="item"></div>
-          <div className="item"></div>
+    <div className="timer-block">
+      <div className="timer">
+        <div className="pmam">{currentTime.split(" ")[0] || "AM/PM"} </div>
+        <div className="hourminutesecond">
+            <span>{currentTime.split(" ")[1]?.split(":")[0] || "00"}</span>
+            <span className="double-dot"> : </span>
+            <span>{currentTime.split(" ")[1]?.split(":")[1] || "00"}</span>
+            <span className="double-dot seconds"> : </span>
+            <span className="seconds">{currentTime.split(" ")[1]?.split(":")[2] || "00"}</span>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Weather;
+export default Timer;
