@@ -42,11 +42,11 @@ services:
     ports:
       - "6376:6376"
 
-  auth:
+  bn:
     build:
-      context: ./BN_AUTH
+      context: ./BN
       dockerfile: Dockerfile
-    image: bn_auth:latest
+    image: bn:latest
     container_name: bn_auth-container
     networks:
       my-custom-network:

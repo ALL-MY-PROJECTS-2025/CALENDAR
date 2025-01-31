@@ -130,7 +130,6 @@ function Calendar() {
 
     // 기존 업로드된 이미지를 상태에 저장
     setUploadedImages(previewImages);
-    //GITHUB ACTION을 이용해서 다른 REPOSITORY 로 전달할예정 PRIVATE to PRIVATE REPOSITORY 가능한지 확인할 것
 
     // FormData에 파일 추가
     const formData = new FormData();
@@ -140,7 +139,8 @@ function Calendar() {
 
     try {
       const response = await fetch(
-        "/auth/upload", // 업로드 디렉토리 경로,
+        // "/auth/upload", // 업로드 디렉토리 경로,
+        "http://localhost:8095/upload",
         {
           method: "POST",
           body: formData,

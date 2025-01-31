@@ -6,8 +6,8 @@ docker network create --subnet=192.168.1.0/24 my-custom-network
 docker run -d --network my-custom-network --ip 192.168.1.30 --name mysql8-container -p 3330:3306 mysql-custom:1.0
  
 
-:: BN_AUTH
-docker run -d --network  my-custom-network --ip 192.168.1.40 --name bn_auth-container -p 8095:8095 bn_auth
+:: BN
+docker run -d --network  my-custom-network --ip 192.168.1.40 --name bn-container -p 8095:8095 bn
 
 :: BN_REDIS
 docker run -d --network  my-custom-network --ip 192.168.1.50 --name bn_redis-container -p 6379:6379 bn_redis
