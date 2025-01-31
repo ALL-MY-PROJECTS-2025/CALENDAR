@@ -74,7 +74,7 @@ public class SecurityConfig {
 
         //권한 체크
         http.authorizeHttpRequests((auth)->{
-            auth.requestMatchers("*").permitAll();
+            auth.requestMatchers("/**").permitAll();
 
 //
 //            auth.requestMatchers("/","/join","/login","/validate").permitAll();

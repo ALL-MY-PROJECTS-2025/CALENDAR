@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import "./Timer.css";
+import "./css/Timer.css";
 
 const Timer = () => {
   const [currentTime, setCurrentTime] = useState(""); // 현재 시간
@@ -37,14 +37,29 @@ const Timer = () => {
   return (
     <div className="timer-block">
       <div className="timer">
-        <div className="pmam">{currentTime.split(" ")[0] || "AM/PM"} </div>
-        <div className="hourminutesecond">
-            <span>{currentTime.split(" ")[1]?.split(":")[0] || "00"}</span>
-            <span className="double-dot"> : </span>
-            <span>{currentTime.split(" ")[1]?.split(":")[1] || "00"}</span>
-            <span className="double-dot seconds"> : </span>
-            <span className="seconds">{currentTime.split(" ")[1]?.split(":")[2] || "00"}</span>
+        <div className="item">
+          <span className="pmam">{currentTime.split(" ")[0] || "AM/PM"} </span>
         </div>
+        <div className="item">
+          <span className="">{currentTime.split(" ")[1]?.split(":")[0] || "00"}</span>
+        </div>
+        <div>
+          <span className="double-dot"> : </span>
+        </div>
+        <div className="item">
+          <span >{currentTime.split(" ")[1]?.split(":")[1] || "00"}</span>
+        </div>
+        <div>
+          <span className="double-dot"> : </span>
+        </div>
+        <div className="item">
+          <span className=" seconds">
+            <span>
+              {currentTime.split(" ")[1]?.split(":")[2] || "00"}
+            </span>
+          </span>
+        </div>
+        
       </div>
     </div>
   );

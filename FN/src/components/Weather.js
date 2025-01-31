@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Weather.css";
+import "./css/Weather.css";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -240,23 +240,48 @@ const Weather = () => {
     }
   }, [location]); // 🚀 location이 변경될 때마다 실행
 
-
-
   // ✅ 데이터 로딩 상태 처리
-  if (
-    !weatherData ||
-    !weatherData.item ||
-    weatherData.item.length === 0
-  ) {
+  if (!weatherData || !weatherData.item || weatherData.item.length === 0) {
     return (
       <>
-        <div className="d-flex justify-content-center" style={{ position: "relative" }}>
-          <div className="spinner-border text-success" role="status" >
-            
+        <div className="weather-block">
+          <div className="items">
+            <div className="item">
+              <div>
+                {/* icon */}
+                <div className="icon">
+                  <span className="material-symbols-outlined ">
+                    🎁
+                  </span>
+                  <div className="obsrValue">
+                  <span>-</span>
+                </div>
+                </div>
+                <div className="obsrValue">
+               
+                  <span></span>
+                </div>
+              </div>
+            </div>
+
+            {/*  */}
+            <div className="item">
+              <div>
+                {/* icon */}
+                <div className="icon">
+                  <span className="material-symbols-outlined ">
+                    🎈
+                  </span>
+                </div>
+                {/* data */}
+                <div className="obsrValue">
+                  <span>-</span>
+                </div>
+              </div>
+            </div>
+
+            {/*  */}
           </div>
-        </div>
-        <div>
-          날씨데이터 로딩중입니다..
         </div>
       </>
     );
@@ -292,9 +317,7 @@ const Weather = () => {
           <div>
             {/* icon */}
             <div className="icon">
-              <span className="material-symbols-outlined ">
-                humidity_low
-              </span>
+              <span className="material-symbols-outlined ">humidity_low</span>
             </div>
             {/* data */}
             <div className="obsrValue">
@@ -304,12 +327,6 @@ const Weather = () => {
         </div>
 
         {/*  */}
-
-
-
-
-
-
       </div>
     </div>
   );

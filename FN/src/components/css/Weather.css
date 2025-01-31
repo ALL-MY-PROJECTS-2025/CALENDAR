@@ -1,32 +1,22 @@
 /* PHOTO BLOCK WEATHER 날씨 */
 .postcard-container>.calendar-header .weather-block {
   display: flex;
-  justify-content: left;
-  flex-direction: column;
+  justify-content: space-between;
   /* border : 1px solid; */
   position: absolute;
-  right: 5px;
-  bottom: 0;
+  left: 15px;
+  top : 5px;
 
   background-color: transparent;
-  height: 100%;
-  padding: 10px;
-
-
+  padding :5px;;
+ 
 }
 
 .postcard-container>.calendar-header .weather-block .items {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  /* 3개의 컬럼 */
-  /* grid-template-rows: 1fr 1fr;  2개의 행 */
+  display: flex;
+  justify-content: left;
+  align-items: start;
   gap: 5px;
-  /* 아이템 간 간격 */
-  justify-items: center;
-  /* 아이템을 중앙 정렬 */
-  align-items: end;
-  width: 100%;
-  height: 100%;
   
 }
 
@@ -34,23 +24,26 @@
   display: flex;
   justify-content: center;
   align-items:end;
-  width: 120px;
-  padding : 10px;
+  width: 80px;
+  padding : 5px;
   font-weight: 500;
   background-color: white;
+  box-shadow: 5px 5px 5px lightgray;;
+  height : 11vh;
+  
 }
 
 .postcard-container>.calendar-header .weather-block .items .item .icon {
-
   width: 100%;
 }
 
-.postcard-container>.calendar-header .weather-block .items .item .icon>span {
-  font-size: 6rem;
 
+.postcard-container>.calendar-header .weather-block .items .item .icon>span {
+  font-size: clamp(2rem ,3.333vw,4rem);
+ 
 }
 
 
 .postcard-container>.calendar-header .weather-block .items .item .obsrValue {
-  font-size: 2rem;
+  font-size: 1rem;
 }
