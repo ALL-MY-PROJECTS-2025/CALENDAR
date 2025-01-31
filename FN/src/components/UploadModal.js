@@ -17,7 +17,17 @@ const UploadModal = ({ currentDate, images, setImages }) => {
   }, [currentDate]); // ✅ currentDate가 변경될 때마다 실행
 
   //--------------------------------------
+  // 드래그시 스타일링
+  //--------------------------------------
+  const handleonDragOver = (e)=>{
+    e.preventDefault();
+    e.target.setAttribute('style','border : 3px dotted gray;font-size:1rem;background-color:lightgray;opacity:.5;color:black;')
+  }
 
+  const handleonDragLeave = (e)=>{
+    e.preventDefault();
+    e.target.setAttribute('style','border : 1px dotted gray;font-size:1rem;background-color:white;opacity:1;color:gray;')
+  }
   //--------------------------------------
   // 파일을 드롭했을 때 처리하는 핸들러
   //--------------------------------------
@@ -191,6 +201,7 @@ const UploadModal = ({ currentDate, images, setImages }) => {
       tabIndex="-1"
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
+     
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
@@ -206,10 +217,12 @@ const UploadModal = ({ currentDate, images, setImages }) => {
           <div className="modal-body">
             <div
               className="upload-block"
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={(e) => handleonDragOver(e)}
+              onDragLeave={(e) => handleonDragLeave(e)}
               onDrop={handleFileDrop}
+              style={{fontSize : "1rem"}}
             >
-              +
+              이미지를 드래그 해 주세요
             </div>
             <div className="preview">
               {previewImages.length > 0 ? (
@@ -218,7 +231,16 @@ const UploadModal = ({ currentDate, images, setImages }) => {
                     <div
                       key={index}
                       className="preview-image"
-                      style={{ position: "relative" }}
+                      style={{ 
+                        position: "relative" ,  
+                        margin : "10px",
+                        border:"1px solid lightgray",
+                        display:"flex",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        overflow:"hidden",
+                        
+                      }}
                     >
                       <img
                         src={src}
@@ -227,23 +249,24 @@ const UploadModal = ({ currentDate, images, setImages }) => {
                           width: "100px",
                           height: "100px",
                           objectFit: "cover",
+                        
                         }}
                       />
                       <button
                         style={{
-                          position: "absolute",
-                          top: "0px",
-                          right: "20px",
-                          backgroundColor: "red",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "25%",
-                          width: "20px",
-                          height: "20px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
+                          backgroundColor:"red",
+                          border:"0",
+                          color:"white",
+                          position:"absolute",
+                          right:"0px",
+                          top:"0px",
+                          borderRadius:"50%",
+                          width:"20px",
+                          height:"20px",
+                          display:"flex",
+                          justifyContent : "center",
+                          alignItems:"center"
+                          
                         }}
                         onClick={() => handleRemoveImage(index)}
                       >

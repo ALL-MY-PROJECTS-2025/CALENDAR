@@ -1,0 +1,57 @@
+
+/* UPLOAD MODAL */
+.uploadmodal .modal-content{
+    width : 350px !important;
+   
+    margin : 0 auto;
+    height :100%;
+}
+.uploadmodal .modal-body .upload-block {
+   
+    height: 100px;
+    border: 1px dotted gray;
+    color: gray;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+
+    
+  .preview-container {
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    /* 여러 줄로 감싸기 */
+    gap: 10px;
+    /* 이미지 간 간격 */
+    justify-content: center;
+    /* 가로 정렬 */
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .preview-image {
+    width: calc(33.33% - 10px);
+    /* 3등분: 3열 */
+  
+  }
+  
+  .modal-header{
+    background-color: royalblue;
+    color : white;
+  }
+  .modal-header button{
+    background-color : white !important;
+    border : 1px solid white;
+    outline : white;
+   
+  }
+  
+
+  .uploadmodal .modal-footer input[type="file"] ::-webkit-file-upload-button{
+    display:none;
+  }

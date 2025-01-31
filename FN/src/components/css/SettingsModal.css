@@ -1,0 +1,127 @@
+.settingmodal .modal-content{
+    width : 350px !important;
+    margin : 0 auto;
+    height :100%;
+}
+.settingmodal .modal-body{
+    font-family: sans-serif;
+}
+
+.settingmodal .modal-body .items{
+    height : 100%;
+}
+
+.settingmodal .modal-body .items .item{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    height : 100%;
+    font-size : .9rem;
+    gap:5px;
+    border : 1px solid lightgray;
+    margin : 5px;
+}
+.settingmodal .modal-body .items .item>div{
+    
+    width:100%;
+    height : 100%;
+}
+
+/* 레이아웃 선택 */
+.settingmodal .modal-body .items .item.choose-layout{
+    height : 100px !important;
+}
+.settingmodal .modal-body .items .item.choose-layout:nth-child(2){
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap : 2px;
+    width : 100%;
+    height : 100px !important;
+  
+    
+}
+.settingmodal .modal-body .items .item.choose-layout .rowLayout{
+    width:100%;
+    height :  100px !important;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap:5px;
+    padding : 5px;
+
+}
+.settingmodal .modal-body .items .item.choose-layout .title{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+.settingmodal .modal-body .items .item.choose-layout .rowLayout .imageblock{
+   
+    width:40%;
+    height:100%;
+    border:1px solid lightgray;
+    background-color: lightgray;
+    writing-mode:vertical-rl;
+    font-size : .8rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.settingmodal .modal-body .items .item.choose-layout .rowLayout .contentblock{
+    width:60%;
+    height:100%;
+    border:1px solid lightgray;
+    writing-mode:vertical-rl;
+    font-size : .8rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.settingmodal .modal-body .items .item.choose-layout .colLayout{
+    width:100%;
+    height :  100px !important;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap:5px;
+    padding : 5px;
+
+}
+.settingmodal .modal-body .items .item.choose-layout .colLayout .imageblock{
+   
+    width:100%;
+    height:40%;
+    border:1px solid lightgray;
+    background-color: lightgray;
+    font-size : .8rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settingmodal .modal-body .items .item.choose-layout .colLayout .contentblock{
+    width:100%;
+    height:60%;
+    border:1px solid lightgray;
+    font-size : .8rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settingmodal .modal-body .items .item.choose-layout-radio{}
+.settingmodal .modal-body .items .item.choose-layout-radio .title{
+    width:100%;
+    
+}
+.settingmodal .modal-body .items .item.choose-layout-radio .rowLayout{
+    padding : 5px;
+}
+.settingmodal .modal-body .items .item.choose-layout-radio .colLayout{
+    padding : 5px;
+}
