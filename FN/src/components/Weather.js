@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Weather.css";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 //------------------------------------------------------------------------
 // 날씨 정보 가져오기 - 초단기 실황조회
@@ -247,7 +248,18 @@ const Weather = () => {
     !weatherData.item ||
     weatherData.item.length === 0
   ) {
-    return <div className="weather-block">날씨 데이터를 불러오는 중...</div>;
+    return (
+      <>
+        <div className="d-flex justify-content-center" style={{ position: "relative" }}>
+          <div className="spinner-border text-success" role="status" >
+            
+          </div>
+        </div>
+        <div>
+          날씨데이터 로딩중입니다..
+        </div>
+      </>
+    );
   }
 
   return (
@@ -274,7 +286,7 @@ const Weather = () => {
             </div>
           </div>
         </div>
-                
+
         {/*  */}
         <div className="item">
           <div>
@@ -293,11 +305,11 @@ const Weather = () => {
 
         {/*  */}
 
-        
 
 
 
-        
+
+
       </div>
     </div>
   );

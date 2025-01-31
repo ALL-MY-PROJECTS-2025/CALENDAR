@@ -5,6 +5,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import googleCalendarPlugin from "@fullcalendar/google-calendar"; // //GOOGLE CALENDAR
 import timeGridPlugin from "@fullcalendar/timegrid"; // timeGridPlugin 추가
 
+
+
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // TIMER COMPONENT
@@ -120,6 +122,29 @@ function Calendar() {
   };
 
   //----------------------------------
+  // 파일 올리기 버튼 클릭시 form추가
+  //----------------------------------
+  const handleAddFormdata = (e) => {
+    const files = Array.from(e.target.files); // 사용자가 선택한 파일 가져오기
+    const imageFiles = files.filter((file) => file.type.startsWith("image/")); // 이미지 파일만 필터링
+  
+    if (imageFiles.length === 0) {
+      alert("이미지 파일만 업로드할 수 있습니다.");
+      return;
+    }
+  
+    // 미리보기 URL 생성
+    const previewUrls = imageFiles.map((file) => URL.createObjectURL(file));
+    
+    // 기존 이미지 리스트에 추가
+    setPreviewImages((prev) => [...prev, ...previewUrls]);
+    setUploadedImages((prev) => [...prev, ...imageFiles]);
+  
+    console.log("📂 추가된 파일 목록:", imageFiles);
+  };
+  
+
+  //----------------------------------
   // 업로드 버튼 클릭 시 호출
   //----------------------------------
   const handleUpload = async () => {
@@ -165,6 +190,12 @@ function Calendar() {
     setPreviewImages([]);
   };
 
+  //----------------------------------
+  //해당 연월에 업로드된 이미지 가져오기
+  //----------------------------------
+  useEffect(()=>{
+    console.log("CURRENTDATE : ",currentDate)
+  },[currentDate])
   //----------------------------------
 
   //----------------------------------
@@ -217,6 +248,16 @@ function Calendar() {
         <div className="controller">
           <button
             type="button"
+            className="btn btn-primary upload-btn"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop2"
+            onClick="handleGetAlbum"
+          >
+            <span className="material-symbols-outlined">upload</span>
+          </button>
+
+          <button
+            type="button"
             className="btn btn-primary setting-btn"
             data-bs-toggle="modal"
             data-bs-target="#staticBackdrop"
@@ -224,14 +265,7 @@ function Calendar() {
             <span className="material-symbols-outlined">settings</span>
           </button>
 
-          <button
-            type="button"
-            className="btn btn-primary upload-btn"
-            data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop2"
-          >
-            <span className="material-symbols-outlined">upload</span>
-          </button>
+
         </div>
 
         <div className="calendar-container" style={{}}>
@@ -478,19 +512,20 @@ function Calendar() {
               </div>
 
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
+                <input 
+                  type="file"
+                  className="btn"
+                  onClick={handleAddFormdata}
+                  multiple 
+                />
+                
+
                 <button
                   type="button"
                   className="btn btn-primary"
                   onClick={handleUpload} // 업로드 처리
                 >
-                  Upload
+                  업로드 요청
                 </button>
               </div>
             </div>

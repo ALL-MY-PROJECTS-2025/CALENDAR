@@ -1,53 +1,56 @@
 /* PHOTO BLOCK WEATHER 날씨 */
-.postcard-container>.calendar-header .weather-block{
-  display:flex;
+.postcard-container>.calendar-header .weather-block {
+  display: flex;
   justify-content: left;
   flex-direction: column;
   /* border : 1px solid; */
-  position:absolute;
-  right : 50px;
+  position: absolute;
+  right: 5px;
   bottom: 0;
 
   background-color: transparent;
-  height : 100%;
+  height: 100%;
+  padding: 10px;
+
+
+}
+
+.postcard-container>.calendar-header .weather-block .items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* 3개의 컬럼 */
+  /* grid-template-rows: 1fr 1fr;  2개의 행 */
+  gap: 5px;
+  /* 아이템 간 간격 */
+  justify-items: center;
+  /* 아이템을 중앙 정렬 */
+  align-items: end;
+  width: 100%;
+  height: 100%;
+  
+}
+
+.postcard-container>.calendar-header .weather-block .items .item {
+  display: flex;
+  justify-content: center;
+  align-items:end;
+  width: 120px;
   padding : 10px;
-  
-    
+  font-weight: 500;
+  background-color: white;
 }
- 
-.postcard-container>.calendar-header .weather-block .items{
-display: grid;
-grid-template-columns: 1fr 1fr; /* 3개의 컬럼 */
-/* grid-template-rows: 1fr 1fr;  2개의 행 */
-gap: 5px; /* 아이템 간 간격 */
-justify-items: center; /* 아이템을 중앙 정렬 */
-align-items: center;
-width: 100%;
-height: 100%;
+
+.postcard-container>.calendar-header .weather-block .items .item .icon {
+
+  width: 100%;
+}
+
+.postcard-container>.calendar-header .weather-block .items .item .icon>span {
+  font-size: 6rem;
 
 }
 
-.postcard-container>.calendar-header .weather-block .items .item{
-display: flex;
-justify-content: center;
-align-items: center;
-width :120px;
-height :17vh;
-font-weight:500;
-background-color: white;
-}
 
-.postcard-container>.calendar-header .weather-block .items .item .icon{
-  
-  width : 100%;
-}
-
-.postcard-container>.calendar-header .weather-block .items .item .icon>span{
-  font-size : 4rem;
-  
-}
-
-
-.postcard-container>.calendar-header .weather-block .items .item .obsrValue{
-  font-size :1.5rem;
+.postcard-container>.calendar-header .weather-block .items .item .obsrValue {
+  font-size: 2rem;
 }
