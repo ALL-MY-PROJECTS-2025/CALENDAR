@@ -318,6 +318,30 @@ body {
 }
 
 
+.fc-toolbar-title{
+  font-size : 2rem !important;
+}
+
+
+.fc-button-group{
+  font-size : .9rem;
+}
+.fc-today-button{
+  font-size : .9rem !important;
+}
+/*제목 부문 */
+.fc-header-toolbar.fc-toolbar.fc-toolbar-ltr{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;;
+  position:relative;
+}
+.fc-header-toolbar.fc-toolbar.fc-toolbar-ltr .fc-toolbar-chunk:nth-child(2){
+  width : 50%;
+  text-align: center;
+  
+}
+
 /* SETTING MODAL */
 .modal-schedule {
   width: 100%;

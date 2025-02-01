@@ -250,16 +250,12 @@ const Weather = () => {
               <div>
                 {/* icon */}
                 <div className="icon">
-                  <span className="material-symbols-outlined ">
-                    🎁
+                  <span>
+                    <span className="material-symbols-outlined "></span>
                   </span>
                   <div className="obsrValue">
-                  <span>-</span>
-                </div>
-                </div>
-                <div className="obsrValue">
-               
-                  <span></span>
+                    <span>-</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -268,11 +264,13 @@ const Weather = () => {
             <div className="item">
               <div>
                 {/* icon */}
+
                 <div className="icon">
-                  <span className="material-symbols-outlined ">
-                    🎈
+                  <span>
+                    <span className="material-symbols-outlined "></span>
                   </span>
                 </div>
+
                 {/* data */}
                 <div className="obsrValue">
                   <span>-</span>

@@ -50,33 +50,48 @@ function Calendar() {
     const fetchImagesFromServer = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8095/getAlbum/${currentYear}/${currentMonth
-            .toString()
-            .padStart(2, "0")}`
+          `http://localhost:8095/getAlbum/${currentYear}/${String(
+            currentMonth
+          ).padStart(2, "0")}`
         );
-        if (response.ok) {
-          const data = await response.json();
-          console.log("data", data);
-          if (data) {
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // 데이터를 [{ filename, base64 }] 형식으로 변환
-            const imageArray = Object.entries(data).map(
-              ([filename, base64]) => ({
-                filename,
-                base64: `data:image/jpeg;base64,${base64}`,
-              })
-            );
-            console.log("imageArray", imageArray);
-            setImages(imageArray);
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          } else {
-            setImages([]); // 이미지가 없으면 초기화
-          }
+
+        // 🔹 응답이 정상적인지 확인
+        if (!response.ok) {
+          console.warn("⚠️ 서버 응답 오류:", response.status);
+          setImages([]); // 초기화
+          return;
+        }
+
+        // 🔹 응답이 JSON인지 체크 (빈 응답이면 JSON 파싱 X)
+        const contentType = response.headers.get("content-type");
+        const contentLength = response.headers.get("content-length");
+
+        if (
+          !contentType ||
+          !contentType.includes("application/json") ||
+          contentLength === "0"
+        ) {
+          console.warn("⚠️ 서버 응답이 비어 있거나 JSON이 아님");
+          setImages([]); // 이미지 초기화
+          return;
+        }
+
+        const data = await response.json();
+        console.log("📌 가져온 이미지 데이터:", data);
+
+        if (data && Object.keys(data).length > 0) {
+          const imageArray = Object.entries(data).map(([filename, base64]) => ({
+            filename,
+            base64: `data:image/jpeg;base64,${base64}`,
+          }));
+
+          setImages(imageArray); // 이미지 상태 업데이트
         } else {
+          console.warn("⚠️ 서버에서 받은 데이터가 없음");
           setImages([]);
         }
       } catch (error) {
-        console.error("Error fetching images from server:", error);
+        console.error("❌ 이미지 데이터를 가져오는 중 오류 발생:", error);
         setImages([]);
       }
     };
@@ -323,9 +338,9 @@ function Calendar() {
         {/* END */}
 
         {/* UPLOAD MODAL */}
-        <UploadModal 
-          currentDate={currentDate} 
-          images={images} 
+        <UploadModal
+          currentDate={currentDate}
+          images={images}
           setImages={setImages}
         />
         {/* END */}

@@ -160,37 +160,45 @@ const UploadModal = ({ currentDate, images, setImages }) => {
   //--------------------------------------
   // 업로드된 내용 패치
   //--------------------------------------
-  // ✅ 서버에서 Base64 이미지 목록을 다시 가져오는 함수
   const fetchImagesFromServer = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8095/getAlbum/${currentDate.getFullYear()}/${String(
-          currentDate.getMonth() + 1
-        ).padStart(2, "0")}`
+        `http://localhost:8095/getAlbum/${currentDate.getFullYear()}/${String(currentDate.getMonth() + 1).padStart(2, "0")}`
       );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("data", data);
-
-        if (data) {
-          // ✅ 기존 이미지 + 새로 업로드한 이미지 유지
-          const imageArray = Object.entries(data).map(([filename, base64]) => ({
-            filename,
-            base64: `data:image/jpeg;base64,${base64}`,
-          }));
-
-          setPreviewImages(imageArray.map((img) => img.base64)); // preview에 반영
-          setImages(imageArray); // images 상태 업데이트
-        }
-      } else {
-        setPreviewImages([]);
+  
+      // 🔹 응답이 JSON인지, 또는 비어 있는지 체크
+      const contentType = response.headers.get("content-type");
+      const contentLength = response.headers.get("content-length");
+  
+      if (!response.ok) {
+        console.warn("⚠️ 서버에서 정상적인 응답을 받지 못함:", response.status);
+        return;
+      }
+  
+      if (!contentType || !contentType.includes("application/json") || contentLength === "0") {
+        console.warn("⚠️ 응답이 비어 있음 또는 JSON이 아님");
+        setPreviewImages([]); // 미리보기 초기화
+        return;
+      }
+  
+      const data = await response.json();
+      console.log("📌 가져온 이미지 데이터:", data);
+  
+      if (data) {
+        const imageArray = Object.entries(data).map(([filename, base64]) => ({
+          filename,
+          base64: `data:image/jpeg;base64,${base64}`,
+        }));
+  
+        setPreviewImages(imageArray.map((img) => img.base64)); // ✅ 미리보기 업데이트
+        setImages(imageArray); // ✅ images 상태 업데이트
       }
     } catch (error) {
-      console.error("Error fetching images from server:", error);
-      setPreviewImages([]);
+      console.error("❌ 이미지 데이터 가져오기 오류:", error);
+      setPreviewImages([]); // 미리보기 초기화
     }
   };
+  
 
   return (
     <div

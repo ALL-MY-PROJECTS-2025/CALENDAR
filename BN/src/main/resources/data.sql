@@ -1,2 +1,3 @@
 INSERT IGNORE INTO user VALUES('admin','$2a$10$KbUSiLvmJQThAQRpoR6Ns.OmJuGLgE5eaPmUbKmNgIR4CM6zYUFM2',null,null,"ROLE_ADMIN")
 INSERT IGNORE INTO user VALUES('user','$2a$10$KbUSiLvmJQThAQRpoR6Ns.OmJuGLgE5eaPmUbKmNgIR4CM6zYUFM2',null,null,"ROLE_USER")
+INSERT IGNORE INTO Settings VALUES(1,true,"1","row",null,null)
