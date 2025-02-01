@@ -1,5 +1,10 @@
 
 /* UPLOAD MODAL */
+.uploadmodal .modal-header{
+  background-color:#1E2B37;
+  height : 55px;
+}
+
 .uploadmodal .modal-content{
     width : 350px !important;
    
@@ -45,13 +50,17 @@
     color : white;
   }
   .modal-header button{
-    background-color : white !important;
-    border : 1px solid white;
-    outline : white;
+      background-color:white;
+
    
   }
   
 
   .uploadmodal .modal-footer input[type="file"] ::-webkit-file-upload-button{
     display:none;
+  }
+
+  .uploadmodal .modal-footer .upload-btn{
+    background-color:#1E2B37;
+    color:white;
   }

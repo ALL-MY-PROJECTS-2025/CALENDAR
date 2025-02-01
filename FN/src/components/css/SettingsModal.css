@@ -1,7 +1,14 @@
+*{
+    box-sizing: border-box;
+}
 .settingmodal .modal-content{
     width : 350px !important;
     margin : 0 auto;
     height :100%;
+}
+.settingmodal .modal-header{
+    background-color:#1E2B37;
+    height : 55px;
 }
 .settingmodal .modal-body{
     font-family: sans-serif;
@@ -15,11 +22,13 @@
     display:flex;
     justify-content: space-between;
     align-items: center;
+    width : 100%;
     height : 100%;
     font-size : .9rem;
     gap:5px;
     border : 1px solid lightgray;
     margin : 5px;
+    
 }
 .settingmodal .modal-body .items .item>div{
     
@@ -27,9 +36,26 @@
     height : 100%;
 }
 
+/* YYYY - MM 선택 */
+.settingmodal .modal-body .items .item.choose-yyyymm{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settingmodal .modal-body .items .item.choose-yyyymm select{
+    font-size : .8rem;
+    border-radius: 0;
+    outline : none;
+    border :0;
+
+
+}
+
 /* 레이아웃 선택 */
 .settingmodal .modal-body .items .item.choose-layout{
     height : 100px !important;
+  
 }
 .settingmodal .modal-body .items .item.choose-layout:nth-child(2){
     display:flex;
@@ -55,10 +81,9 @@
     display:flex;
     justify-content: center;
     align-items: center;
-   
+    border : 1px solid lightgray;
 }
 .settingmodal .modal-body .items .item.choose-layout .rowLayout .imageblock{
-   
     width:40%;
     height:100%;
     border:1px solid lightgray;
@@ -114,14 +139,117 @@
     align-items: center;
 }
 
-.settingmodal .modal-body .items .item.choose-layout-radio{}
+.settingmodal .modal-body .items .item.choose-layout-radio{
+    width : 100%;
+    height : 100%;
+}
 .settingmodal .modal-body .items .item.choose-layout-radio .title{
-    width:100%;
+    height : 30px;
+    border-right : 1px solid lightgray;
     
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0;
+
 }
 .settingmodal .modal-body .items .item.choose-layout-radio .rowLayout{
     padding : 5px;
+    width : 100%;
+    height : 30px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-right : 1px solid lightgray;
+    border-radius: 0;
 }
 .settingmodal .modal-body .items .item.choose-layout-radio .colLayout{
     padding : 5px;
+    height : 30px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.settingmodal .modal-body .items .item.choose-layout-radio input{
+   
+}
+
+/* 이미지 배치 형태 */
+.settingmodal .modal-body .items .item.choose-image-array
+{
+
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.settingmodal .modal-body .items .item.choose-image-array .title{
+
+    border : 1px solid lightgray;
+    height : 200px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0;
+    
+}
+.settingmodal .modal-body .items .item.choose-image-array .array-1{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height:100%;
+    border : 1px solid lightgray;
+    padding : 5px;
+}
+.settingmodal .modal-body .items .item.choose-image-array .array-1>div{
+    border : 1px solid lightgray;
+    width : 50%;
+    height : 100px;
+}
+.settingmodal .modal-body .items .item.choose-image-array .array-2-row{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border : 1px solid lightgray;
+    gap : 2px;
+    padding : 5px;
+}
+.settingmodal .modal-body .items .item.choose-image-array .array-2-row>div{
+    width:100%;
+    height:100px;
+    border : 1px solid lightgray;
+}
+.settingmodal .modal-body .items .item.choose-image-array .array-2-col{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border : 1px solid lightgray;
+    gap : 2px;
+    flex-direction: column;
+    padding : 5px;
+}
+.settingmodal .modal-body .items .item.choose-image-array .array-2-col>div{
+    width:100%;
+    height:50px;
+    border : 1px solid lightgray;
+   
+}
+.settingmodal .modal-body .items .item.choose-image-array .array-4{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap:2px;
+    padding : 2px;
+
+
+}
+.settingmodal .modal-body .items .item.choose-image-array .array-4>div{
+    width : 100%;
+    height : 50px;
+    border : 1px solid lightgray;
+}
+
+.settingmodal .modal-footer button{
+    font-size : .8rem;
+    background-color: #1E2B37;;
 }

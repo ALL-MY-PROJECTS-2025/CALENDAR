@@ -283,7 +283,7 @@ const UploadModal = ({ currentDate, images, setImages }) => {
           <div className="modal-footer">
             <input
               type="file"
-              className="btn"
+              className="btn "
               onChange={handleAddFormdata}
               multiple
               style={{ display: "none" }}
@@ -294,7 +294,7 @@ const UploadModal = ({ currentDate, images, setImages }) => {
             </button>
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn upload-btn"
               onClick={handleUpload}
             >
               업로드 요청
