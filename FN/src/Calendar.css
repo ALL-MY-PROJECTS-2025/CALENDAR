@@ -114,6 +114,8 @@ body {
 
 .photo-frame>.items>.item {
   position: relative;
+  width : 100%;
+  height : 100%;
 }
 
 
