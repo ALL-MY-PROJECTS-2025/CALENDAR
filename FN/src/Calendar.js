@@ -276,8 +276,7 @@ function Calendar() {
   };
 
   return (
-    <div className="App">
-      {/*  */}
+    <div className={`App ${selectedSettings.layout === 'row' ? 'layout-row' : 'layout-col'}`}>
       <div className="photo-frame">
         {/* SLIDE 없이 배치 */}
         {images.length > 0 ? (

@@ -48,25 +48,70 @@ body {
 
 .App {
   text-align: center;
-  display:flex;
-  justify-content: start;
-  align-items: start;
-  gap : 10px;
-  height : 100vh;
-  overflow : hidden;
-  /* border : 1px solid;  */
+  display: flex;
+  gap: 10px;
+  height: 100vh;
+  overflow: hidden;
 }
 
-
-/* LEFT */
-.App>.photo-frame{
-  width : 40%;
-  height : 100vh;
-}
-.App>.photo-frame{
-
+/* Row 레이아웃 (가로 배치) */
+.layout-row {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
+.layout-row .photo-frame {
+  width: 40%;
+  height: 100vh;
+}
+
+.layout-row .postcard-container {
+  width: 60%;
+  padding-left: 20px;
+}
+
+/* Column 레이아웃 (세로 배치) */
+.layout-col {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.layout-col .photo-frame {
+  width: 100%;
+  height: 40vh;
+  margin-bottom: 20px;
+}
+
+.layout-col .postcard-container {
+  width: 100%;
+  height: 60vh;
+}
+
+/* 이미지 컨테이너 스타일 조정 */
+.layout-row .items {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.layout-col .items {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+}
+
+/* 이미지 스타일 조정 */
+.layout-row .item img {
+  width: 100%;
+  height: auto;
+}
+
+.layout-col .item img {
+  height: 100%;
+  width: auto;
+}
 
 .photo-frame {
   width: 100%;
