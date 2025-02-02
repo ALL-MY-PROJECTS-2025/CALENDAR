@@ -69,13 +69,16 @@ public class SettingsRestController
         if (settings == null) {
             response.put("message", "해당 월에 대한 설정이 존재하지 않습니다.");
             Settings defaultSettings  =  settingsRepository.findByDefaultValue(true);
-            response.put("year", defaultSettings.getYear());
-            response.put("month", defaultSettings.getMonth());
-            response.put("layout", defaultSettings.getLayout());
-            response.put("imageArray", defaultSettings.getImageArray());
-            response.put("defaultValue", defaultSettings.isDefaultValue());
 
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            //해당연월을 기본값으로 저장
+            settings = new Settings();
+            settings.setYear(year);
+            settings.setMonth(month);
+            settings.setLayout(defaultSettings.getLayout());
+            settings.setDefaultValue(false);
+            settings.setImageArray(defaultSettings.getImageArray());
+
+            settingsRepository.save(settings);
 
         }
 

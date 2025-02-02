@@ -23,9 +23,12 @@ import "swiper/css";
 import "./Calendar.css";
 
 function Calendar() {
+
+  //----------------------------
+  // 
+  //----------------------------
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today);
-  const [images, setImages] = useState([]);
 
   const calendarRef = useRef(null); // FullCalendar를 제어하기 위한 ref
 
@@ -36,16 +39,106 @@ function Calendar() {
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
-  // 미리보기 이미지 리스트
+
+  //----------------------------
+  // UploadModal.js State
+  //----------------------------
+  const [images, setImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]); // 미리보기 이미지 리스트
   const [uploadedImages, setUploadedImages] = useState([]); // 업로드된 이미지 리스트
+  //----------------------------
 
-  // 타이머
+  //----------------------------
+  // Timer.js  State
+  //----------------------------
   const [currentTime, setCurrentTime] = useState(""); //  현재 시간을 저장
   const [currentDay, setCurrentDay] = useState(""); //  현재 요일과 날짜 저장
+  //----------------------------
 
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //----------------------------
+  // SettingsModel.js State 
+  //----------------------------
+  // 연도 및 월 상태 관리
+  const [years, setYears] = useState([]);
+  const [months, setMonths] = useState([]);
+  const [selectedSettings, setSelectedSettings] = useState({})
+  // 상태를 객체로 관리
+  // const [selectedSettings, setSelectedSettings] = useState({
+  //   year: new Date().getFullYear(),
+  //   month: new Date().getMonth() + 1, // 월은 0부터 시작하므로 +1
+  //   layout: "row",
+  //   imageArray: "1",
+  //   defaultValue: false,
+  // });
+  useEffect(()=>{
+    const currentMonth = currentDate.getMonth() + 1;
+    setYears(currentDate.getFullYear())
+    
+  },[])
+
+  //-----------------------------------
+  // 연도 및 월 변경 시 서버에서 설정 값 가져오기!!!!!!!!!!!
+  //-----------------------------------
+  useEffect(() => {
+    fetchSettings(currentYear, currentMonth)
+  }, [currentYear, currentMonth]); // 현재 연월이 변경될 때 실행
+
+  const fetchSettings = async (year, month) => {
+    try {
+      const response = await fetch(`http://localhost:8095/settings/get/${year}/${month}`);
+      if (!response.ok) {
+        console.warn("⚠️ 서버에서 설정을 가져올 수 없음. 기본 설정 사용.");
+      }
+      const data = await response.json();
+      console.log("📌 서버에서 가져온 설정:", data);
+
+      // 가져온 데이터를 상태에 저장
+      setSelectedSettings({
+        year: data.year,
+        month: data.month,
+        layout: data.layout,
+        imageArray: data.imageArray,
+        defaultValue: data.defaultValue,
+      });
+
+    } catch (error) {
+      console.error("❌ 설정 데이터를 가져오는 중 오류 발생:", error);
+    }
+  };
+
+
+  //-------------------------------
+  // Settings 변경시 서버에 저장
+  //-------------------------------
+  useEffect(() => {
+    if (selectedSettings.defaultValue !== null) {
+      handleFetch();
+    }
+  }, [selectedSettings]);
+
+  const handleFetch = async () => {
+    console.log("서버로 전송할 데이터:", selectedSettings);
+    try {
+      const response = await fetch("http://localhost:8095/settings/month", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedSettings),
+      });
+      if (response.ok) {
+        // alert("설정을 저장했습니다.");
+      }
+    } catch (error) {
+      console.error("월 설정 적용 오류:", error);
+      alert("월 설정 적용 중 오류가 발생했습니다.");
+    }
+  };
+  //-------------------------------
+
+  //----------------------------
   // 서버에서 Base64 이미지 목록을 가져오는 함수
+  //----------------------------
   useEffect(() => {
     const fetchImagesFromServer = async () => {
       try {
@@ -59,6 +152,7 @@ function Calendar() {
         if (!response.ok) {
           console.warn("⚠️ 서버 응답 오류:", response.status);
           setImages([]); // 초기화
+          setPreviewImages([]);
           return;
         }
 
@@ -73,6 +167,7 @@ function Calendar() {
         ) {
           console.warn("⚠️ 서버 응답이 비어 있거나 JSON이 아님");
           setImages([]); // 이미지 초기화
+          setPreviewImages([]);
           return;
         }
 
@@ -85,6 +180,7 @@ function Calendar() {
             base64: `data:image/jpeg;base64,${base64}`,
           }));
 
+          setPreviewImages(imageArray.map((img) => img.base64)); // ✅ 미리보기 업데이트
           setImages(imageArray); // 이미지 상태 업데이트
         } else {
           console.warn("⚠️ 서버에서 받은 데이터가 없음");
@@ -93,12 +189,12 @@ function Calendar() {
       } catch (error) {
         console.error("❌ 이미지 데이터를 가져오는 중 오류 발생:", error);
         setImages([]);
+        setPreviewImages([]);
       }
     };
-
     fetchImagesFromServer();
   }, [currentYear, currentMonth]); // 현재 년/월이 변경될 때 실행
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
   //----------------------------------------
   // TEST CODE( PUBLIC 내의이미지 가져와서 확인)
@@ -127,8 +223,11 @@ function Calendar() {
 
   //   fetchImages();
   // }, [currentYear, currentMonth]);
-  //----------------------------------------
 
+
+  //----------------------------------------
+  //FULLCALENDAR  + GOOGLE 
+  //----------------------------------------
   //GOOGLE MODAL
   const handleEventClick = (info) => {
     info.jsEvent.preventDefault(); // !!! 기본 동작 방지
@@ -167,8 +266,8 @@ function Calendar() {
             {images.map((img, index) => (
               <div key={index} className="item">
                 <img
-                  src={img.base64} // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                  alt={img.filename} // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                  src={img.base64}
+                  alt={img.filename}
                   className="month-image"
                 />
                 <video autoPlay muted loop>
@@ -334,7 +433,14 @@ function Calendar() {
         {/* END */}
 
         {/* SETTING Modal */}
-        <SettingsModal />
+        <SettingsModal
+          years={years}
+          setYears={setYears}
+          months={months}
+          setMonths={setMonths}
+          selectedSettings={selectedSettings}
+          setSelectedSettings={setSelectedSettings}
+        />
         {/* END */}
 
         {/* UPLOAD MODAL */}
@@ -342,6 +448,10 @@ function Calendar() {
           currentDate={currentDate}
           images={images}
           setImages={setImages}
+          previewImages={previewImages}
+          setPreviewImages={setPreviewImages}
+          uploadedImages={uploadedImages}
+          setUploadedImages={setUploadedImages}
         />
         {/* END */}
       </div>

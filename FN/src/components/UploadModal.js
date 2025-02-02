@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./css/UploadModal.css";
 
-const UploadModal = ({ currentDate, images, setImages }) => {
-  const [previewImages, setPreviewImages] = useState([]);
-  const [uploadedImages, setUploadedImages] = useState([]);
+const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewImages,uploadedImages,setUploadedImages }) => {
 
-  //--------------------------------------
-  // 서버에서 받은 이미지를 미리보기로 추가 (currentDate 변경 시 초기화)
-  //--------------------------------------
 
   //--------------------------------------
   // 서버에서 받은 이미지를 미리보기로 추가
   //--------------------------------------
-  useEffect(() => {
-    fetchImagesFromServer();
-  }, [currentDate]); // ✅ currentDate가 변경될 때마다 실행
+  // useEffect(() => {
+  //   fetchImagesFromServer();
+  // }, [currentDate]); // ✅ currentDate가 변경될 때마다 실행
 
   //--------------------------------------
   // 드래그시 스타일링
@@ -182,7 +177,7 @@ const UploadModal = ({ currentDate, images, setImages }) => {
       }
   
       const data = await response.json();
-      console.log("📌 가져온 이미지 데이터:", data);
+      console.log("📌 가져온 이미지 데이터(UPLOADMODAL):", data);
   
       if (data) {
         const imageArray = Object.entries(data).map(([filename, base64]) => ({

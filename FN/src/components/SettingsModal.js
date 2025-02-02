@@ -1,24 +1,10 @@
 import { useState, useEffect } from "react";
 import "./css/SettingsModal.css";
 
-const SettingsModal = () => {
-  //-----------------------------------
-  // 연도 및 월 상태 관리
-  //-----------------------------------
-  const [years, setYears] = useState([]);
-  const [months, setMonths] = useState([]);
+const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, setSelectedSettings }) => {
 
-  //-----------------------------------
-  // 상태를 객체로 관리
-  //-----------------------------------
-  const [selectedSettings, setSelectedSettings] = useState({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth() + 1, // 월은 0부터 시작하므로 +1
-    layout: "row",
-    imageArray: "1",
-    defaultValue: false,
-  });
-
+  const [modalYear, setModalYear] = useState(selectedSettings.year)
+  const [modalmonths, setModalmonths] = useState(selectedSettings.month)
   //-----------------------------------
 
   //-----------------------------------
@@ -32,23 +18,49 @@ const SettingsModal = () => {
   //-----------------------------------
   // 연도 및 월 변경 시 초기화
   //-----------------------------------
+  useEffect(() => {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!",modalYear,modalmonths)
+    fetchSettings(modalYear, modalmonths);
+  }, [modalYear,modalmonths])
+
   const handleYearChange = (e) => {
-    setSelectedSettings((prev) => ({
-      ...prev,
-      year: Number(e.target.value),
-      layout: "row",
-      imageArray: "1",
-    }));
+
+    fetchSettings(modalYear, modalmonths);
   };
 
   const handleMonthChange = (e) => {
-    setSelectedSettings((prev) => ({
-      ...prev,
-      month: Number(e.target.value),
-      layout: "row",
-      imageArray: "1",
-    }));
+
+    fetchSettings(modalYear, modalmonths);
   };
+
+  const fetchSettings = async (year, month) => {
+    console.log("upload modal's fetchSettings func ...",year,month);
+    try {
+      const response = await fetch(`http://localhost:8095/settings/get/${year}/${month}`);
+      if (!response.ok) {
+        console.warn("⚠️ 서버에서 설정을 가져올 수 없음. 기본 설정 사용.");
+        
+      }
+      const data = await response.json();
+      console.log("📌 서버에서 가져온 설정:", data);
+
+      // 가져온 데이터를 상태에 저장
+      setSelectedSettings({
+        year: data.year,
+        month: data.month,
+        layout: data.layout,
+        imageArray: data.imageArray,
+        defaultValue: data.defaultValue,
+      });
+
+    } catch (error) {
+      console.error("❌ 설정 데이터를 가져오는 중 오류 발생:", error);
+    }
+  };
+  //-----------------------------------
+
+
+
 
   // 레이아웃 변경 핸들러
   const handleLayoutChange = (e) => {
@@ -71,35 +83,6 @@ const SettingsModal = () => {
   //-----------------------------------
   const handleDownloadClick = (option) => {
     console.log("download btn clicked..");
-  };
-
-  //-----------------------------------
-  // 상태 변경 시 콘솔에 로깅
-  //-----------------------------------
-  useEffect(() => {
-    if (selectedSettings.defaultValue !== null) {
-      handleFetch();
-    }
-  }, [selectedSettings]);
-
-  const handleFetch = async () => {
-    console.log("서버로 전송할 데이터:", selectedSettings);
-    try {
-      const response = await fetch("http://localhost:8095/settings/month", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(selectedSettings),
-      });
-      if (response.ok) {
-        // alert("설정을 저장했습니다.");
-        
-      }
-    } catch (error) {
-      console.error("월 설정 적용 오류:", error);
-      alert("월 설정 적용 중 오류가 발생했습니다.");
-    }
   };
 
   //-----------------------------------
@@ -155,7 +138,9 @@ const SettingsModal = () => {
                   id="yearSelect"
                   className="form-select"
                   value={selectedSettings.year}
-                  onChange={handleYearChange}
+                  onChange={e => { 
+                    setModalYear(e.target.value) 
+                  }}
                 >
                   {years.map((year) => (
                     <option key={year} value={year}>
@@ -168,7 +153,9 @@ const SettingsModal = () => {
                   id="monthSelect"
                   className="form-select"
                   value={selectedSettings.month}
-                  onChange={handleMonthChange}
+                  onChange={e => { 
+                    setModalmonths(e.target.value) 
+                  }}
                 >
                   {months.map((month) => (
                     <option key={month} value={month}>
