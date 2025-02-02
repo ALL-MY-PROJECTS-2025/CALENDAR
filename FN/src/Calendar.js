@@ -365,7 +365,7 @@ function Calendar() {
             initialDate={currentDate}
             datesSet={handleDatesSet}
             dateClick={(info) => {
-              console.log("clicked...", info.date);
+              // console.log 제거
             }}
             //GOOGLE CALENDAR(// npm install @fullcalendar/google-calendar)
             eventClick={handleEventClick} // !!! 이벤트 클릭 핸들러 추가

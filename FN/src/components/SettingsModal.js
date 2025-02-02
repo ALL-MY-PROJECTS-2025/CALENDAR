@@ -41,12 +41,20 @@ const SettingsModal = ({
 
   const handleYearChange = (e) => {
     setModalYear(e.target.value);
-    fetchSettings(e.target.value, modalmonths);
+    const newSettings = {
+      ...selectedSettings,
+      year: e.target.value,
+    };
+    onSettingsUpdate(newSettings);
   };
 
   const handleMonthChange = (e) => {
     setModalmonths(e.target.value);
-    fetchSettings(modalYear, e.target.value);
+    const newSettings = {
+      ...selectedSettings,
+      month: e.target.value,
+    };
+    onSettingsUpdate(newSettings);
   };
 
   const fetchSettings = async (year, month) => {
@@ -80,12 +88,20 @@ const SettingsModal = ({
 
   // 레이아웃 변경 핸들러
   const handleLayoutChange = (e) => {
-    handleSettingChange('layout', e.target.value);
+    const newSettings = {
+      ...selectedSettings,
+      layout: e.target.value,
+    };
+    onSettingsUpdate(newSettings);
   };
 
   // 이미지 배열 변경 핸들러
   const handleImageArrayChange = (e) => {
-    handleSettingChange('imageArray', e.target.value);
+    const newSettings = {
+      ...selectedSettings,
+      imageArray: e.target.value,
+    };
+    onSettingsUpdate(newSettings);
   };
 
   //-----------------------------------
@@ -99,14 +115,22 @@ const SettingsModal = ({
   //월 저장 핸들러
   //-----------------------------------
   const handleApplyMonth = () => {
-    handleSettingChange('defaultValue', false);
+    const newSettings = {
+      ...selectedSettings,
+      defaultValue: false,
+    };
+    onSettingsUpdate(newSettings);
   };
 
   //-----------------------------------
   //기본값  저장 핸들러
   //-----------------------------------
   const handleApplyDefault = () => {
-    handleSettingChange('defaultValue', true);
+    const newSettings = {
+      ...selectedSettings,
+      defaultValue: true,
+    };
+    onSettingsUpdate(newSettings);
   };
 
 
