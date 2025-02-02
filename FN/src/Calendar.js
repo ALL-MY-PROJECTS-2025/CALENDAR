@@ -25,74 +25,73 @@ import "./Calendar.css";
 function Calendar() {
 
   //----------------------------
-  // 
+  // STATE MANAGEMENT
   //----------------------------
+  // Calendar Basic States
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today);
+  const calendarRef = useRef(null);
+  
+  // 현재 날짜 계산 로직 수정
+  const getCurrentMonthYear = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    return { year, month };
+  };
 
-  const calendarRef = useRef(null); // FullCalendar를 제어하기 위한 ref
+  const { year: currentYear, month: currentMonth } = getCurrentMonthYear(currentDate);
 
-  // 이벤트표시모달(GOOGLE CALENDAR)
-  const [selectedEvent, setSelectedEvent] = useState(null); // !!! 선택된 이벤트 정보
-  const [showEventModal, setShowEventModal] = useState(false); // !!! 모달 표시 여부
+  // Google Calendar Modal States
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showEventModal, setShowEventModal] = useState(false);
 
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
-
-
-  //----------------------------
-  // UploadModal.js State
-  //----------------------------
+  // Image Management States
   const [images, setImages] = useState([]);
-  const [previewImages, setPreviewImages] = useState([]); // 미리보기 이미지 리스트
-  const [uploadedImages, setUploadedImages] = useState([]); // 업로드된 이미지 리스트
-  //----------------------------
+  const [previewImages, setPreviewImages] = useState([]);
+  const [uploadedImages, setUploadedImages] = useState([]);
+
+  // Timer States
+  const [currentTime, setCurrentTime] = useState("");
+  const [currentDay, setCurrentDay] = useState("");
+
+  // Settings States
+  const [years] = useState(() => {
+    // 현재 연도 기준 ±5년 배열 생성
+    const currentYear = new Date().getFullYear();
+    return Array.from({length: 11}, (_, i) => currentYear - 5 + i);
+  });
+  
+  const [months] = useState(() => {
+    // 1-12월 배열 생성
+    return Array.from({length: 12}, (_, i) => i + 1);
+  });
+
+  const [selectedSettings, setSelectedSettings] = useState({
+    year: currentYear,
+    month: currentMonth,
+    layout: "row",
+    imageArray: "1",
+    defaultValue: false,
+  });
 
   //----------------------------
-  // Timer.js  State
+  // DATA FETCHING AND SETTINGS MANAGEMENT
   //----------------------------
-  const [currentTime, setCurrentTime] = useState(""); //  현재 시간을 저장
-  const [currentDay, setCurrentDay] = useState(""); //  현재 요일과 날짜 저장
-  //----------------------------
-
-  //----------------------------
-  // SettingsModel.js State 
-  //----------------------------
-  // 연도 및 월 상태 관리
-  const [years, setYears] = useState([]);
-  const [months, setMonths] = useState([]);
-  const [selectedSettings, setSelectedSettings] = useState({})
-  // 상태를 객체로 관리
-  // const [selectedSettings, setSelectedSettings] = useState({
-  //   year: new Date().getFullYear(),
-  //   month: new Date().getMonth() + 1, // 월은 0부터 시작하므로 +1
-  //   layout: "row",
-  //   imageArray: "1",
-  //   defaultValue: false,
-  // });
-  useEffect(()=>{
-    const currentMonth = currentDate.getMonth() + 1;
-    setYears(currentDate.getFullYear())
-    
-  },[])
-
-  //-----------------------------------
-  // 연도 및 월 변경 시 서버에서 설정 값 가져오기!!!!!!!!!!!
-  //-----------------------------------
-  useEffect(() => {
-    fetchSettings(currentYear, currentMonth)
-  }, [currentYear, currentMonth]); // 현재 연월이 변경될 때 실행
-
   const fetchSettings = async (year, month) => {
+    // 이전 요청과 동일한 요청인지 확인
+    const requestKey = `${year}-${month}`;
+    if (fetchSettings.lastRequest === requestKey) {
+      return;
+    }
+    fetchSettings.lastRequest = requestKey;
+
     try {
       const response = await fetch(`http://localhost:8095/settings/get/${year}/${month}`);
-      if (!response.ok) {
-        console.warn("⚠️ 서버에서 설정을 가져올 수 없음. 기본 설정 사용.");
-      }
+      if (!response.ok) return;
+      
       const data = await response.json();
-      console.log("📌 서버에서 가져온 설정:", data);
+      console.log("📌 서버 설정:", { year, month, ...data });
 
-      // 가져온 데이터를 상태에 저장
       setSelectedSettings({
         year: data.year,
         month: data.month,
@@ -102,98 +101,119 @@ function Calendar() {
       });
 
     } catch (error) {
-      console.error("❌ 설정 데이터를 가져오는 중 오류 발생:", error);
+      console.error("❌ 설정 데이터 오류:", error);
     }
   };
 
+  // FullCalendar datesSet 이벤트 핸들러 수정
+  const handleDatesSet = (dateInfo) => {
+    const titleParts = dateInfo.view.title.split('년 ');
+    const viewYear = parseInt(titleParts[0]);
+    const viewMonth = parseInt(titleParts[1].replace('월', ''));
+    
+    if (isNaN(viewYear) || isNaN(viewMonth)) return;
+    const newCurrentDate = new Date(viewYear, viewMonth - 1, 15);
+    setCurrentDate(newCurrentDate);
+  };
 
-  //-------------------------------
-  // Settings 변경시 서버에 저장
-  //-------------------------------
+  // currentDate가 변경될 때마다 실행되는 useEffect
   useEffect(() => {
-    if (selectedSettings.defaultValue !== null) {
-      handleFetch();
-    }
-  }, [selectedSettings]);
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    
+    // 유효한 날짜인지 확인
+    if (isNaN(year) || isNaN(month)) return;
+    
+    fetchSettings(year, month);
+  }, [currentDate]);
 
-  const handleFetch = async () => {
-    console.log("서버로 전송할 데이터:", selectedSettings);
+  // Settings 변경시 서버에 저장
+  const handleSettingsUpdate = async (newSettings) => {
     try {
-      const response = await fetch("http://localhost:8095/settings/month", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(selectedSettings),
-      });
-      if (response.ok) {
-        // alert("설정을 저장했습니다.");
+      if (newSettings.defaultValue !== null) {
+        const response = await fetch("http://localhost:8095/settings/month", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newSettings),
+        });
+
+        if (!response.ok) {
+          throw new Error('설정 저장 실패');
+        }
+
+        setSelectedSettings(newSettings);
+        if (newSettings.year !== selectedSettings.year || 
+            newSettings.month !== selectedSettings.month) {
+          await fetchSettings(newSettings.year, newSettings.month);
+        }
       }
     } catch (error) {
-      console.error("월 설정 적용 오류:", error);
-      alert("월 설정 적용 중 오류가 발생했습니다.");
+      console.error("❌ 설정 저장 오류:", error);
+      alert("설정 저장 중 오류가 발생했습니다.");
     }
   };
-  //-------------------------------
 
-  //----------------------------
-  // 서버에서 Base64 이미지 목록을 가져오는 함수
-  //----------------------------
+  // 이미지 가져오기 useEffect 수정
   useEffect(() => {
     const fetchImagesFromServer = async () => {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      
+      // year와 month가 유효한지 확인
+      if (isNaN(year) || isNaN(month)) return;
+
+      const monthString = String(month).padStart(2, "0");
+
       try {
         const response = await fetch(
-          `http://localhost:8095/getAlbum/${currentYear}/${String(
-            currentMonth
-          ).padStart(2, "0")}`
+          `http://localhost:8095/getAlbum/${year}/${monthString}`
         );
 
-        // 🔹 응답이 정상적인지 확인
-        if (!response.ok) {
-          console.warn("⚠️ 서버 응답 오류:", response.status);
-          setImages([]); // 초기화
+        // 404 응답은 에러가 아닌 정상적인 "데이터 없음" 상태로 처리
+        if (response.status === 404) {
+          setImages([]);
           setPreviewImages([]);
           return;
         }
 
-        // 🔹 응답이 JSON인지 체크 (빈 응답이면 JSON 파싱 X)
-        const contentType = response.headers.get("content-type");
-        const contentLength = response.headers.get("content-length");
+        // 다른 에러 응답 처리
+        if (!response.ok) {
+          setImages([]);
+          setPreviewImages([]);
+          return;
+        }
 
-        if (
-          !contentType ||
-          !contentType.includes("application/json") ||
-          contentLength === "0"
-        ) {
-          console.warn("⚠️ 서버 응답이 비어 있거나 JSON이 아님");
-          setImages([]); // 이미지 초기화
+        // 응답이 JSON인지 확인
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          setImages([]);
           setPreviewImages([]);
           return;
         }
 
         const data = await response.json();
-        console.log("📌 가져온 이미지 데이터:", data);
-
+        
         if (data && Object.keys(data).length > 0) {
           const imageArray = Object.entries(data).map(([filename, base64]) => ({
             filename,
             base64: `data:image/jpeg;base64,${base64}`,
           }));
 
-          setPreviewImages(imageArray.map((img) => img.base64)); // ✅ 미리보기 업데이트
-          setImages(imageArray); // 이미지 상태 업데이트
+          setPreviewImages(imageArray.map((img) => img.base64));
+          setImages(imageArray);
         } else {
-          console.warn("⚠️ 서버에서 받은 데이터가 없음");
           setImages([]);
+          setPreviewImages([]);
         }
       } catch (error) {
-        console.error("❌ 이미지 데이터를 가져오는 중 오류 발생:", error);
         setImages([]);
         setPreviewImages([]);
       }
     };
     fetchImagesFromServer();
-  }, [currentYear, currentMonth]); // 현재 년/월이 변경될 때 실행
+  }, [currentDate]);
 
 
   //----------------------------------------
@@ -230,15 +250,14 @@ function Calendar() {
   //----------------------------------------
   //GOOGLE MODAL
   const handleEventClick = (info) => {
-    info.jsEvent.preventDefault(); // !!! 기본 동작 방지
-    setSelectedEvent(info.event); // !!! 선택한 이벤트 정보 저장
-    setShowEventModal(true); // !!! 모달 표시
-    console.log("!!!!!!!! 이벤트 클릭:", info.event);
+    info.jsEvent.preventDefault();
+    setSelectedEvent(info.event);
+    setShowEventModal(true);
   };
   //GOOGLE MODAL
   const closeModal = () => {
-    setShowEventModal(false); // !!! 모달 숨김
-    setSelectedEvent(null); // !!! 선택한 이벤트 초기화
+    setShowEventModal(false);
+    setSelectedEvent(null);
   };
 
   //GOOGLE MODAL 이벤트 시간 변경
@@ -343,16 +362,8 @@ function Calendar() {
               googleCalendarId:
                 "505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com", // Google Calendar ID
             }}
-            initialDate={currentDate.toISOString().split("T")[0]}
-            datesSet={(dateInfo) => {
-              const newDate = new Date(dateInfo.startStr);
-              const viewCenterDate = new Date(
-                newDate.getFullYear(),
-                newDate.getMonth() + 1,
-                15 // 매달 중앙 날짜로 설정
-              );
-              setCurrentDate(viewCenterDate);
-            }}
+            initialDate={currentDate}
+            datesSet={handleDatesSet}
             dateClick={(info) => {
               console.log("clicked...", info.date);
             }}
@@ -435,11 +446,11 @@ function Calendar() {
         {/* SETTING Modal */}
         <SettingsModal
           years={years}
-          setYears={setYears}
           months={months}
-          setMonths={setMonths}
           selectedSettings={selectedSettings}
-          setSelectedSettings={setSelectedSettings}
+          onSettingsUpdate={handleSettingsUpdate}
+          currentYear={currentYear}
+          currentMonth={currentMonth}
         />
         {/* END */}
 

@@ -69,7 +69,7 @@ public class SettingsRestController
         if (settings == null) {
             response.put("message", "해당 월에 대한 설정이 존재하지 않습니다.");
             Settings defaultSettings  =  settingsRepository.findByDefaultValue(true);
-
+            System.out.println("DefaultSettings..."+defaultSettings);
             //해당연월을 기본값으로 저장
             settings = new Settings();
             settings.setYear(year);

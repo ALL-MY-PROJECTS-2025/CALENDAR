@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import "./css/SettingsModal.css";
 
-const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, setSelectedSettings }) => {
+const SettingsModal = ({
+  years,
+  months,
+  selectedSettings,
+  onSettingsUpdate,
+  currentYear,
+  currentMonth
+}) => {
+  // years와 months는 이제 props로만 사용
+  // setYears, setMonths 사용하지 않음
 
   const [modalYear, setModalYear] = useState(selectedSettings.year)
   const [modalmonths, setModalmonths] = useState(selectedSettings.month)
@@ -11,8 +20,8 @@ const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, s
   // 연도 및 월 데이터 초기화
   useEffect(() => {
     const currentYear = new Date().getFullYear();
-    setYears(Array.from({ length: 11 }, (_, i) => currentYear - 5 + i));
-    setMonths(Array.from({ length: 12 }, (_, i) => i + 1));
+    setModalYear(currentYear);
+    setModalmonths(new Date().getMonth() + 1);
   }, []);
 
   //-----------------------------------
@@ -23,14 +32,21 @@ const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, s
     fetchSettings(modalYear, modalmonths);
   }, [modalYear,modalmonths])
 
-  const handleYearChange = (e) => {
+  const handleSettingChange = (name, value) => {
+    onSettingsUpdate({
+      ...selectedSettings,
+      [name]: value
+    });
+  };
 
-    fetchSettings(modalYear, modalmonths);
+  const handleYearChange = (e) => {
+    setModalYear(e.target.value);
+    fetchSettings(e.target.value, modalmonths);
   };
 
   const handleMonthChange = (e) => {
-
-    fetchSettings(modalYear, modalmonths);
+    setModalmonths(e.target.value);
+    fetchSettings(modalYear, e.target.value);
   };
 
   const fetchSettings = async (year, month) => {
@@ -45,7 +61,7 @@ const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, s
       console.log("📌 서버에서 가져온 설정:", data);
 
       // 가져온 데이터를 상태에 저장
-      setSelectedSettings({
+      onSettingsUpdate({
         year: data.year,
         month: data.month,
         layout: data.layout,
@@ -64,18 +80,12 @@ const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, s
 
   // 레이아웃 변경 핸들러
   const handleLayoutChange = (e) => {
-    setSelectedSettings((prev) => ({
-      ...prev,
-      layout: e.target.value,
-    }));
+    handleSettingChange('layout', e.target.value);
   };
 
   // 이미지 배열 변경 핸들러
   const handleImageArrayChange = (e) => {
-    setSelectedSettings((prev) => ({
-      ...prev,
-      imageArray: e.target.value,
-    }));
+    handleSettingChange('imageArray', e.target.value);
   };
 
   //-----------------------------------
@@ -89,20 +99,14 @@ const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, s
   //월 저장 핸들러
   //-----------------------------------
   const handleApplyMonth = () => {
-    setSelectedSettings((prev) => ({
-      ...prev,
-      defaultValue: false,
-    }));
+    handleSettingChange('defaultValue', false);
   };
 
   //-----------------------------------
   //기본값  저장 핸들러
   //-----------------------------------
   const handleApplyDefault = () => {
-    setSelectedSettings((prev) => ({
-      ...prev,
-      defaultValue: true,
-    }));
+    handleSettingChange('defaultValue', true);
   };
 
 
@@ -138,9 +142,7 @@ const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, s
                   id="yearSelect"
                   className="form-select"
                   value={selectedSettings.year}
-                  onChange={e => { 
-                    setModalYear(e.target.value) 
-                  }}
+                  onChange={handleYearChange}
                 >
                   {years.map((year) => (
                     <option key={year} value={year}>
@@ -153,9 +155,7 @@ const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, s
                   id="monthSelect"
                   className="form-select"
                   value={selectedSettings.month}
-                  onChange={e => { 
-                    setModalmonths(e.target.value) 
-                  }}
+                  onChange={handleMonthChange}
                 >
                   {months.map((month) => (
                     <option key={month} value={month}>
@@ -287,18 +287,14 @@ const SettingsModal = ({ years, setYears, months, setMonths, selectedSettings, s
             <button
               type="button"
               className="btn btn-primary"
-              onClick={(e) => {
-                handleApplyDefault(e);
-              }}
+              onClick={handleApplyDefault}
             >
               기본값 적용
             </button>
             <button
               type="button"
               className="btn btn-primary"
-              onClick={(e) => {
-                handleApplyMonth(e);
-              }}
+              onClick={handleApplyMonth}
             >
               월 적용
             </button>
