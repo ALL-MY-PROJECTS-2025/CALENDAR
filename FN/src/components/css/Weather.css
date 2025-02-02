@@ -3,13 +3,13 @@
   display: flex;
   justify-content: space-between;
   /* border : 1px solid; */
-  position: absolute;
+  /* position: absolute;
   left: 15px;
-  top : 5px;
+  top : 5px; */
 
   background-color: transparent;
   padding :5px;;
- 
+  border : 1px solid;
 }
 
 .postcard-container>.calendar-header .weather-block .items {

@@ -2,15 +2,15 @@
 .postcard-container>.calendar-header .timer-block{
 
     /* border : 1px solid; */
-    position:absolute;
+    /* position:absolute;
     left:5px;
-    bottom : 0;
-    margin : auto;
+    bottom : 0; */
+    margin : 0;
+
     background-color: transparent;
     /* border : 1px solid; */
     width : 100%;
     text-align: right;
-    
 
     
   }
@@ -27,16 +27,16 @@
     justify-content: right;
     align-items: end;
     gap : 10px;
-    padding : 20px;
-
+  
     font-family: 'digit';
     font-weight:300;
     color:#1E2B37;
-    
+    border : 1px solid;
   }
 
   .postcard-container>.calendar-header .timer-block .timer .pmam{
     font-family: 'google-custom';
+    font-size : 4rem;
   }
   
 
@@ -70,7 +70,7 @@
    
   }
   .postcard-container>.calendar-header .timer-block .timer>.item .pmam{
-    font-size : 2.5vw;
+   
   }
   
   .postcard-container>.calendar-header .timer-block .timer>.item>span{

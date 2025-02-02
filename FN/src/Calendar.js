@@ -23,7 +23,6 @@ import "swiper/css";
 import "./Calendar.css";
 
 function Calendar() {
-
   //----------------------------
   // STATE MANAGEMENT
   //----------------------------
@@ -31,7 +30,7 @@ function Calendar() {
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today);
   const calendarRef = useRef(null);
-  
+
   // 현재 날짜 계산 로직 수정
   const getCurrentMonthYear = (date) => {
     const year = date.getFullYear();
@@ -39,7 +38,8 @@ function Calendar() {
     return { year, month };
   };
 
-  const { year: currentYear, month: currentMonth } = getCurrentMonthYear(currentDate);
+  const { year: currentYear, month: currentMonth } =
+    getCurrentMonthYear(currentDate);
 
   // Google Calendar Modal States
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -58,12 +58,12 @@ function Calendar() {
   const [years] = useState(() => {
     // 현재 연도 기준 ±5년 배열 생성
     const currentYear = new Date().getFullYear();
-    return Array.from({length: 11}, (_, i) => currentYear - 5 + i);
+    return Array.from({ length: 11 }, (_, i) => currentYear - 5 + i);
   });
-  
+
   const [months] = useState(() => {
     // 1-12월 배열 생성
-    return Array.from({length: 12}, (_, i) => i + 1);
+    return Array.from({ length: 12 }, (_, i) => i + 1);
   });
 
   const [selectedSettings, setSelectedSettings] = useState({
@@ -86,9 +86,11 @@ function Calendar() {
     fetchSettings.lastRequest = requestKey;
 
     try {
-      const response = await fetch(`http://localhost:8095/settings/get/${year}/${month}`);
+      const response = await fetch(
+        `http://localhost:8095/settings/get/${year}/${month}`
+      );
       if (!response.ok) return;
-      
+
       const data = await response.json();
       console.log("📌 서버 설정:", { year, month, ...data });
 
@@ -99,7 +101,6 @@ function Calendar() {
         imageArray: data.imageArray,
         defaultValue: data.defaultValue,
       });
-
     } catch (error) {
       console.error("❌ 설정 데이터 오류:", error);
     }
@@ -107,10 +108,10 @@ function Calendar() {
 
   // FullCalendar datesSet 이벤트 핸들러 수정
   const handleDatesSet = (dateInfo) => {
-    const titleParts = dateInfo.view.title.split('년 ');
+    const titleParts = dateInfo.view.title.split("년 ");
     const viewYear = parseInt(titleParts[0]);
-    const viewMonth = parseInt(titleParts[1].replace('월', ''));
-    
+    const viewMonth = parseInt(titleParts[1].replace("월", ""));
+
     if (isNaN(viewYear) || isNaN(viewMonth)) return;
     const newCurrentDate = new Date(viewYear, viewMonth - 1, 15);
     setCurrentDate(newCurrentDate);
@@ -120,10 +121,10 @@ function Calendar() {
   useEffect(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
-    
+
     // 유효한 날짜인지 확인
     if (isNaN(year) || isNaN(month)) return;
-    
+
     fetchSettings(year, month);
   }, [currentDate]);
 
@@ -140,12 +141,14 @@ function Calendar() {
         });
 
         if (!response.ok) {
-          throw new Error('설정 저장 실패');
+          throw new Error("설정 저장 실패");
         }
 
         setSelectedSettings(newSettings);
-        if (newSettings.year !== selectedSettings.year || 
-            newSettings.month !== selectedSettings.month) {
+        if (
+          newSettings.year !== selectedSettings.year ||
+          newSettings.month !== selectedSettings.month
+        ) {
           await fetchSettings(newSettings.year, newSettings.month);
         }
       }
@@ -160,7 +163,7 @@ function Calendar() {
     const fetchImagesFromServer = async () => {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth() + 1;
-      
+
       // year와 month가 유효한지 확인
       if (isNaN(year) || isNaN(month)) return;
 
@@ -194,7 +197,7 @@ function Calendar() {
         }
 
         const data = await response.json();
-        
+
         if (data && Object.keys(data).length > 0) {
           const imageArray = Object.entries(data).map(([filename, base64]) => ({
             filename,
@@ -214,7 +217,6 @@ function Calendar() {
     };
     fetchImagesFromServer();
   }, [currentDate]);
-
 
   //----------------------------------------
   // TEST CODE( PUBLIC 내의이미지 가져와서 확인)
@@ -244,9 +246,8 @@ function Calendar() {
   //   fetchImages();
   // }, [currentYear, currentMonth]);
 
-
   //----------------------------------------
-  //FULLCALENDAR  + GOOGLE 
+  //FULLCALENDAR  + GOOGLE
   //----------------------------------------
   //GOOGLE MODAL
   const handleEventClick = (info) => {
@@ -276,7 +277,11 @@ function Calendar() {
   };
 
   return (
-    <div className={`App ${selectedSettings.layout === 'row' ? 'layout-row' : 'layout-col'}`}>
+    <div
+      className={`App ${
+        selectedSettings.layout === "row" ? "layout-row" : "layout-col"
+      }`}
+    >
       <div className="photo-frame">
         {/* SLIDE 없이 배치 */}
         {images.length > 0 ? (
@@ -309,9 +314,9 @@ function Calendar() {
 
       <div className="postcard-container">
         <div className="calendar-header">
-          <Timer />
-          {/*  */}
           <Weather />
+          {/*  */}
+          <Timer />
         </div>
 
         <div className="controller">

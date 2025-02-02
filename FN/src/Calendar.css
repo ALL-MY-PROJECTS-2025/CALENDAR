@@ -64,6 +64,9 @@ body {
 .layout-row .photo-frame {
   width: 40%;
   height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .layout-row .postcard-container {
@@ -81,7 +84,10 @@ body {
 .layout-col .photo-frame {
   width: 100%;
   height: 40vh;
+  overflow: hidden;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .layout-col .postcard-container {
@@ -173,7 +179,7 @@ body {
 
 .photo-frame>.items>.item video {
   width: 100%;
- 
+  height:100%;
   position: absolute;
   left: 0;
   top: 0;
@@ -231,6 +237,10 @@ body {
   width : 100%;
   height : 100%;
   margin-top:0;
+  display:flex;
+  justify-content: right;
+  align-items: end;
+  padding-bottom:20px;
 }
 
 /*  */
@@ -244,7 +254,7 @@ body {
   right: 10px;
   top: 10px;
   z-index: 100;
-
+  z-index:9999;
   
   display:flex;
   justify-content: right;
@@ -269,6 +279,8 @@ body {
   width : 100%;
   height : 100%;
   padding : 5px;
+  z-index : 9999;
+
 }
 .controller button:hover{
   background-color: rgb(233, 233, 233);
@@ -290,7 +302,6 @@ body {
   margin :0;
   padding : 0;
 }
-
 
 
 /* 캘린더 헤더 */
@@ -395,4 +406,28 @@ body {
 
 .modal-schedule>div {
   margin-bottom: 5px;
+}
+
+/* 이미지 컨테이너 스타일 조정 */
+.photo-frame .items {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.photo-frame .item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo-frame .item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }

@@ -1,23 +1,76 @@
 *{
     box-sizing: border-box;
 }
-.settingmodal .modal-content{
-    width : 350px !important;
-    margin : 0px auto;
-    height :100%;
+.settingmodal{
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom : 0 !important;
+    right : 0 !important;
+    margin : auto  !important;
 
-    padding : 0;
+    width:  380px !important;
+    height: 100% !important;
+    background: transparent !important;
+ 
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    pointer-events: auto !important;
+    z-index : 9999;
+    
+}
+
+.settingmodal.show {
+    display: flex !important;
+    pointer-events: auto;
+}
+
+.settingmodal .modal-dialog {
+    position: relative !important;
+    width: 350px !important;
+    margin: 0 auto !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    z-index: 10000 !important;
+}
+.settingmodal .modal-content{
+    position: relative !important;
+    width: 100% !important;
+    background: white !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    z-index: 10001 !important;
 }
 .settingmodal .modal-header{
-    background-color:#1E2B37;
-    height : 55px;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 1rem !important;
+    background-color: #1E2B37 !important;
+    height: 55px !important;
+    border-top-left-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    z-index: 10002 !important;
 }
 .settingmodal .modal-body{
+    position: relative !important;
+    padding: 1rem !important;
+    max-height: calc(100vh - 200px) !important;
+    overflow-y: auto !important;
     font-family: sans-serif;
 }
 
 .settingmodal .modal-body .items{
-    height : 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+.settingmodal .item {
+    position: relative !important;
+    width: 100% !important;
 }
 
 .settingmodal .modal-body .items .item{
@@ -296,4 +349,18 @@
 .settingmodal .modal-footer button{
     font-size : .8rem;
     background-color: #1E2B37;
+}
+
+/* 스크롤바 숨기기 */
+.settingmodal .modal-body::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* 모달 닫기 버튼 */
+.settingmodal .btn-close {
+    position: absolute !important;
+    right: 1rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 10003 !important;
 }
