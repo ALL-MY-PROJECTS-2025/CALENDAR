@@ -526,6 +526,10 @@ body {
 
 }
 
+.current-location {
+  display: none;  /* 또는 해당 스타일 블록 전체를 삭제 */
+}
+
 
 
 
@@ -823,4 +827,59 @@ body {
   height: 100%;
   object-fit: cover;
   z-index: -1;
+}
+
+/* Location 버튼 툴팁 스타일 수정 */
+.location-button {
+  position: relative;
+}
+
+/* 기본 툴팁 스타일 - 위치 미등록 시 항상 표시 */
+.location-button[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* 툴팁 화살표 */
+.location-button[data-tooltip]::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* 위치가 등록되지 않았을 때만 툴팁 표시 */
+.location-button[data-tooltip]:not([data-tooltip=""])::after,
+.location-button[data-tooltip]:not([data-tooltip=""])::before {
+  opacity: 1;
+}
+
+/* 위치 아이콘이 설정되지 않았을 때의 애니메이션 */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.location-button span[style*="ff4444"] {
+  animation: pulse 2s infinite;
 }

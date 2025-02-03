@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 //------------------------------------------------------------------------
 // 날씨 정보 가져오기 - 초단기 실황조회
 //------------------------------------------------------------------------
-const fetchWeatherInfo_Ultra = async (latitude, longitude) => {
+const fetchWeatherInfo_Ultra = async (nx,ny) => {
   // 현재 날짜와 시간을 가져와서 포맷
   const now = new Date();
 
@@ -45,9 +45,8 @@ const fetchWeatherInfo_Ultra = async (latitude, longitude) => {
     baseDate.getMonth() + 1
   ).padStart(2, "0")}${String(baseDate.getDate()).padStart(2, "0")}`;
 
-  const gridCoords = dfs_xy_conv("toXY", latitude, longitude);
   console.log(
-    `baseDate : ${formattedDate} base_time : ${baseTime} 격자 좌표: x=${gridCoords.x}, y=${gridCoords.y}`
+    `baseDate : ${formattedDate} base_time : ${baseTime} 격자 좌표: x=${nx}, y=${ny}`
   );
 
   try {
@@ -56,18 +55,25 @@ const fetchWeatherInfo_Ultra = async (latitude, longitude) => {
       {
         params: {
           ServiceKey:
-            "xYZ80mMcU8S57mCCY/q8sRsk7o7G8NtnfnK7mVEuVxdtozrl0skuhvNf34epviHrru/jiRQ41FokE9H4lK0Hhg==",
+            "xYZ80mMcU8S57mCCY/q8sRsk7o7G8NtnfnK7mVEuVxdtozrl0skuhvNf34epviHrru/jiRQ41FokE9H4lK0Hhg==", // 실제 API 키로 교체
           pageNo: 1,
           numOfRows: 100,
           dataType: "JSON",
           base_date: formattedDate,
           base_time: baseTime,
-          nx: gridCoords.x,
-          ny: gridCoords.y,
+          nx: nx,
+          ny: ny,
         },
       }
     );
-    return resp;
+
+    if (resp.data && resp.data.response && resp.data.response.body) {
+      console.log('기상청 API 응답:', resp.data);
+      return resp;
+    } else {
+      console.error('기상청 API 응답 형식이 올바르지 않습니다:', resp.data);
+      return null;
+    }
   } catch (error) {
     console.error("날씨 정보를 가져오는 데 실패했습니다:", error);
     return null;
@@ -194,178 +200,215 @@ const PTY_LIST = [
 //
 //
 //
-const Weather = () => {
-  const [location, setLocation] = useState({ lat: null, lng: null });
+const Weather = ({ location }) => {
   const [error, setError] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
-  const [dustData, setDustData] = useState(null);  // 미세먼지 상태 추가
-  const [weather, setWeather] = useState(null);
+  const [dustData, setDustData] = useState(null);
+  const [coordinates, setCoordinates] = useState(null);
 
   // 미세먼지 등급 판정
   const getDustGrade = (value) => {
-    if (value <= 30) return '😊'; // 좋음
-    if (value <= 80) return '🙂'; // 보통
-    if (value <= 150) return '😷'; // 나쁨
-    return '😱'; // 매우 나쁨
+    if (value <= 30) return '좋음';
+    if (value <= 80) return '보통';
+    if (value <= 150) return '나쁨';
+    return '매우나쁨';
+  };
+
+  // 미세먼지 등급별 색상 반환 함수 추가
+  const getDustGradeColor = (value) => {
+    if (value <= 30) return '#32A1FF';  // 좋음 - 파란색
+    if (value <= 80) return '#00C73C';  // 보통 - 초록색
+    if (value <= 150) return '#FD9B5A'; // 나쁨 - 주황색
+    return '#FF5959';                   // 매우나쁨 - 빨간색
+  };
+
+  // 시도명 추출 함수 추가
+  const extractSidoName = (address) => {
+    // 특별시, 광역시, 특별자치시, 도, 특별자치도 처리
+    const sidoPatterns = {
+      '서울': '서울',
+      '부산': '부산',
+      '대구': '대구',
+      '인천': '인천',
+      '광주': '광주',
+      '대전': '대전',
+      '울산': '울산',
+      '세종': '세종',
+      '경기': '경기',
+      '강원': '강원',
+      '충북': '충북',
+      '충남': '충남',
+      '전북': '전북',
+      '전남': '전남',
+      '경북': '경북',
+      '경남': '경남',
+      '제주': '제주'
+    };
+
+    // 입력된 주소에서 시도명 찾기
+    for (const [key, value] of Object.entries(sidoPatterns)) {
+      if (address.includes(key)) {
+        return value;
+      }
+    }
+    return null;
   };
 
   // 미세먼지 정보 가져오기
   const fetchDustInfo = async () => {
-    const serviceKey = 'xYZ80mMcU8S57mCCY%2Fq8sRsk7o7G8NtnfnK7mVEuVxdtozrl0skuhvNf34epviHrru%2FjiRQ41FokE9H4lK0Hhg%3D%3D';
+    if (!location) return;
+    
+    const serviceKey = 'xYZ80mMcU8S57mCCY/q8sRsk7o7G8NtnfnK7mVEuVxdtozrl0skuhvNf34epviHrru/jiRQ41FokE9H4lK0Hhg==';
     try {
-      // 1. 먼저 TM 좌표로 변환
-      const tmCoord = await axios.get(
-        `http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getTMStdrCrdnt`,
-        {
-          params: {
-            serviceKey: serviceKey,
-            returnType: 'json',
-            numOfRows: 1,
-            pageNo: 1,
-            lat: location.lat,
-            lng: location.lng
-          }
-        }
-      );
-      console.log('📍 TM 좌표 변환 결과:', tmCoord.data.response.body.items[0]);
-
-      // 2. 변환된 TM 좌표로 가장 가까운 측정소 찾기
-      const nearStation = await axios.get(
-        `http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList`,
-        {
-          params: {
-            serviceKey: serviceKey,
-            returnType: 'json',
-            tmX: tmCoord.data.response.body.items[0].tmX,
-            tmY: tmCoord.data.response.body.items[0].tmY
-          }
-        }
-      );
-      console.log('📍 가장 가까운 측정소:', nearStation.data.response.body.items[0]);
-
-      // 3. 가장 가까운 측정소의 대기오염 정보 가져오기
-      const stationName = nearStation.data.response.body.items[0].stationName;
-      const response = await axios.get(
-        `http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty`,
-        {
-          params: {
-            serviceKey: serviceKey,
-            returnType: 'json',
-            numOfRows: 1,
-            pageNo: 1,
-            stationName: stationName,
-            dataTerm: 'DAILY'
-          }
-        }
-      );
+      // 주소에서 시도 정보 추출
+      const sidoName = extractSidoName(location);
+      if (!sidoName) {
+        console.error('올바른 시도 정보를 찾을 수 없습니다.');
+        return;
+      }
       
-      const data = response.data;
-      if (data.response?.body?.items?.[0]) {
-        const dustInfo = {
-          ...data.response.body.items[0],
-          stationName: stationName
-        };
-        console.log('📍 미세먼지 정보:', {
-          측정소: dustInfo.stationName,
-          미세먼지: dustInfo.pm10Value + ' ㎍/㎥',
-          초미세먼지: dustInfo.pm25Value + ' ㎍/㎥',
-          측정시각: dustInfo.dataTime,
-          통합대기환경지수: dustInfo.khaiValue,
-          오존: dustInfo.o3Value,
-          일산화탄소: dustInfo.coValue,
-          이산화질소: dustInfo.no2Value,
-          아황산가스: dustInfo.so2Value
+      console.log('미세먼지 검색 지역:', sidoName);
+
+      const response = await axios.get(
+        'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty',
+        {
+          params: {
+            serviceKey,
+            returnType: 'json',
+            numOfRows: 100,
+            pageNo: 1,
+            sidoName: sidoName,
+            ver: '1.0'
+          }
+        }
+      );
+
+      console.log('미세먼지 API 응답:', response.data);
+
+      if (response.data?.response?.body?.items) {
+        // 구/군 정보로 필터링
+        const guName = location.split(' ')[1]?.replace(/구$/, ''); // '구' 제거
+        let dustData = null;
+
+        if (guName) {
+          // 정확한 구/군 매칭
+          dustData = response.data.response.body.items.find(
+            item => item.stationName.includes(guName)
+          );
+        }
+        
+        // 매칭되는 구/군 데이터가 없으면 해당 시도의 첫 번째 측정소 데이터 사용
+        if (!dustData) {
+          dustData = response.data.response.body.items[0];
+          console.log('해당 구의 미세먼지 정보가 없어 가장 가까운 측정소 데이터를 사용합니다.');
+        }
+
+        console.log('선택된 미세먼지 정보:', {
+          측정소: dustData.stationName,
+          미세먼지: dustData.pm10Value,
+          시도: sidoName,
+          구군: guName || '없음'
         });
-        setDustData(dustInfo);
+        
+        if (dustData.pm10Value && dustData.pm10Value !== '-') {
+          setDustData({
+            pm10Value: dustData.pm10Value
+          });
+        } else {
+          console.log('유효한 미세먼지 데이터가 없습니다.');
+          setDustData(null);
+        }
       }
     } catch (error) {
-      console.error('❌ 미세먼지 정보 가져오기 실패:', error);
+      console.error('미세먼지 정보 가져오기 실패:', error);
+      setDustData(null);
     }
   };
 
-  // ✅ 위치 정보 가져오기
-  useEffect(() => {
-    const getLocation = async () => {
-      if (!navigator.geolocation) {
-        setError("브라우저에서 위치 정보를 지원하지 않습니다.");
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
-        (error) => {
-          setError(error.message);
+  // 주소를 좌표로 변환하는 함수
+  const getCoordinatesFromAddress = async (address) => {
+    try {
+      // 주소에서 기본 주소만 추출 (시/구 까지만)
+      const baseAddress = address.split(' ').slice(0, 2).join(' ');
+      console.log('📍 변환할 주소:', baseAddress);
+      
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(baseAddress)}&limit=1&accept-language=ko`,
+        {
+          headers: {
+            'User-Agent': 'Calendar App'
+          }
         }
       );
+      const data = await response.json();
+      console.log("data ", data);
+      
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        console.log('📍 Nominatim 좌표:', { lat, lon });
+        
+        const gridCoords = dfs_xy_conv('toXY', parseFloat(lat), parseFloat(lon));
+        console.log('📍 기상청 격자 좌표:', {
+          x: gridCoords.x,
+          y: gridCoords.y,
+          입력주소: baseAddress, // 기본 주소로 변경
+          원본주소: address,    // 원본 주소도 함께 로깅
+          위도: lat,
+          경도: lon,
+          상세주소: data[0].display_name
+        });
+        
+        setCoordinates(gridCoords);
+        return gridCoords;
+      }
+      return null;
+    } catch (error) {
+      console.error('주소 변환 실패:', error);
+      return null;
+    }
+  };
+
+  // location이 변경될 때마다 날씨 정보 업데이트
+  useEffect(() => {
+    const updateWeather = async () => {
+      if (!location) return;
+
+      const coords = await getCoordinatesFromAddress(location);
+      if (coords) {
+        try {
+          const weatherResponse = await fetchWeatherInfo_Ultra(coords.x, coords.y);
+          if (weatherResponse && weatherResponse.data && 
+              weatherResponse.data.response && 
+              weatherResponse.data.response.body) {
+            setWeatherData(weatherResponse.data.response.body.items);
+            console.log('날씨 정보:', weatherResponse.data.response.body.items);
+          } else {
+            console.error('날씨 데이터 형식이 올바르지 않습니다:', weatherResponse);
+            setWeatherData(null);
+          }
+          await fetchDustInfo();
+        } catch (error) {
+          console.error('날씨 정보 업데이트 실패:', error);
+          setWeatherData(null);
+        }
+      }
     };
 
-    getLocation();
-  }, []);
+    updateWeather();
+  }, [location]);
 
-  // ✅ location이 변경된 후 날씨 데이터 요청하기
-  useEffect(() => {
-    if (location.lat !== null && location.lng !== null) {
-      const getWeather = async () => {
-        try {
-          const resp = await fetchWeatherInfo_Ultra(location.lat, location.lng);
-          setWeatherData(resp?.data?.response?.body?.items || { item: [] });
-        } catch (error) {
-          console.error("날씨 정보를 가져오는 데 실패했습니다:", error);
-        }
-      };
-
-      getWeather();
-      fetchDustInfo();  // 미세먼지 정보도 함께 가져오기
-    }
-  }, [location]); // 🚀 location이 변경될 때마다 실행
-
-  // ✅ 데이터 로딩 상태 처리
-  if (!weatherData || !weatherData.item || weatherData.item.length === 0) {
+  if (!weatherData) {
     return (
-      <>
-        <div className="weather-block">
-          <div className="items">
-            <div className="item">
-              <div>
-                {/* icon */}
-                <div className="icon">
-                  <span>
-                    <span className="material-symbols-outlined "></span>
-                  </span>
-                  <div className="obsrValue">
-                    <span>-</span>
-                  </div>
-                </div>
-              </div>
+      <div className="weather-loading-container weather-block">
+        <div className="loading-wrapper">
+          <div className="spinner-container">
+            <div className="spinner-border text-secondary" role="status">
+              <span className="visually-hidden">Loading...</span>
             </div>
-
-            {/*  */}
-            <div className="item">
-              <div>
-                {/* icon */}
-
-                <div className="icon">
-                  <span>
-                    <span className="material-symbols-outlined "></span>
-                  </span>
-                </div>
-
-                {/* data */}
-                <div className="obsrValue">
-                  <span>-</span>
-                </div>
-              </div>
-            </div>
-
-            {/*  */}
           </div>
+          <div className="loading-text">WEATHER LOADING...</div>
         </div>
-      </>
+      </div>
     );
   }
 
@@ -374,41 +417,28 @@ const Weather = () => {
       <div className="items">
         <div className="item">
           <div>
-            {/* icon */}
             <div className="icon">
-              <span className="material-symbols-outlined ">
+              <span className="material-symbols-outlined">
                 {PTY_LIST[Number(weatherData.item[0].obsrValue)].icon}
               </span>
             </div>
-
-            {/* data */}
-
             <div className="obsrValue">
-              {/* 
-              <span>
-                {PTY_LIST[Number(weatherData.item[0].obsrValue)].text}
-              </span> 
-              */}
               <span>{weatherData.item[3].obsrValue} ℃</span>
             </div>
           </div>
         </div>
 
-        {/*  */}
         <div className="item">
           <div>
-            {/* icon */}
             <div className="icon">
-              <span className="material-symbols-outlined ">humidity_low</span>
+              <span className="material-symbols-outlined">humidity_low</span>
             </div>
-            {/* data */}
             <div className="obsrValue">
               <span>{weatherData.item[1].obsrValue} %</span>
             </div>
           </div>
         </div>
 
-        {/* 미세먼지 아이템 */}
         <div className="item">
           <div>
             <div className="icon">
@@ -416,11 +446,8 @@ const Weather = () => {
             </div>
             <div className="obsrValue">
               {dustData ? (
-                <span>
-                  {dustData.pm10Value} {getDustGrade(parseInt(dustData.pm10Value))}
-                  <small style={{ fontSize: '0.7em', display: 'block', color: '#666' }}>
-                    {dustData.stationName}
-                  </small>
+                <span style={{ color: getDustGradeColor(parseInt(dustData.pm10Value)) }}>
+                  {getDustGrade(parseInt(dustData.pm10Value))}
                 </span>
               ) : (
                 <span>--</span>

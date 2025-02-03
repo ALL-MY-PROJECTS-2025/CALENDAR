@@ -1,0 +1,39 @@
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+  max-width: 500px;
+}
+
+.modal-content {
+  border-radius: 8px;
+}
+
+.modal-header {
+  background-color:#1E2B37;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+}
+
+/* 주소 검색 버튼 스타일 */
+.input-group .btn-outline-secondary {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.375rem 0.75rem;
+}
+
+.input-group .btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* 입력 필드 읽기 전용 스타일 */
+.form-control[readonly] {
+  background-color: #fff;
+  cursor: default;
+} 

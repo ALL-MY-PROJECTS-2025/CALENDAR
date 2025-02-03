@@ -20,6 +20,8 @@ import UploadModal from "./components/UploadModal";
 // Settings MODAL
 import SettingsModal from "./components/SettingsModal";
 
+import Location from "./components/Location"; // 상단에 추가
+
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/autoplay";
@@ -29,6 +31,8 @@ function Calendar() {
 
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [location, setLocation] = useState('');
 
   // Bootstrap 모달 초기화 및 제어
   useEffect(() => {
@@ -459,6 +463,60 @@ function Calendar() {
     }, 150);
   };
 
+  // 위치 정보 버튼 클릭 핸들러 추가
+  const handleLocationClick = () => {
+    setIsLocationModalOpen(true);
+  };
+
+  // 위치 정보 저장 핸들러
+  const handleLocationSave = async (address) => {
+    try {
+      const response = await fetch('http://localhost:8095/location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          address,
+          user: 'anonymous' // 사용자 정보 추가
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('위치 정보 저장 실패');
+      }
+
+      const savedData = await response.json();
+      setLocation(savedData.location);
+      console.log('저장된 위치 정보:', savedData.location);
+    } catch (error) {
+      console.error('위치 정보 저장 중 오류 발생:', error);
+    }
+  };
+
+  // 위치 정보 가져오기
+  const fetchLocation = async () => {
+    try {
+      const response = await fetch('http://localhost:8095/location/anonymous');
+      if (response.ok) {
+        const data = await response.json();
+        setLocation(data.location); // 서버에서 받은 위치 정보 저장
+        console.log('서버에서 받은 위치 정보:', data.location);
+      } else {
+        console.log('위치 정보가 없습니다. 위치를 입력해주세요.');
+        setLocation(''); // 위치 정보가 없으면 빈 문자열로 설정
+      }
+    } catch (error) {
+      console.error('위치 정보 가져오기 실패:', error);
+      setLocation('');
+    }
+  };
+
+  // 컴포넌트 마운트 시 위치 정보 가져오기
+  useEffect(() => {
+    fetchLocation();
+  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행
+
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
@@ -544,13 +602,25 @@ function Calendar() {
 
       <div className="postcard-container">
         <div className="calendar-header">
-          <Weather />
+          <Weather location={location} />
           <Timer />
         </div>
 
         <div className="controller">
           <button onClick={handleRefresh}>
             <span className="material-symbols-outlined refresh">refresh</span>
+          </button>
+          <button 
+            onClick={handleLocationClick}
+            className="location-button"
+            data-tooltip={!location ? "위치를 입력해주세요" : ""}
+          >
+            <span 
+              className="material-symbols-outlined"
+              style={{ color: !location ? '#ff4444' : 'inherit' }}
+            >
+              location_on
+            </span>
           </button>
           <button onClick={handleUploadClick}>
             <span className="material-symbols-outlined">upload</span>
@@ -808,6 +878,14 @@ function Calendar() {
           />
         )}
         {/* END */}
+
+        {/* Location 모달 */}
+        <Location
+          isOpen={isLocationModalOpen}
+          onClose={() => setIsLocationModalOpen(false)}
+          onSave={handleLocationSave}
+          currentLocation={location}
+        />
       </div>
     </div>
   );

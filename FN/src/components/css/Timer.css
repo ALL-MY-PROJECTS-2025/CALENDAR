@@ -125,3 +125,47 @@
     top:0;
     /* border : 1px solid; */
   }
+
+.timer-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 60%;
+  padding-right: 15px;
+  height: 100%;
+}
+
+.timer-container .time {
+  text-align: right;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.timer-container .time span {
+  display: inline-block;
+}
+
+.timer-container .hours,
+.timer-container .minutes {
+  min-width: 2ch;  /* 2자리 숫자 너비 고정 */
+  text-align: right;
+}
+
+.timer-container .seconds {
+  display: inline-block;
+  min-width: 2ch;  /* 2자리 숫자 너비 고정 */
+  text-align: right;
+}
+
+.timer-container .colon {
+  margin: 0 2px;  /* 콜론 좌우 간격 조정 */
+}
+
+.timer-container .ampm {
+  margin-right: 10px;  /* AM/PM과 시간 사이 간격 */
+  min-width: 2ch;  /* AM/PM 너비 고정 */
+  text-align: right;
+}
