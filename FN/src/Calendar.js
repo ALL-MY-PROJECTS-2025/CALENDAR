@@ -327,6 +327,35 @@ function Calendar() {
     setIsSettingsModalOpen(false);
   };
 
+  // 공휴일 판별 함수
+  const isHoliday = (date) => {
+    const day = date.getDay();
+    // 주말(토,일) 체크
+    if (day === 0 || day === 6) return true;
+    
+    // 공휴일 목록 (YYYY-MM-DD 형식)
+    const holidays = [
+      "2024-01-01",  // 신정
+      "2024-02-09",  // 설날
+      "2024-02-10",
+      "2024-02-11",
+      "2024-03-01",  // 삼일절
+      "2024-05-05",  // 어린이날
+      "2024-05-15",  // 석가탄신일
+      "2024-06-06",  // 현충일
+      "2024-08-15",  // 광복절
+      "2024-09-16",  // 추석
+      "2024-09-17",
+      "2024-09-18",
+      "2024-10-03",  // 개천절
+      "2024-10-09",  // 한글날
+      "2024-12-25",  // 크리스마스
+    ];
+
+    const dateString = date.toISOString().split('T')[0];
+    return holidays.includes(dateString);
+  };
+
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
@@ -414,6 +443,35 @@ function Calendar() {
             eventClick={handleEventClick} // !!! 이벤트 클릭 핸들러 추가
             locale="ko" // 한글로 설정
             height="auto" // 자동으로 화면 크기에 맞게 조정
+           
+            dayCellContent={(args) => {
+              const day = args.date.getDay();
+              // dayNumberText에서 '일' 제거
+              const dayNumber = args.dayNumberText.replace('일', '');
+              return (
+                <div
+                  style={{
+                    color: day === 0 ? 'red' : day === 6 ? '#1E2B37' : 'inherit',
+                    textAlign: 'center'
+                  }}
+                >
+                  {dayNumber}
+                </div>
+              );
+            }}
+            dayHeaderContent={(args) => {
+              const day = args.date.getDay();
+              return (
+                <div
+                  style={{
+                    color: day === 0 ? 'red' : day === 6 ? '#1E2B37' : 'inherit',
+                    textAlign: 'center'
+                  }}
+                >
+                  {args.text}
+                </div>
+              );
+            }}
           />
         </div>
 

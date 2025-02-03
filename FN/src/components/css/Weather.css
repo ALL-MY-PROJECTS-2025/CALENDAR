@@ -34,24 +34,22 @@
   justify-content: left;
   align-items: end;
   gap: 5px;
-  
+
 }
 
 .postcard-container>.calendar-header .weather-block .items .item {
   display: flex;
   justify-content: center;
   align-items:end;
-  width: 80px;
+  width: 100px;
   padding : 5px;
   font-weight: 500;
   background-color: white;
-  /* box-shadow: 5px 5px 5px lightgray;; */
-  height : 11vh;
+  
+  height : 120px;
   
   border-radius: 0;
-  border-bottom : 1px solid lightgray;
-  border-right : 1px solid lightgray;
-  box-shadow: 2px 2px 2px lightgray;
+ 
   
 }
 

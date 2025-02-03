@@ -123,29 +123,14 @@ body {
 
 .photo-frame {
   width: 100%;
-  background: url('/public/images/default-background.jpg');
+  /* background: url('/public/images/default-background.jpg'); */
   display: flex;
   align-items: center;
   justify-content: center;
   position:relative;
-}
-
-.poto-frame .swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.photo-frame .swiper .swiper-wrapper {
-  width: 100%;
-  height: 100%;
 
 }
 
-.photo-frame .swiper .swiper-wrapper .swiper-slide {
-  width: 100%;
-  height: 100%;
-
-}
 
 .photo-frame img {
   width: 100%;
@@ -426,4 +411,38 @@ body {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+/* 공휴일 스타일 */
+.fc-day-sun a {
+  color: red !important;  /* 일요일 */
+}
+
+.fc-day-sat a {
+  color: blue !important;  /* 토요일 */
+}
+
+.holiday {
+  color: red !important;  /* 공휴일 */
+}
+
+/* 요일 및 날짜 스타일 */
+.fc-col-header-cell.fc-day-sun,
+.fc-day-sun { /* 일요일 */
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.fc-col-header-cell.fc-day-sun .fc-col-header-cell-cushion,
+.fc-day-sun .fc-daygrid-day-number {
+  color: red !important;
+}
+
+.fc-col-header-cell.fc-day-sat,
+.fc-day-sat { /* 토요일 */
+  background-color: rgba(30, 43, 55, 0.05);
+}
+
+.fc-col-header-cell.fc-day-sat .fc-col-header-cell-cushion,
+.fc-day-sat .fc-daygrid-day-number {
+  color: #1E2B37 !important;
 }

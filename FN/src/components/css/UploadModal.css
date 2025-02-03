@@ -1,5 +1,42 @@
-
 /* UPLOAD MODAL */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+.uploadmodal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadmodal .modal-dialog {
+  z-index: 10000;  /* 모달 다이얼로그는 더 높은 z-index */
+}
+
+.uploadmodal .modal-content {
+  position: relative;
+  z-index: 10001;  /* 모달 내용은 가장 높은 z-index */
+}
+
+.uploadmodal .modal-header,
+.uploadmodal .modal-body,
+.uploadmodal .modal-footer {
+  position: relative;
+  z-index: 10002;  /* 모달 내부 요소들도 높은 z-index */
+}
 
 .uploadmodal .modal-header{
   background-color:#1E2B37;
@@ -67,3 +104,11 @@
     background-color:#1E2B37;
     color:white;
   }
+
+.upload-block {
+  border: 1px dotted gray;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: gray;
+}

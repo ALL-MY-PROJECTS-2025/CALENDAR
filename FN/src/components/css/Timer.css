@@ -79,22 +79,12 @@
     align-items: center;
     
     position:relative;
-    box-shadow: 5px 5px 5px lightgray;
-    /* border : 1px solid; */
+
   }
 
 
   .postcard-container>.calendar-header .timer-block .timer>.item::before{
-    content:'';
-    width:0;
-    height:0;
-    position:absolute;
-    left:0;
-    top:0;
-    border-top : 5px solid rgb(237, 237, 237);
-    border-left : 5px solid rgb(237, 237, 237);
-    border-right: 5px solid white;
-    border-bottom : 5px solid white;
+
    
   }
   .postcard-container>.calendar-header .timer-block .timer>.item:nth-child(1)::before{
@@ -106,8 +96,8 @@
     position:absolute;
     
     
-    top:50px;
-    left:5px;
+    top:0px;
+    left:0px;
     width : 65px;
     height:35px;
 
@@ -119,12 +109,16 @@
     
   }
   .postcard-container>.calendar-header .timer-block .timer>.item .pmam{
-    font-size : 1rem;
+    font-size : 1.5rem;
     font-weight: 900;
     border-radius: 0;
     font-family:sans-serif;
     
     box-shadow: 0;
+
+    position:absolute;
+    left:0;
+    top:0;
 
   }
   

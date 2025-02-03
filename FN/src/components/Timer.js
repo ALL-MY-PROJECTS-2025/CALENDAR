@@ -38,12 +38,12 @@ const Timer = () => {
     <div className="timer-block">
       <div className="timer">
         <div className="item">
-          <span className="pmam">{currentTime.split(" ")[0] || "AM/PM"} </span>
         </div>
         <div className="item">
+          <span className="pmam">{currentTime.split(" ")[0] || "AM/PM"} </span>
           <span className="">{currentTime.split(" ")[1]?.split(":")[0] || "00"}</span>
         </div>
-       
+
         <div className="dot-block">
           <span className="double-dot"> : </span>
         </div>
@@ -60,7 +60,7 @@ const Timer = () => {
             </span>
           </span>
         </div>
-        
+
       </div>
     </div>
   );
