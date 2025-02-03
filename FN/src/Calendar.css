@@ -52,7 +52,7 @@ body {
   display: flex;
   gap: 10px;
   height: 100vh;
-  overflow: hidden;
+ 
 }
 
 /* Row 레이아웃 (가로 배치) */

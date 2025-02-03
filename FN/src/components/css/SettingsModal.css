@@ -54,8 +54,16 @@
     border-top-left-radius: 4px !important;
     border-top-right-radius: 4px !important;
     z-index: 10002 !important;
-}
+    
+}   
 .settingmodal .modal-header button{
+    position:absolute !important;
+    right:10px !important;
+    top:27px !important;
+  
+    margin :auto;
+    background-color: white;
+
     
 }
 .settingmodal .modal-body{
@@ -72,6 +80,9 @@
     display: flex !important;
     flex-direction: column !important;
     gap: 10px !important;
+}
+.settingmodal .modal-body .items::-webkit-scrollbar{
+    display:none;
 }
 
 .settingmodal .item {
@@ -109,8 +120,16 @@
     border-radius: 0;
     outline : none;
     border :0;
+    width : 100%;
+    height : 100%;
+
+}
 
 
+.settingmodal .modal-body .items .item.choose-yyyymm select:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 /* 레이아웃 선택 */
