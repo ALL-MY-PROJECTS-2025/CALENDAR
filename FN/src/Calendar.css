@@ -437,12 +437,80 @@ body {
   color: red !important;
 }
 
+/* 토요일 스타일 수정 */
 .fc-col-header-cell.fc-day-sat,
 .fc-day-sat { /* 토요일 */
-  background-color: rgba(30, 43, 55, 0.05);
+  background-color: rgba(0, 0, 139, 0.05);  /* darkblue with opacity */
 }
 
+/* 토요일 헤더와 날짜 숫자 스타일 */
 .fc-col-header-cell.fc-day-sat .fc-col-header-cell-cushion,
+.fc-day-sat .fc-daygrid-day-number,
+.fc-daygrid-day.fc-day-sat .fc-daygrid-day-number {
+  color: darkblue !important;  /* 진한 파란색으로 변경 */
+  font-weight: 600;  /* 숫자를 더 진하게 */
+}
+
+/* 토요일 날짜 숫자 추가 강조 */
 .fc-day-sat .fc-daygrid-day-number {
-  color: #1E2B37 !important;
+  font-weight: 600;  /* 숫자를 더 진하게 */
+}
+
+/* 토요일 컬럼의 모든 숫자에 적용 */
+.fc-daygrid-day.fc-day-sat div {
+  color: darkblue !important;
+  font-weight: 600;
+}
+
+/* 날짜 칸을 relative로 설정 */
+.fc-daygrid-day {
+  position: relative !important;
+}
+
+/* 공휴일 이벤트 스타일 수정 */
+.holiday-event {
+  opacity: 1;
+  position: relative;
+}
+
+.holiday-labels-container {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: calc(100% - 4px);  /* 좌우 2px 여백 제외한 전체 너비 */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.holiday-label {
+  font-size: 0.8rem;
+  color: red;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 2px 4px;
+  line-height: 1.2;
+  border-radius: 2px;
+  width: 100%;
+  
+}
+
+/* 대체공휴일 스타일 */
+.holiday-label.alternative-holiday {
+  color: #FF6B6B;  /* 좀 더 연한 빨간색 */
+  font-style: italic;  /* 이탤릭체로 표시 */
+}
+
+/* 공휴일 배경색 */
+.fc-day.holiday-event {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+/* 날짜 숫자 위치 조정 */
+.fc-daygrid-day-top {
+  padding-top: 0 !important;
+  margin-bottom: 20px;  /* 공휴일 레이블을 위한 하단 여백 */
 }

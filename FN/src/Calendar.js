@@ -107,6 +107,8 @@ function Calendar() {
     defaultValue: false,
   });
 
+  const [holidays, setHolidays] = useState([]);
+
   //----------------------------
   // DATA FETCHING AND SETTINGS MANAGEMENT
   //----------------------------
@@ -327,31 +329,89 @@ function Calendar() {
     setIsSettingsModalOpen(false);
   };
 
-  // 공휴일 판별 함수
+  // 공휴일 데이터 가져오기
+  const fetchHolidays = async (year) => {
+    const serviceKey = 'xYZ80mMcU8S57mCCY%2Fq8sRsk7o7G8NtnfnK7mVEuVxdtozrl0skuhvNf34epviHrru%2FjiRQ41FokE9H4lK0Hhg%3D%3D';
+    try {
+      const response = await fetch(
+        `http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?` +
+        `serviceKey=${serviceKey}&solYear=${year}&numOfRows=100&_type=json`
+      );
+      
+      const data = await response.json();
+      
+      if (!data.response?.body?.items?.item) {
+        console.error('공휴일 데이터 형식이 올바르지 않음:', data);
+        return;
+      }
+      
+      const items = data.response.body.items.item;
+      
+      // 공휴일 데이터를 FullCalendar 이벤트 형식으로 변환
+      const holidayEvents = items.reduce((acc, item) => {
+        const date = item.locdate.toString();
+        const year = date.substring(0, 4);
+        const month = date.substring(4, 6);
+        const day = date.substring(6, 8);
+        const formattedDate = `${year}-${month}-${day}`;
+        
+        // 대체공휴일 여부 확인 (dateName에 "대체" 문자열이 포함되어 있는지)
+        const isAlternativeHoliday = item.dateName.includes('대체');
+        
+        // 같은 날짜의 이벤트가 있는지 확인
+        const existingEventIndex = acc.findIndex(event => event.start === formattedDate);
+        
+        if (existingEventIndex !== -1) {
+          // 기존 이벤트가 있으면 제목에 추가
+          acc[existingEventIndex] = {
+            ...acc[existingEventIndex],
+            title: `${acc[existingEventIndex].title}, ${item.dateName}`,
+            extendedProps: {
+              ...acc[existingEventIndex].extendedProps,
+              isHoliday: true,
+              holidayNames: [...(acc[existingEventIndex].extendedProps.holidayNames || []), 
+                { name: item.dateName, isAlternative: isAlternativeHoliday }]
+            }
+          };
+        } else {
+          // 새로운 날짜의 이벤트 추가
+          acc.push({
+            title: item.dateName,
+            start: formattedDate,
+            display: 'background',
+            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+            classNames: ['holiday-event'],
+            extendedProps: {
+              isHoliday: true,
+              holidayNames: [{ name: item.dateName, isAlternative: isAlternativeHoliday }]
+            }
+          });
+        }
+        
+        return acc;
+      }, []);
+
+      // 데이터 확인을 위한 로그
+      console.log('처리된 공휴일 데이터:', holidayEvents);
+
+      setHolidays(holidayEvents);
+    } catch (error) {
+      console.error('공휴일 데이터 가져오기 실패:', error);
+    }
+  };
+
+  // 컴포넌트 마운트 시와 연도 변경 시 공휴일 데이터 가져오기
+  useEffect(() => {
+    fetchHolidays(currentYear);
+  }, [currentYear]);
+
+  // 공휴일 판별 함수 수정
   const isHoliday = (date) => {
     const day = date.getDay();
     // 주말(토,일) 체크
     if (day === 0 || day === 6) return true;
     
-    // 공휴일 목록 (YYYY-MM-DD 형식)
-    const holidays = [
-      "2024-01-01",  // 신정
-      "2024-02-09",  // 설날
-      "2024-02-10",
-      "2024-02-11",
-      "2024-03-01",  // 삼일절
-      "2024-05-05",  // 어린이날
-      "2024-05-15",  // 석가탄신일
-      "2024-06-06",  // 현충일
-      "2024-08-15",  // 광복절
-      "2024-09-16",  // 추석
-      "2024-09-17",
-      "2024-09-18",
-      "2024-10-03",  // 개천절
-      "2024-10-09",  // 한글날
-      "2024-12-25",  // 크리스마스
-    ];
-
+    // 공휴일 체크
     const dateString = date.toISOString().split('T')[0];
     return holidays.includes(dateString);
   };
@@ -430,10 +490,12 @@ function Calendar() {
               day: "일",
             }} // 버튼 텍스트를 한글로 변경
             googleCalendarApiKey="AIzaSyA_rJ5q1Jjde3tdinjhSUx9m-ZbpCSkS58" // API 키 설정
-            events={{
-              googleCalendarId:
-                "505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com", // Google Calendar ID
-            }}
+            events={[
+              {
+                googleCalendarId: '505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com'
+              },
+              ...holidays // 공휴일 이벤트 추가
+            ]}
             initialDate={currentDate}
             datesSet={handleDatesSet}
             dateClick={(info) => {
@@ -443,16 +505,44 @@ function Calendar() {
             eventClick={handleEventClick} // !!! 이벤트 클릭 핸들러 추가
             locale="ko" // 한글로 설정
             height="auto" // 자동으로 화면 크기에 맞게 조정
-           
+            eventContent={(arg) => {
+              // 공휴일 이벤트의 경우
+              if (arg.event.extendedProps.isHoliday) {
+                const holidayNames = arg.event.extendedProps.holidayNames || 
+                  [{ name: arg.event.title, isAlternative: false }];
+                return (
+                  <div className="holiday-labels-container">
+                    {holidayNames.map((holiday, index) => (
+                      <div 
+                        key={index} 
+                        className={`holiday-label ${holiday.isAlternative ? 'alternative-holiday' : ''}`}
+                      >
+                        {holiday.name}
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+              // 다른 이벤트는 기본 렌더링
+              return arg.event.title;
+            }}
             dayCellContent={(args) => {
               const day = args.date.getDay();
-              // dayNumberText에서 '일' 제거
+              // 공휴일 여부 확인을 holidays 배열에서만 체크
+              const isHolidayDate = holidays.some(holiday => 
+                holiday.start === args.date.toISOString().split('T')[0]
+              );
+              const isSunday = day === 0;
+              const isSaturday = day === 6;
               const dayNumber = args.dayNumberText.replace('일', '');
+              
               return (
                 <div
                   style={{
-                    color: day === 0 ? 'red' : day === 6 ? '#1E2B37' : 'inherit',
-                    textAlign: 'center'
+                    color: isHolidayDate || isSunday ? 'rgb(255, 0, 0)' : 
+                          isSaturday ? 'darkblue' : 'inherit',
+                    textAlign: 'center',
+                    fontWeight: (isSaturday || isHolidayDate || isSunday) ? '600' : 'inherit'
                   }}
                 >
                   {dayNumber}
@@ -464,7 +554,7 @@ function Calendar() {
               return (
                 <div
                   style={{
-                    color: day === 0 ? 'red' : day === 6 ? '#1E2B37' : 'inherit',
+                    color: day === 0 ? 'red' : day === 6 ? 'darkblue' : 'inherit',
                     textAlign: 'center'
                   }}
                 >
