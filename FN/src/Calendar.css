@@ -450,39 +450,31 @@ body {
 }
 
 .controller button {
-  width:50px;
- 
+  width: 50px;
   border: 0;
   background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding : 0;
-  margin-left:5px;
-  outline : none;
-  position:relative;
-  left:0;
-  top:0;
-  width : 100%;
-  height : 100%;
-  padding : 5px;
-  z-index : 9999;
-
-}
-.controller button:hover{
-  background-color: rgb(233, 233, 233);
-  outline : none;
-} 
-.controller button:active{
-  background-color: rgb(233, 233, 233);
-  outline : none;
-}
-.controller button:focus
-{
-  background-color: rgb(233, 233, 233);
-  outline : none;
+  padding: 5px;
+  margin-left: 5px;
+  outline: none;
+  cursor: pointer;
 }
 
+.controller button:hover {
+  background-color: rgb(233, 233, 233);
+}
+
+.controller button .material-symbols-outlined {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+/* 새로고침 버튼 회전 애니메이션 */
+.controller button:active .material-symbols-outlined.refresh {
+  transform: rotate(360deg) !important;
+}
 
 .controller button span {
   color:#1E2B37;

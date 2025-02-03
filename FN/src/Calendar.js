@@ -421,6 +421,41 @@ function Calendar() {
     }
   };
 
+  // 새로고침 핸들러 수정
+  const handleRefresh = () => {
+    // 새로고침 버튼 회전 애니메이션
+    const refreshButton = document.querySelector('.material-symbols-outlined.refresh');
+    if (refreshButton) {
+      refreshButton.style.transform = 'rotate(360deg)';
+    }
+
+    // 화면 페이드 아웃 효과
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 99999;
+      pointer-events: none;
+    `;
+    document.body.appendChild(overlay);
+
+    // 페이드 인 효과 실행
+    requestAnimationFrame(() => {
+      overlay.style.opacity = '1';
+    });
+
+    // 실제 페이지 새로고침
+    setTimeout(() => {
+      window.location.reload();
+    }, 150);
+  };
+
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
@@ -468,6 +503,9 @@ function Calendar() {
         </div>
 
         <div className="controller">
+          <button onClick={handleRefresh}>
+            <span className="material-symbols-outlined refresh">refresh</span>
+          </button>
           <button onClick={handleUploadClick}>
             <span className="material-symbols-outlined">upload</span>
           </button>
