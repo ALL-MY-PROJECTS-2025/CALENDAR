@@ -71,11 +71,40 @@ body {
   align-items: center;
 }
 
-
-.layout-row .photo-frame>.items>.item video
-{
-
+/* layout-row에서 단일 이미지 레이아웃 */
+.layout-row .photo-frame.layout-single {
+  padding: 0;
 }
+
+.layout-row .photo-frame.layout-single .items {
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.layout-row .photo-frame.layout-single .item {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.layout-row .photo-frame.layout-single .item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.layout-row .photo-frame.layout-single .item video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
 .layout-row .postcard-container {
   width: 60%;
   padding-left: 20px;
@@ -87,15 +116,15 @@ body {
   justify-content: flex-start;
   align-items: center;
   gap: 0;
-  width: 1080px;
-  height: 1920px;
+  width:100%;
+  height: 100vh;
   margin: 0 auto;
   overflow: hidden;  /* 스크롤 방지 */
 }
 
 .layout-col .photo-frame {
   width: 100%;
-  height: 40%;
+  height: 70%;
   overflow: hidden;
   padding: 10px;
   display: flex;
@@ -333,33 +362,29 @@ body {
 
 /* SWIPER 가 없는 경우 */
 .photo-frame>.items {
-  padding: 10px;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  width : 100%;
-  height : 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .photo-frame>.items>.item {
   position: relative;
-  width : 100%;
-  height : 100%;
+  width: 100%;
+  height: 100%;
 }
 
-
-.photo-frame>.items>.item img{
-  width : 100%;
-  height : 100%;
+.photo-frame>.items>.item img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-
 }
 
 .photo-frame>.items>.item video {
   width: 100%;
-  height:100%;
+  height: 100%;
   position: absolute;
   left: 0;
   top: 0;
@@ -749,4 +774,53 @@ body {
   border : 1px solid lightgray;
   padding : 2px;
   
+}
+
+/* Swiper 스타일 */
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  width: 100%;
+  height: 100%;
+}
+
+/* 페이드 효과를 위한 스타일 */
+.swiper-slide {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.swiper-slide-active {
+  opacity: 1;
+}
+
+/* 단일 이미지 레이아웃에서의 Swiper 컨테이너 */
+.layout-single .swiper-container {
+  width: 100%;
+  height: 100%;
+}
+
+.layout-single .swiper-slide .item {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.layout-single .swiper-slide .item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.layout-single .swiper-slide .item video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 }

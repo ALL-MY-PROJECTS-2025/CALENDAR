@@ -6,6 +6,7 @@ import googleCalendarPlugin from "@fullcalendar/google-calendar"; // //GOOGLE CA
 import timeGridPlugin from "@fullcalendar/timegrid"; // timeGridPlugin 추가
 
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from 'swiper/modules';
 
 // TIMER COMPONENT
 import Timer from "./components/Timer";
@@ -20,6 +21,8 @@ import UploadModal from "./components/UploadModal";
 import SettingsModal from "./components/SettingsModal";
 
 import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/autoplay";
 import "./Calendar.css";
 
 function Calendar() {
@@ -462,35 +465,79 @@ function Calendar() {
         }`}
     >
       <div className={`photo-frame ${getPhotoFrameLayoutClass(selectedSettings.imageArray)}`}>
-        {images.length > 0 ? (
-          <div className="items">
-            {images.map((img, index) => (
-              <div key={index} className="item">
-                <img
-                  src={img.base64}
-                  alt={img.filename}
-                  className="month-image"
-                />
-                <video autoPlay muted loop>
-                  <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
-                </video>
-              </div>
-            ))}
-          </div>
+        {selectedSettings.imageArray === "1" ? (
+          // Swiper로 단일 이미지 슬라이드 구현
+          <Swiper
+            modules={[Autoplay, EffectFade]}
+            effect="fade"
+            fadeEffect={{ crossFade: true }}
+            autoplay={{
+              delay: 8000,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            className="swiper-container"
+          >
+            {images.length > 0 ? (
+              images.map((img, index) => (
+                <SwiperSlide key={index}>
+                  <div className="item">
+                    <img
+                      src={img.base64}
+                      alt={img.filename}
+                      className="month-image"
+                    />
+                    <video autoPlay muted loop>
+                      <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
+                    </video>
+                  </div>
+                </SwiperSlide>
+              ))
+            ) : (
+              <SwiperSlide>
+                <div className="item">
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/default.png`}
+                    alt="Default Image"
+                    className="month-image default-image"
+                  />
+                  <video autoPlay muted loop>
+                    <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
+                  </video>
+                </div>
+              </SwiperSlide>
+            )}
+          </Swiper>
         ) : (
+          // 기존 다중 이미지 레이아웃
           <div className="items">
-            {Array.from({ length: parseInt(selectedSettings.imageArray) || 1 }).map((_, index) => (
-              <div key={index} className="item">
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/default.png`}
-                  alt={`Default Image ${index + 1}`}
-                  className="month-image default-image"
-                />
-                <video autoPlay muted loop>
-                  <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
-                </video>
-              </div>
-            ))}
+            {images.length > 0 ? (
+              images.map((img, index) => (
+                <div key={index} className="item">
+                  <img
+                    src={img.base64}
+                    alt={img.filename}
+                    className="month-image"
+                  />
+                  <video autoPlay muted loop>
+                    <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
+                  </video>
+                </div>
+              ))
+            ) : (
+              Array.from({ length: parseInt(selectedSettings.imageArray) }).map((_, index) => (
+                <div key={index} className="item">
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/default.png`}
+                    alt={`Default Image ${index + 1}`}
+                    className="month-image default-image"
+                  />
+                  <video autoPlay muted loop>
+                    <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
+                  </video>
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>
