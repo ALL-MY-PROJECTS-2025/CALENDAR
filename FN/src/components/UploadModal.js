@@ -1,8 +1,35 @@
 import React, { useState, useEffect } from "react";
 import "./css/UploadModal.css";
 
-const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewImages,uploadedImages,setUploadedImages }) => {
+const UploadModal = ({ onClose, ...props }) => {
+  // Bootstrap 모달 인스턴스 참조를 위한 상태 추가
+  const [modalInstance, setModalInstance] = useState(null);
 
+  // 모달 초기화
+  useEffect(() => {
+    const modalElement = document.getElementById('staticBackdrop2');
+    if (modalElement) {
+      const modal = new window.bootstrap.Modal(modalElement, {
+        backdrop: 'static',
+        keyboard: false
+      });
+      setModalInstance(modal);
+    }
+  }, []);
+
+  useEffect(() => {
+    // 컴포넌트가 언마운트될 때 backdrop 제거
+    return () => {
+      const backdrops = document.getElementsByClassName('modal-backdrop');
+      if (backdrops.length > 0) {
+        Array.from(backdrops).forEach(backdrop => {
+          document.body.removeChild(backdrop);
+        });
+      }
+      // body에서 modal-open 클래스도 제거
+      document.body.classList.remove('modal-open');
+    };
+  }, []);
 
   //--------------------------------------
   // 서버에서 받은 이미지를 미리보기로 추가
@@ -40,8 +67,8 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
     const previewUrls = imageFiles.map((file) => URL.createObjectURL(file));
 
     // ✅ 기존 이미지 유지 + 새 이미지 추가
-    setPreviewImages((prev) => [...prev, ...previewUrls]);
-    setUploadedImages((prev) => [...prev, ...imageFiles]);
+    props.setPreviewImages((prev) => [...prev, ...previewUrls]);
+    props.setUploadedImages((prev) => [...prev, ...imageFiles]);
   };
   //--------------------------------------
   // 파일 올리기 버튼 클릭 시 form 추가
@@ -57,8 +84,8 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
       return;
     }
     const previewUrls = imageFiles.map((file) => URL.createObjectURL(file));
-    setPreviewImages((prev) => [...prev, ...previewUrls]);
-    setUploadedImages((prev) => [...prev, ...imageFiles]);
+    props.setPreviewImages((prev) => [...prev, ...previewUrls]);
+    props.setUploadedImages((prev) => [...prev, ...imageFiles]);
   };
 
   //--------------------------------------
@@ -66,20 +93,20 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
   //--------------------------------------
   const handleRemoveImage = async (index) => {
     // ✅ 새로 추가된 이미지인지 확인
-    if (index < uploadedImages.length) {
+    if (index < props.uploadedImages.length) {
       console.log("!!!!!!!! 새로 추가된 이미지, 서버 요청 없이 제거");
 
       // 새로 추가된 이미지는 서버 요청 없이 제거
-      setUploadedImages((prev) => prev.filter((_, i) => i !== index));
-      setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+      props.setUploadedImages((prev) => prev.filter((_, i) => i !== index));
+      props.setPreviewImages((prev) => prev.filter((_, i) => i !== index));
       return;
     }
 
     // ✅ 서버에 저장된 이미지인 경우 요청 보냄
-    const realIndex = index - uploadedImages.length; // 서버 이미지의 실제 인덱스
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-    const filename = images[realIndex]?.filename;
+    const realIndex = index - props.uploadedImages.length; // 서버 이미지의 실제 인덱스
+    const year = props.currentDate.getFullYear();
+    const month = String(props.currentDate.getMonth() + 1).padStart(2, "0");
+    const filename = props.images[realIndex]?.filename;
     const filePath = filename ? `${year}/${month}/${filename}` : null;
 
     try {
@@ -102,8 +129,8 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
       console.error("!!!!!!!! 이미지 삭제 중 오류 발생:", error);
     } finally {
       // ✅ 서버 응답과 관계없이 UI에서 삭제
-      setPreviewImages((prev) => prev.filter((_, i) => i !== index));
-      setImages((prev) => prev.filter((_, i) => i !== realIndex));
+      props.setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+      props.setImages((prev) => prev.filter((_, i) => i !== realIndex));
       console.log("!!!!!!!! 이미지가 UI에서 제거되었습니다.");
     }
   };
@@ -112,18 +139,18 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
   // 업로드 버튼 클릭 시 호출
   //--------------------------------------
   const handleUpload = async () => {
-    if (uploadedImages.length === 0) {
+    if (props.uploadedImages.length === 0) {
       alert("업로드할 이미지가 없습니다.");
       return;
     }
 
     const formData = new FormData();
-    uploadedImages.forEach((file) => {
+    props.uploadedImages.forEach((file) => {
       formData.append("files", file);
     });
 
-    const yyyy = currentDate.getFullYear();
-    const mm = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const yyyy = props.currentDate.getFullYear();
+    const mm = String(props.currentDate.getMonth() + 1).padStart(2, "0");
     formData.append("yyyy", yyyy);
     formData.append("mm", mm);
 
@@ -135,13 +162,8 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
 
       if (response.ok) {
         alert("이미지 업로드가 완료되었습니다.");
-
-        // ✅ 모달 닫기
-        const exitButtonEl = document.querySelector(".btn-close");
-        exitButtonEl.click();
-
-        // ✅ 업로드가 완료된 후 서버에서 최신 이미지 목록을 다시 가져옴
-        fetchImagesFromServer();
+        onClose(); // 모달 닫기
+        fetchImagesFromServer(); // 이미지 목록 새로고침
       } else {
         alert("업로드 요청에 실패했습니다.");
       }
@@ -149,7 +171,7 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
       console.error("API 호출 중 오류 발생:", error);
     }
 
-    setUploadedImages([]); // 새로 추가한 이미지는 초기화
+    props.setUploadedImages([]); // 새로 추가한 이미지는 초기화
   };
 
   //--------------------------------------
@@ -158,7 +180,7 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
   const fetchImagesFromServer = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8095/getAlbum/${currentDate.getFullYear()}/${String(currentDate.getMonth() + 1).padStart(2, "0")}`
+        `http://localhost:8095/getAlbum/${props.currentDate.getFullYear()}/${String(props.currentDate.getMonth() + 1).padStart(2, "0")}`
       );
   
       // 🔹 응답이 JSON인지, 또는 비어 있는지 체크
@@ -172,7 +194,7 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
   
       if (!contentType || !contentType.includes("application/json") || contentLength === "0") {
         console.warn("⚠️ 응답이 비어 있음 또는 JSON이 아님");
-        setPreviewImages([]); // 미리보기 초기화
+        props.setPreviewImages([]); // 미리보기 초기화
         return;
       }
   
@@ -185,127 +207,131 @@ const UploadModal = ({ currentDate, images, setImages,previewImages,setPreviewIm
           base64: `data:image/jpeg;base64,${base64}`,
         }));
   
-        setPreviewImages(imageArray.map((img) => img.base64)); // ✅ 미리보기 업데이트
-        setImages(imageArray); // ✅ images 상태 업데이트
+        props.setPreviewImages(imageArray.map((img) => img.base64)); // ✅ 미리보기 업데이트
+        props.setImages(imageArray); // ✅ images 상태 업데이트
       }
     } catch (error) {
       console.error("❌ 이미지 데이터 가져오기 오류:", error);
-      setPreviewImages([]); // 미리보기 초기화
+      props.setPreviewImages([]); // 미리보기 초기화
     }
   };
   
+  const handleClose = () => {
+    onClose();
+  };
 
   return (
-    <div
-      className="modal fade uploadmodal"
-      id="staticBackdrop2"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabIndex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-     
-    >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">UPLOAD</h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div className="modal-body">
-            <div
-              className="upload-block"
-              onDragOver={(e) => handleonDragOver(e)}
-              onDragLeave={(e) => handleonDragLeave(e)}
-              onDrop={handleFileDrop}
-              style={{fontSize : "1rem"}}
-            >
-              이미지를 드래그 해 주세요
+    <>
+      <div className="modal-backdrop fade show"></div>
+      <div
+        className="modal fade show uploadmodal"
+        id="staticBackdrop2"
+        style={{ display: 'block' }}
+        tabIndex="-1"
+        aria-modal="true"
+        role="dialog"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">UPLOAD</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={handleClose}
+                aria-label="Close"
+              ></button>
             </div>
-            <div className="preview">
-              {previewImages.length > 0 ? (
-                <div className="preview-container">
-                  {previewImages.map((src, index) => (
-                    <div
-                      key={index}
-                      className="preview-image"
-                      style={{ 
-                        position: "relative" ,  
-                        margin : "10px",
-                        border:"1px solid lightgray",
-                        display:"flex",
-                        justifyContent:"center",
-                        alignItems:"center",
-                        overflow:"hidden",
-                        
-                      }}
-                    >
-                      <img
-                        src={src}
-                        alt={`preview-${index}`}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        
-                        }}
-                      />
-                      <button
-                        style={{
-                          backgroundColor:"red",
-                          border:"0",
-                          color:"white",
-                          position:"absolute",
-                          right:"0px",
-                          top:"0px",
-                          borderRadius:"50%",
-                          width:"20px",
-                          height:"20px",
+            <div className="modal-body">
+              <div
+                className="upload-block"
+                onDragOver={(e) => handleonDragOver(e)}
+                onDragLeave={(e) => handleonDragLeave(e)}
+                onDrop={handleFileDrop}
+                style={{fontSize : "1rem"}}
+              >
+                이미지를 드래그 해 주세요
+              </div>
+              <div className="preview">
+                {props.previewImages.length > 0 ? (
+                  <div className="preview-container">
+                    {props.previewImages.map((src, index) => (
+                      <div
+                        key={index}
+                        className="preview-image"
+                        style={{ 
+                          position: "relative" ,  
+                          margin : "10px",
+                          border:"1px solid lightgray",
                           display:"flex",
-                          justifyContent : "center",
-                          alignItems:"center"
+                          justifyContent:"center",
+                          alignItems:"center",
+                          overflow:"hidden",
                           
                         }}
-                        onClick={() => handleRemoveImage(index)}
                       >
-                        -
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p>-</p>
-              )}
+                        <img
+                          src={src}
+                          alt={`preview-${index}`}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                          
+                          }}
+                        />
+                        <button
+                          style={{
+                            backgroundColor:"red",
+                            border:"0",
+                            color:"white",
+                            position:"absolute",
+                            right:"0px",
+                            top:"0px",
+                            borderRadius:"50%",
+                            width:"20px",
+                            height:"20px",
+                            display:"flex",
+                            justifyContent : "center",
+                            alignItems:"center"
+                            
+                          }}
+                          onClick={() => handleRemoveImage(index)}
+                        >
+                          -
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>-</p>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <input
-              type="file"
-              className="btn "
-              onChange={handleAddFormdata}
-              multiple
-              style={{ display: "none" }}
-              id="file-input"
-            />
-            <button className="btn btn-success">
-              <label htmlFor="file-input">파일올리기</label>
-            </button>
-            <button
-              type="button"
-              className="btn upload-btn"
-              onClick={handleUpload}
-            >
-              업로드 요청
-            </button>
+            <div className="modal-footer">
+              <input
+                type="file"
+                className="btn"
+                onChange={handleAddFormdata}
+                multiple
+                style={{ display: "none" }}
+                id="file-input"
+              />
+              <button className="btn btn-success">
+                <label htmlFor="file-input">파일올리기</label>
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary upload-btn"
+                onClick={handleUpload}
+              >
+                업로드 요청
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

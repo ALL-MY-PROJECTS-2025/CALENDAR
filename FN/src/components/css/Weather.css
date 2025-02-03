@@ -8,14 +8,31 @@
   top : 5px; */
 
   background-color: transparent;
-  padding :5px;;
-  border : 1px solid;
+  padding :5px;
+  /* border : 10px solid; */
+  height :100%;
+
+  position:relative;
 }
+.postcard-container>.calendar-header .weather-block::before{
+  /* content : '';
+  position:absolute;
+  left:-10px;
+  top:-10px;
+  width : 0;
+  height : 0;
+  border-top:15px solid white;
+  border-left:15px solid white;
+  border-right:15px solid #1E2B37;
+  border-bottom:15px solid #1E2B37; */
+}
+
+
 
 .postcard-container>.calendar-header .weather-block .items {
   display: flex;
   justify-content: left;
-  align-items: start;
+  align-items: end;
   gap: 5px;
   
 }
@@ -28,8 +45,13 @@
   padding : 5px;
   font-weight: 500;
   background-color: white;
-  box-shadow: 5px 5px 5px lightgray;;
+  /* box-shadow: 5px 5px 5px lightgray;; */
   height : 11vh;
+  
+  border-radius: 0;
+  border-bottom : 1px solid lightgray;
+  border-right : 1px solid lightgray;
+  box-shadow: 2px 2px 2px lightgray;
   
 }
 

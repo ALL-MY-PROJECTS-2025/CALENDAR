@@ -23,6 +23,39 @@ import "swiper/css";
 import "./Calendar.css";
 
 function Calendar() {
+
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+  // Bootstrap 모달 초기화 및 제어
+  useEffect(() => {
+    // Upload 모달
+    const uploadModal = document.getElementById('staticBackdrop2');
+    if (uploadModal && isUploadModalOpen) {
+      const modal = new window.bootstrap.Modal(uploadModal);
+      modal.show();
+      
+      // 모달이 닫힐 때 상태 업데이트
+      uploadModal.addEventListener('hidden.bs.modal', () => {
+        setIsUploadModalOpen(false);
+      });
+    }
+
+    // Settings 모달
+    const settingsModal = document.getElementById('staticBackdrop');
+    if (settingsModal) {
+      if (isSettingsModalOpen) {
+        const bsModal = new window.bootstrap.Modal(settingsModal);
+        bsModal.show();
+        
+        // 모달이 닫힐 때 상태 업데이트
+        settingsModal.addEventListener('hidden.bs.modal', () => {
+          setIsSettingsModalOpen(false);
+        });
+      }
+    }
+  }, [isUploadModalOpen, isSettingsModalOpen]);
+
   //----------------------------
   // STATE MANAGEMENT
   //----------------------------
@@ -276,11 +309,28 @@ function Calendar() {
     return new Date(date).toLocaleString("ko-KR", options);
   };
 
+  // 버튼 클릭 핸들러
+  const handleUploadClick = () => {
+    setIsUploadModalOpen(true);
+  };
+
+  const handleSettingsClick = () => {
+    setIsSettingsModalOpen(true);
+  };
+
+  // 모달 닫기 핸들러
+  const handleCloseUploadModal = () => {
+    setIsUploadModalOpen(false);
+  };
+
+  const handleCloseSettingsModal = () => {
+    setIsSettingsModalOpen(false);
+  };
+
   return (
     <div
-      className={`App ${
-        selectedSettings.layout === "row" ? "layout-row" : "layout-col"
-      }`}
+      className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
+        }`}
     >
       <div className="photo-frame">
         {/* SLIDE 없이 배치 */}
@@ -320,21 +370,10 @@ function Calendar() {
         </div>
 
         <div className="controller">
-          <button
-            type="button"
-            className="btn btn-primary upload-btn"
-            data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop2"
-          >
+          <button onClick={handleUploadClick}>
             <span className="material-symbols-outlined">upload</span>
           </button>
-
-          <button
-            type="button"
-            className="btn btn-primary setting-btn"
-            data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop"
-          >
+          <button onClick={handleSettingsClick}>
             <span className="material-symbols-outlined">settings</span>
           </button>
         </div>
@@ -448,26 +487,32 @@ function Calendar() {
         {/* END */}
 
         {/* SETTING Modal */}
-        <SettingsModal
-          years={years}
-          months={months}
-          selectedSettings={selectedSettings}
-          onSettingsUpdate={handleSettingsUpdate}
-          currentYear={currentYear}
-          currentMonth={currentMonth}
-        />
+        {isSettingsModalOpen && (
+          <SettingsModal
+            years={years}
+            months={months}
+            selectedSettings={selectedSettings}
+            onSettingsUpdate={handleSettingsUpdate}
+            currentYear={currentYear}
+            currentMonth={currentMonth}
+            onClose={handleCloseSettingsModal}
+          />
+        )}
         {/* END */}
 
         {/* UPLOAD MODAL */}
-        <UploadModal
-          currentDate={currentDate}
-          images={images}
-          setImages={setImages}
-          previewImages={previewImages}
-          setPreviewImages={setPreviewImages}
-          uploadedImages={uploadedImages}
-          setUploadedImages={setUploadedImages}
-        />
+        {isUploadModalOpen && (
+          <UploadModal
+            currentDate={currentDate}
+            images={images}
+            setImages={setImages}
+            previewImages={previewImages}
+            setPreviewImages={setPreviewImages}
+            uploadedImages={uploadedImages}
+            setUploadedImages={setUploadedImages}
+            onClose={handleCloseUploadModal}
+          />
+        )}
         {/* END */}
       </div>
     </div>

@@ -40,7 +40,8 @@ body {
   margin: 0;
   padding: 0px;
   height: 100vh;
-  width: 1280px;
+  /* width: 1280px; */
+  width : 98vw;
   margin: 0 auto;
   font-family:"google-custom";
   font-weight : 400;
@@ -79,13 +80,14 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  gap:0;
 }
 
 .layout-col .photo-frame {
   width: 100%;
   height: 40vh;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   display: flex;
   align-items: center;
 }
@@ -236,11 +238,15 @@ body {
   /* background-color: rgb(204, 201, 201); */
   width : 100%;
   height : 100%;
+  min-height:150px;
+  max-height : 200px;
   margin-top:0;
+  margin : 0;
   display:flex;
   justify-content: right;
   align-items: end;
   padding-bottom:20px;
+  ;
 }
 
 /*  */
@@ -251,8 +257,8 @@ body {
 
 .postcard-container>.controller {
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 15px;
+  top: 15px;
   z-index: 100;
   z-index:9999;
   
@@ -325,18 +331,7 @@ body {
 }
 
 
-.calendar-header::before{
-  content : '';
-  position:absolute;
-  left:0;
-  top:0;
-  width : 0;
-  height : 0;
-  border-top:10px solid #1E2B37;
-  border-left:10px solid #1E2B37;
-  border-right:10px solid transparent;
-  border-bottom:10px solid transparent;
-}
+
 
 
 /* .calendar-header::after{
@@ -354,6 +349,7 @@ body {
 
 
 .calendar-container {
+  padding-top : 20px;
   height : 100vh;
   overflow:auto;
 }

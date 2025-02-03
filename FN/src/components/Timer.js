@@ -43,13 +43,14 @@ const Timer = () => {
         <div className="item">
           <span className="">{currentTime.split(" ")[1]?.split(":")[0] || "00"}</span>
         </div>
-        <div>
+       
+        <div className="dot-block">
           <span className="double-dot"> : </span>
         </div>
         <div className="item">
           <span >{currentTime.split(" ")[1]?.split(":")[1] || "00"}</span>
         </div>
-        <div>
+        <div className="dot-block">
           <span className="double-dot"> : </span>
         </div>
         <div className="item">

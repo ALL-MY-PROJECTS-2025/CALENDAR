@@ -1,8 +1,11 @@
 
 /* UPLOAD MODAL */
+
 .uploadmodal .modal-header{
   background-color:#1E2B37;
   height : 55px;
+  position:relative;
+
 }
 
 .uploadmodal .modal-content{

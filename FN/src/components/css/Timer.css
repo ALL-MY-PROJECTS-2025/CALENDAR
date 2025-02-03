@@ -11,9 +11,35 @@
     /* border : 1px solid; */
     width : 100%;
     text-align: right;
+    height : 100%;
+  
 
-    
-  }
+    padding : 10px; 
+    position:relative;
+
+   
+}
+
+
+
+.postcard-container>.calendar-header .timer-block::before{
+  /* content:"TIMER";
+  position:absolute;
+  left:15px;
+  top:15px;
+
+  width : 65px;
+  height : 25px;
+  display:flex;
+  justify-content:left;
+  align-items: center;
+  
+  background-color: #8B5A2B;
+  color : white;
+  font-size : .8rem;
+  padding : 5px; */
+}
+
 
   .postcard-container>.calendar-header .timer-block .timer{
     font-size : 5rem;
@@ -31,20 +57,22 @@
     font-family: 'digit';
     font-weight:300;
     color:#1E2B37;
-    border : 1px solid;
+ 
+
+    padding : 10px;
+    padding-bottom : 0;
   }
 
-  .postcard-container>.calendar-header .timer-block .timer .pmam{
-    font-family: 'google-custom';
-    font-size : 4rem;
-  }
+ 
+
   
 
   .postcard-container>.calendar-header .timer-block .timer>.item{
     display:block;
     
-    height : 100%;
+    
     width : 100%;
+    height : 100px;
 
     display:flex;
     justify-content: center;
@@ -69,10 +97,43 @@
     border-bottom : 5px solid white;
    
   }
+  .postcard-container>.calendar-header .timer-block .timer>.item:nth-child(1)::before{
+    border : 0;
+    
+  }
+  .postcard-container>.calendar-header .timer-block .timer>.item:nth-child(1)
+  {
+    position:absolute;
+    
+    
+    top:50px;
+    left:5px;
+    width : 65px;
+    height:35px;
+
+    font-size : .8rem;
+    z-index: 100;
+    background-color: white;
+
+    box-shadow: 0px 0px 0px white;
+    
+  }
   .postcard-container>.calendar-header .timer-block .timer>.item .pmam{
-   
+    font-size : 1rem;
+    font-weight: 900;
+    border-radius: 0;
+    font-family:sans-serif;
+    
+    box-shadow: 0;
+
   }
   
+  .dot-block{
+    display:flex;
+    align-items: end;
+    padding-bottom:0;
+    font-size:4rem;
+  }
   .postcard-container>.calendar-header .timer-block .timer>.item>span{
     position:relative;
     left:0;
