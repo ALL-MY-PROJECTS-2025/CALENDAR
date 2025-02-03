@@ -405,13 +405,28 @@ function Calendar() {
     fetchHolidays(currentYear);
   }, [currentYear]);
 
+  // Photo Frame 레이아웃 클래스 결정 함수
+  const getPhotoFrameLayoutClass = (imageArray) => {
+    switch (imageArray) {
+      case '1':
+        return 'layout-single';
+      case '2-row':
+        return 'layout-2-row';
+      case '2-col':
+        return 'layout-2-col';
+      case '4':
+        return 'layout-grid';
+      default:
+        return 'layout-single';
+    }
+  };
+
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
         }`}
     >
-      <div className="photo-frame">
-        {/* SLIDE 없이 배치 */}
+      <div className={`photo-frame ${getPhotoFrameLayoutClass(selectedSettings.imageArray)}`}>
         {images.length > 0 ? (
           <div className="items">
             {images.map((img, index) => (
@@ -429,13 +444,18 @@ function Calendar() {
           </div>
         ) : (
           <div className="items">
-            <div className="item">
-              <img
-                src={`${process.env.PUBLIC_URL}/images/default.png`}
-                alt="Default Image"
-                className="month-image default-image"
-              />
-            </div>
+            {Array.from({ length: parseInt(selectedSettings.imageArray) || 1 }).map((_, index) => (
+              <div key={index} className="item">
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/default.png`}
+                  alt={`Default Image ${index + 1}`}
+                  className="month-image default-image"
+                />
+                <video autoPlay muted loop>
+                  <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
+                </video>
+              </div>
+            ))}
           </div>
         )}
       </div>
