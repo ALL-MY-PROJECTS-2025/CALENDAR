@@ -105,6 +105,7 @@ function Calendar() {
     layout: "row",
     imageArray: "1",
     defaultValue: false,
+    address: "" // 주소 정보 추가
   });
 
   const [holidays, setHolidays] = useState([]);
@@ -135,6 +136,7 @@ function Calendar() {
         layout: data.layout,
         imageArray: data.imageArray,
         defaultValue: data.defaultValue,
+        address: data.address
       });
     } catch (error) {
       console.error("❌ 설정 데이터 오류:", error);
@@ -182,7 +184,8 @@ function Calendar() {
         setSelectedSettings(newSettings);
         if (
           newSettings.year !== selectedSettings.year ||
-          newSettings.month !== selectedSettings.month
+          newSettings.month !== selectedSettings.month ||
+          newSettings.address !== selectedSettings.address // 주소 변경 확인
         ) {
           await fetchSettings(newSettings.year, newSettings.month);
         }
@@ -423,13 +426,12 @@ function Calendar() {
 
   // 새로고침 핸들러 수정
   const handleRefresh = () => {
-    // 새로고침 버튼 회전 애니메이션
+    // 위치 정보 갱신
     const refreshButton = document.querySelector('.material-symbols-outlined.refresh');
     if (refreshButton) {
       refreshButton.style.transform = 'rotate(360deg)';
     }
 
-    // 화면 페이드 아웃 효과
     const overlay = document.createElement('div');
     overlay.style.cssText = `
       position: fixed;
@@ -445,12 +447,10 @@ function Calendar() {
     `;
     document.body.appendChild(overlay);
 
-    // 페이드 인 효과 실행
     requestAnimationFrame(() => {
       overlay.style.opacity = '1';
     });
 
-    // 실제 페이지 새로고침
     setTimeout(() => {
       window.location.reload();
     }, 150);
@@ -498,7 +498,6 @@ function Calendar() {
       <div className="postcard-container">
         <div className="calendar-header">
           <Weather />
-          {/*  */}
           <Timer />
         </div>
 
@@ -515,7 +514,6 @@ function Calendar() {
         </div>
 
         <div className="calendar-container" style={{}}>
-          {/*  */}
           <FullCalendar
             ref={calendarRef}
             plugins={[

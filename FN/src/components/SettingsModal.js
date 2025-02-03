@@ -201,144 +201,146 @@ const SettingsModal = ({
             ></button>
           </div>
           <div className="modal-body">
-            <div className="items">
-              {/* YYYY/MM 정보 표시 */}
-              <div className="item choose-yyyymm">
-                <div className="year-display">
-                  <input
-                    type="text"
-                    value={selectedSettings.year}
-                    readOnly
-                    className="form-control"
-                  />
+            <form>
+              <div className="items">
+                {/* YYYY/MM 정보 표시 */}
+                <div className="item choose-yyyymm">
+                  <div className="year-display">
+                    <input
+                      type="text"
+                      value={selectedSettings.year}
+                      readOnly
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="month-display">
+                    <input
+                      type="text"
+                      value={`${selectedSettings.month.toString().padStart(2, "0")}월`}
+                      readOnly
+                      className="form-control"
+                    />
+                  </div>
                 </div>
-                <div className="month-display">
-                  <input
-                    type="text"
-                    value={`${selectedSettings.month.toString().padStart(2, "0")}월`}
-                    readOnly
-                    className="form-control"
-                  />
+                
+
+                {/* 레이아웃 설정 */}
+                <div className="item choose-layout">
+                  <div className="title">레이아웃</div>
+                  <div className="rowLayout">
+                    <div className="imageblock">이미지</div>
+                    <div className="contentblock">달력</div>
+                  </div>
+                  <div className="colLayout">
+                    <div className="imageblock">이미지</div>
+                    <div className="contentblock">달력</div>
+                  </div>
                 </div>
-              </div>
+
+                <div className="item choose-layout-radio">
+                  <div className="title">선택</div>
+                  <div className="rowLayout">
+                    <input
+                      type="radio"
+                      name="layout"
+                      value="row"
+                      checked={selectedSettings.layout === "row"}
+                      onChange={handleLayoutChange}
+                    />
+                  </div>
+                  <div className="colLayout">
+                    <input
+                      type="radio"
+                      name="layout"
+                      value="col"
+                      checked={selectedSettings.layout === "col"}
+                      onChange={handleLayoutChange}
+                    />
+                  </div>
+                </div>
+                
+
+                  {/* 이미지 배치 설정 */}
+                  <div className="item">
+                    <div className="title">이미지 배치 설정</div>
+                  </div>
+                  <div className="item choose-image-array">
+                    <div className="array-1">
+                      <input
+                        type="radio"
+                        name="array"
+                        value="1"
+                        checked={selectedSettings.imageArray === "1"}
+                        onChange={handleImageArrayChange}
+                      />
+                      <div></div>
+                    </div>
+
+                    <div className="array-2-row">
+                      <input
+                        type="radio"
+                        name="array"
+                        value="2-row"
+                        checked={selectedSettings.imageArray === "2-row"}
+                        onChange={handleImageArrayChange}
+                      />
+                      <div></div>
+                      <div></div>
+                    </div>
+
+                    <div className="array-2-col">
+                      <input
+                        type="radio"
+                        name="array"
+                        value="2-col"
+                        checked={selectedSettings.imageArray === "2-col"}
+                        onChange={handleImageArrayChange}
+                      />
+                      <div></div>
+                      <div></div>
+                    </div>
+
+                    <div className="array-4">
+                      <input
+                        type="radio"
+                        name="array"
+                        value="4"
+                        checked={selectedSettings.imageArray === "4"}
+                        onChange={handleImageArrayChange}
+                      />
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
+                  </div>
+
               
 
-              {/* 레이아웃 설정 */}
-              <div className="item choose-layout">
-                <div className="title">레이아웃</div>
-                <div className="rowLayout">
-                  <div className="imageblock">이미지</div>
-                  <div className="contentblock">달력</div>
-                </div>
-                <div className="colLayout">
-                  <div className="imageblock">이미지</div>
-                  <div className="contentblock">달력</div>
-                </div>
-              </div>
-
-              <div className="item choose-layout-radio">
-                <div className="title">선택</div>
-                <div className="rowLayout">
-                  <input
-                    type="radio"
-                    name="layout"
-                    value="row"
-                    checked={selectedSettings.layout === "row"}
-                    onChange={handleLayoutChange}
-                  />
-                </div>
-                <div className="colLayout">
-                  <input
-                    type="radio"
-                    name="layout"
-                    value="col"
-                    checked={selectedSettings.layout === "col"}
-                    onChange={handleLayoutChange}
-                  />
-                </div>
-              </div>
-              
-
-                {/* 이미지 배치 설정 */}
+                {/* 내려받기 */}
                 <div className="item">
-                  <div className="title">이미지 배치 설정</div>
+                  <div className="title">다운로드</div>
                 </div>
-                <div className="item choose-image-array">
-                  <div className="array-1">
-                    <input
-                      type="radio"
-                      name="array"
-                      value="1"
-                      checked={selectedSettings.imageArray === "1"}
-                      onChange={handleImageArrayChange}
-                    />
-                    <div></div>
+                <div className="item download">
+                  <div className="item">
+                    <button
+                      className="btn"
+                      onClick={() => handleDownloadClick("월별 사진")}
+                    >
+                      월별 사진 받기
+                    </button>
                   </div>
-
-                  <div className="array-2-row">
-                    <input
-                      type="radio"
-                      name="array"
-                      value="2-row"
-                      checked={selectedSettings.imageArray === "2-row"}
-                      onChange={handleImageArrayChange}
-                    />
-                    <div></div>
-                    <div></div>
+                  <div className="item">
+                    <button
+                      className="btn"
+                      onClick={() => handleDownloadClick("전체 사진")}
+                    >
+                      전체 사진 받기
+                    </button>
                   </div>
-
-                  <div className="array-2-col">
-                    <input
-                      type="radio"
-                      name="array"
-                      value="2-col"
-                      checked={selectedSettings.imageArray === "2-col"}
-                      onChange={handleImageArrayChange}
-                    />
-                    <div></div>
-                    <div></div>
-                  </div>
-
-                  <div className="array-4">
-                    <input
-                      type="radio"
-                      name="array"
-                      value="4"
-                      checked={selectedSettings.imageArray === "4"}
-                      onChange={handleImageArrayChange}
-                    />
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                </div>
-
-            
-
-              {/* 내려받기 */}
-              <div className="item">
-                <div className="title">다운로드</div>
-              </div>
-              <div className="item download">
-                <div className="item">
-                  <button
-                    className="btn"
-                    onClick={() => handleDownloadClick("월별 사진")}
-                  >
-                    월별 사진 받기
-                  </button>
-                </div>
-                <div className="item">
-                  <button
-                    className="btn"
-                    onClick={() => handleDownloadClick("전체 사진")}
-                  >
-                    전체 사진 받기
-                  </button>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
           <div className="modal-footer">
             <button

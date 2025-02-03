@@ -199,6 +199,7 @@ const Weather = () => {
   const [error, setError] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [dustData, setDustData] = useState(null);  // 미세먼지 상태 추가
+  const [weather, setWeather] = useState(null);
 
   // 미세먼지 등급 판정
   const getDustGrade = (value) => {
