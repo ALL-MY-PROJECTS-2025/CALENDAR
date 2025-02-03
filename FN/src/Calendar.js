@@ -599,7 +599,7 @@ function Calendar() {
         {/* GOOGLE EVENT MODAL        */}
         {showEventModal && selectedEvent && (
           <div
-            className="modal fade show"
+            className="fullcalendar-custom-event-modal modal fade show"
             style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
             tabIndex="-1"
           >
@@ -621,16 +621,16 @@ function Calendar() {
                     className="img-block"
                     style={{
                       width: "100%",
-                      height: "450px",
-                      aspectRatio: "16 / 9",
+                     
+                     
                     }}
                   >
                     <img
                       style={{
                         width: "100%",
                         height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "100% 10%",
+                        objectFit: "contain",
+                  
                       }}
                       src={`${process.env.PUBLIC_URL}/modal_1.png`}
                       alt="Example"

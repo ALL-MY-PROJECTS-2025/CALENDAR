@@ -514,17 +514,20 @@ body {
   position: relative;
 }
 
+/* 공휴일 라벨 컨테이너 */
 .holiday-labels-container {
   position: absolute;
   bottom: 2px;
   right: 2px;
-  width: calc(100% - 4px);  /* 좌우 2px 여백 제외한 전체 너비 */
+  width: calc(100% - 4px);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
+  z-index: 1;
 }
 
+/* 공휴일 라벨 */
 .holiday-label {
   font-size: 0.8rem;
   color: red;
@@ -536,22 +539,49 @@ body {
   line-height: 1.2;
   border-radius: 2px;
   width: 100%;
-  
 }
 
 /* 대체공휴일 스타일 */
 .holiday-label.alternative-holiday {
-  color: #FF6B6B;  /* 좀 더 연한 빨간색 */
-  font-style: italic;  /* 이탤릭체로 표시 */
+  color: #FF6B6B;
+  font-style: italic;
 }
 
 /* 공휴일 배경색 */
 .fc-day.holiday-event {
-  background-color: orange(255, 0, 0, 0.1);
+  background-color: rgba(255, 0, 0, 0.05);
 }
 
-/* 날짜 숫자 위치 조정 */
-.fc-daygrid-day-top {
-  padding-top: 0 !important;
-  margin-bottom: 20px;  /* 공휴일 레이블을 위한 하단 여백 */
+/* 날짜 셀 내부 여백 조정 */
+.fc-daygrid-day-frame {
+  padding-bottom: 20px !important;  /* 공휴일 텍스트를 위한 여백 */
+}
+
+/* 구글 연동  */
+.fc-event.gcal-event.fc-daygrid-event.fc-daygrid-dot-event
+{
+  background-color: #1E2B37;;
+  color:white !important;
+  text-align: right;
+  display:block;
+  padding : 2px;
+  font-size : .8rem;
+
+}
+
+/* EVENT MODAL */
+.fullcalendar-custom-event-modal .modal-dialog{
+  width:380px;
+}
+.fullcalendar-custom-event-modal .modal-header{
+  background-color: #1E2B37;;
+
+}
+
+.fullcalendar-custom-event-modal .modal-body{
+
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  gap : 10px;
 }

@@ -198,6 +198,89 @@ const Weather = () => {
   const [location, setLocation] = useState({ lat: null, lng: null });
   const [error, setError] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+  const [dustData, setDustData] = useState(null);  // 미세먼지 상태 추가
+
+  // 미세먼지 등급 판정
+  const getDustGrade = (value) => {
+    if (value <= 30) return '😊'; // 좋음
+    if (value <= 80) return '🙂'; // 보통
+    if (value <= 150) return '😷'; // 나쁨
+    return '😱'; // 매우 나쁨
+  };
+
+  // 미세먼지 정보 가져오기
+  const fetchDustInfo = async () => {
+    const serviceKey = 'xYZ80mMcU8S57mCCY%2Fq8sRsk7o7G8NtnfnK7mVEuVxdtozrl0skuhvNf34epviHrru%2FjiRQ41FokE9H4lK0Hhg%3D%3D';
+    try {
+      // 1. 먼저 TM 좌표로 변환
+      const tmCoord = await axios.get(
+        `http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getTMStdrCrdnt`,
+        {
+          params: {
+            serviceKey: serviceKey,
+            returnType: 'json',
+            numOfRows: 1,
+            pageNo: 1,
+            lat: location.lat,
+            lng: location.lng
+          }
+        }
+      );
+      console.log('📍 TM 좌표 변환 결과:', tmCoord.data.response.body.items[0]);
+
+      // 2. 변환된 TM 좌표로 가장 가까운 측정소 찾기
+      const nearStation = await axios.get(
+        `http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList`,
+        {
+          params: {
+            serviceKey: serviceKey,
+            returnType: 'json',
+            tmX: tmCoord.data.response.body.items[0].tmX,
+            tmY: tmCoord.data.response.body.items[0].tmY
+          }
+        }
+      );
+      console.log('📍 가장 가까운 측정소:', nearStation.data.response.body.items[0]);
+
+      // 3. 가장 가까운 측정소의 대기오염 정보 가져오기
+      const stationName = nearStation.data.response.body.items[0].stationName;
+      const response = await axios.get(
+        `http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty`,
+        {
+          params: {
+            serviceKey: serviceKey,
+            returnType: 'json',
+            numOfRows: 1,
+            pageNo: 1,
+            stationName: stationName,
+            dataTerm: 'DAILY'
+          }
+        }
+      );
+      
+      const data = response.data;
+      if (data.response?.body?.items?.[0]) {
+        const dustInfo = {
+          ...data.response.body.items[0],
+          stationName: stationName
+        };
+        console.log('📍 미세먼지 정보:', {
+          측정소: dustInfo.stationName,
+          미세먼지: dustInfo.pm10Value + ' ㎍/㎥',
+          초미세먼지: dustInfo.pm25Value + ' ㎍/㎥',
+          측정시각: dustInfo.dataTime,
+          통합대기환경지수: dustInfo.khaiValue,
+          오존: dustInfo.o3Value,
+          일산화탄소: dustInfo.coValue,
+          이산화질소: dustInfo.no2Value,
+          아황산가스: dustInfo.so2Value
+        });
+        setDustData(dustInfo);
+      }
+    } catch (error) {
+      console.error('❌ 미세먼지 정보 가져오기 실패:', error);
+    }
+  };
 
   // ✅ 위치 정보 가져오기
   useEffect(() => {
@@ -229,7 +312,6 @@ const Weather = () => {
       const getWeather = async () => {
         try {
           const resp = await fetchWeatherInfo_Ultra(location.lat, location.lng);
-
           setWeatherData(resp?.data?.response?.body?.items || { item: [] });
         } catch (error) {
           console.error("날씨 정보를 가져오는 데 실패했습니다:", error);
@@ -237,6 +319,7 @@ const Weather = () => {
       };
 
       getWeather();
+      fetchDustInfo();  // 미세먼지 정보도 함께 가져오기
     }
   }, [location]); // 🚀 location이 변경될 때마다 실행
 
@@ -324,7 +407,26 @@ const Weather = () => {
           </div>
         </div>
 
-        {/*  */}
+        {/* 미세먼지 아이템 */}
+        <div className="item">
+          <div>
+            <div className="icon">
+              <span className="material-symbols-outlined">air</span>
+            </div>
+            <div className="obsrValue">
+              {dustData ? (
+                <span>
+                  {dustData.pm10Value} {getDustGrade(parseInt(dustData.pm10Value))}
+                  <small style={{ fontSize: '0.7em', display: 'block', color: '#666' }}>
+                    {dustData.stationName}
+                  </small>
+                </span>
+              ) : (
+                <span>--</span>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -51,3 +51,27 @@
 .postcard-container>.calendar-header .weather-block .items .item .obsrValue {
   font-size: 1rem;
 }
+
+.weather-container {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.weather-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.weather-item span {
+  display: flex;
+  align-items: center;
+}
+
+.material-symbols-outlined {
+  font-size: 1.2rem;
+}
