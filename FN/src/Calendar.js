@@ -405,17 +405,6 @@ function Calendar() {
     fetchHolidays(currentYear);
   }, [currentYear]);
 
-  // 공휴일 판별 함수 수정
-  const isHoliday = (date) => {
-    const day = date.getDay();
-    // 주말(토,일) 체크
-    if (day === 0 || day === 6) return true;
-    
-    // 공휴일 체크
-    const dateString = date.toISOString().split('T')[0];
-    return holidays.includes(dateString);
-  };
-
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
@@ -526,23 +515,38 @@ function Calendar() {
               // 다른 이벤트는 기본 렌더링
               return arg.event.title;
             }}
+            fixedWeekCount={false}  // 월별로 정확한 주 수를 표시
             dayCellContent={(args) => {
               const day = args.date.getDay();
-              // 공휴일 여부 확인을 holidays 배열에서만 체크
-              const isHolidayDate = holidays.some(holiday => 
-                holiday.start === args.date.toISOString().split('T')[0]
+              const dateString = args.date.toISOString().split('T')[0];
+              const dayNumber = args.dayNumberText.replace('일', '');
+              const isOtherMonth = !args.isInCurrentMonth;
+              
+              const holidayEvent = holidays.find(holiday => 
+                holiday.start === dateString && 
+                holiday.extendedProps?.isHoliday
               );
+              
               const isSunday = day === 0;
               const isSaturday = day === 6;
-              const dayNumber = args.dayNumberText.replace('일', '');
               
+              let textColor;
+              if (isSunday) {
+                textColor = 'rgb(255, 0, 0)';  // 일요일은 항상 빨간색
+              } else if (holidayEvent || isOtherMonth) {
+                textColor = '#000000';  // 공휴일과 다른 월의 날짜는 회색으로
+              } else if (isSaturday) {
+                textColor = 'darkblue';  // 토요일은 파란색
+              } else {
+                textColor = '#000';  // 평일은 검정색
+              }
+
               return (
                 <div
                   style={{
-                    color: isHolidayDate || isSunday ? 'rgb(255, 0, 0)' : 
-                          isSaturday ? 'darkblue' : 'inherit',
+                    color: textColor,
                     textAlign: 'center',
-                    fontWeight: (isSaturday || isHolidayDate || isSunday) ? '600' : 'inherit'
+                    fontWeight: (!isOtherMonth && (isSunday || isSaturday)) ? '600' : '400'  // 공휴일은 볼드 제외
                   }}
                 >
                   {dayNumber}
@@ -554,7 +558,7 @@ function Calendar() {
               return (
                 <div
                   style={{
-                    color: day === 0 ? 'red' : day === 6 ? 'darkblue' : 'inherit',
+                    color: day === 0 ? 'rgb(255, 0, 0)' : day === 6 ? 'darkblue' : '#000',
                     textAlign: 'center'
                   }}
                 >

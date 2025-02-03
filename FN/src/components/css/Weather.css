@@ -2,38 +2,20 @@
 .postcard-container>.calendar-header .weather-block {
   display: flex;
   justify-content: space-between;
-  /* border : 1px solid; */
-  /* position: absolute;
-  left: 15px;
-  top : 5px; */
-
-  background-color: transparent;
   padding :5px;
   /* border : 10px solid; */
   height :100%;
-
   position:relative;
+  width : 100%;
 }
-.postcard-container>.calendar-header .weather-block::before{
-  /* content : '';
-  position:absolute;
-  left:-10px;
-  top:-10px;
-  width : 0;
-  height : 0;
-  border-top:15px solid white;
-  border-left:15px solid white;
-  border-right:15px solid #1E2B37;
-  border-bottom:15px solid #1E2B37; */
-}
-
-
 
 .postcard-container>.calendar-header .weather-block .items {
   display: flex;
-  justify-content: left;
+  justify-content: right;
   align-items: end;
   gap: 5px;
+  width : 100%;
+  max-width:300px;
 
 }
 
@@ -41,7 +23,9 @@
   display: flex;
   justify-content: center;
   align-items:end;
-  width: 100px;
+  width: 100%;
+  min-width:100px;
+  max-width:150px;
   padding : 5px;
   font-weight: 500;
   background-color: white;
@@ -49,7 +33,7 @@
   height : 120px;
   
   border-radius: 0;
- 
+  margin-right:5px;
   
 }
 

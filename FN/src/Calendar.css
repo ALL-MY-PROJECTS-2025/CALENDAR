@@ -38,10 +38,10 @@ body::-webkit-scrollbar {
 }
 body {
   margin: 0;
-  padding: 0px;
+  
   height: 100vh;
-  /* width: 1280px; */
-  width : 98vw;
+
+  width : 90vw;
   margin: 0 auto;
   font-family:"google-custom";
   font-weight : 400;
@@ -204,7 +204,7 @@ body {
 
  
 
-/* RIGHT */
+/* RIGHT-BLOCK */
 .postcard-container {
   width : 60%;
   
@@ -217,21 +217,22 @@ body {
   display:flex;
   justify-content: space-between;
   flex-direction: column;
+  ;
 }
 
 .postcard-container>.calendar-header{
   /* background-color: rgb(204, 201, 201); */
   width : 100%;
   height : 100%;
-  min-height:150px;
-  max-height : 200px;
+  min-height:180px;
+  max-height : 180px;
   margin-top:0;
   margin : 0;
   display:flex;
   justify-content: right;
   align-items: end;
   padding-bottom:20px;
-  ;
+  padding : 0px;
 }
 
 /*  */
@@ -506,7 +507,7 @@ body {
 
 /* 공휴일 배경색 */
 .fc-day.holiday-event {
-  background-color: rgba(255, 0, 0, 0.1);
+  background-color: orange(255, 0, 0, 0.1);
 }
 
 /* 날짜 숫자 위치 조정 */
