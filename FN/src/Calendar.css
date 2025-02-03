@@ -71,6 +71,10 @@ body {
 }
 
 
+.layout-row .photo-frame>.items>.item video
+{
+
+}
 .layout-row .postcard-container {
   width: 60%;
   padding-left: 20px;
@@ -84,17 +88,19 @@ body {
   gap:0;
   width : 1080px;
   height : 1920px;
+  /* height : 200vh; */
   margin : 0 auto;
 }
 
 .layout-col .photo-frame {
   width: 100%;
-  height: 40%;
+  height: 60%;
   overflow: auto;
   margin-bottom: 0px;
   display: flex;
   align-items: center;
 }
+
 .layout-col .photo-frame>.items{
   width : 100%;
   height : 100%;
@@ -103,6 +109,12 @@ body {
   width : 100%;
   height : 100%;
 }
+.layout-col .photo-frame>.items>.item video
+{
+  object-fit: cover;
+ 
+}
+
 .layout-col .photo-frame>.items>.item>img{
   width : 100%;
   height : 100%;

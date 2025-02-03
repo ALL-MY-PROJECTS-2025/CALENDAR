@@ -479,11 +479,14 @@ function Calendar() {
               day: "일",
             }} // 버튼 텍스트를 한글로 변경
             googleCalendarApiKey="AIzaSyA_rJ5q1Jjde3tdinjhSUx9m-ZbpCSkS58" // API 키 설정
-            events={[
+            eventSources={[
+              // Google Calendar 이벤트
               {
-                googleCalendarId: '505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com'
+                googleCalendarId: '505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com',
+                className: 'gcal-event'  // 구글 캘린더 이벤트용 클래스
               },
-              ...holidays // 공휴일 이벤트 추가
+              // 공휴일 이벤트
+              holidays
             ]}
             initialDate={currentDate}
             datesSet={handleDatesSet}
@@ -496,9 +499,8 @@ function Calendar() {
             height="auto" // 자동으로 화면 크기에 맞게 조정
             eventContent={(arg) => {
               // 공휴일 이벤트의 경우
-              if (arg.event.extendedProps.isHoliday) {
-                const holidayNames = arg.event.extendedProps.holidayNames || 
-                  [{ name: arg.event.title, isAlternative: false }];
+              if (arg.event.extendedProps?.isHoliday) {
+                const holidayNames = arg.event.extendedProps.holidayNames || [];
                 return (
                   <div className="holiday-labels-container">
                     {holidayNames.map((holiday, index) => (
@@ -507,12 +509,21 @@ function Calendar() {
                         className={`holiday-label ${holiday.isAlternative ? 'alternative-holiday' : ''}`}
                       >
                         {holiday.name}
+                        {holiday.isAlternative && (
+                          <span style={{ 
+                            marginLeft: '2px',
+                            color: '#FF6B6B',
+                            fontStyle: 'italic'
+                          }}>
+                            ,
+                          </span>
+                        )}
                       </div>
                     ))}
                   </div>
                 );
               }
-              // 다른 이벤트는 기본 렌더링
+              // 구글 캘린더 이벤트는 기본 렌더링
               return arg.event.title;
             }}
             fixedWeekCount={false}  // 월별로 정확한 주 수를 표시
@@ -526,6 +537,9 @@ function Calendar() {
                 holiday.start === dateString && 
                 holiday.extendedProps?.isHoliday
               );
+
+              const holidayNames = holidayEvent?.extendedProps?.holidayNames || [];
+              const isAlternativeHoliday = holidayNames.some(h => h.isAlternative);
               
               const isSunday = day === 0;
               const isSaturday = day === 6;
@@ -534,7 +548,7 @@ function Calendar() {
               if (isSunday) {
                 textColor = 'rgb(255, 0, 0)';  // 일요일은 항상 빨간색
               } else if (holidayEvent || isOtherMonth) {
-                textColor = '#000000';  // 공휴일과 다른 월의 날짜는 회색으로
+                textColor = '#000000';  // 공휴일과 다른 월의 날짜는 검정색
               } else if (isSaturday) {
                 textColor = 'darkblue';  // 토요일은 파란색
               } else {
@@ -546,10 +560,23 @@ function Calendar() {
                   style={{
                     color: textColor,
                     textAlign: 'center',
-                    fontWeight: (!isOtherMonth && (isSunday || isSaturday)) ? '600' : '400'  // 공휴일은 볼드 제외
+                    fontWeight: (!isOtherMonth && (isSunday || isSaturday)) ? '600' : '400',
+                    position: 'relative'
                   }}
                 >
                   {dayNumber}
+                  {isAlternativeHoliday && (
+                    <span style={{ 
+                      position: 'absolute',
+                      top: '50%',
+                      right: '-12px',
+                      fontSize: '0.8em',
+                      color: '#FF6B6B',
+                      fontStyle: 'italic'
+                    }}>
+                      ,
+                    </span>
+                  )}
                 </div>
               );
             }}

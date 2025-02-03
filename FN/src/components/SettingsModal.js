@@ -202,34 +202,24 @@ const SettingsModal = ({
           </div>
           <div className="modal-body">
             <div className="items">
-              {/* YYYY/MM 정보 선택 */}
+              {/* YYYY/MM 정보 표시 */}
               <div className="item choose-yyyymm">
-                <label htmlFor="yearSelect"></label>
-                <select
-                  id="yearSelect"
-                  className="form-select"
-                  value={selectedSettings.year}
-                  onChange={handleYearChange}
-                >
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-                <label htmlFor="monthSelect"></label>
-                <select
-                  id="monthSelect"
-                  className="form-select"
-                  value={selectedSettings.month}
-                  onChange={handleMonthChange}
-                >
-                  {months.map((month) => (
-                    <option key={month} value={month}>
-                      {month.toString().padStart(2, "0")}월
-                    </option>
-                  ))}
-                </select>
+                <div className="year-display">
+                  <input
+                    type="text"
+                    value={selectedSettings.year}
+                    readOnly
+                    className="form-control"
+                  />
+                </div>
+                <div className="month-display">
+                  <input
+                    type="text"
+                    value={`${selectedSettings.month.toString().padStart(2, "0")}월`}
+                    readOnly
+                    className="form-control"
+                  />
+                </div>
               </div>
               
 

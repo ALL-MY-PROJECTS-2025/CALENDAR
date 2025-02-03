@@ -108,28 +108,41 @@
     height : 100%;
 }
 
-/* YYYY - MM 선택 */
-.settingmodal .modal-body .items .item.choose-yyyymm{
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
+/* YYYY/MM 표시 스타일 */
+.settingmodal .modal-body .items .item.choose-yyyymm {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  padding: 2px;
 }
 
-.settingmodal .modal-body .items .item.choose-yyyymm select{
-    font-size : .8rem;
-    border-radius: 0;
-    outline : none;
-    border :0;
-    width : 100%;
-    height : 100%;
-
+.settingmodal .modal-body .items .item.choose-yyyymm .year-display,
+.settingmodal .modal-body .items .item.choose-yyyymm .month-display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  
 }
 
+.settingmodal .modal-body .items .item.choose-yyyymm label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0;
+}
 
-.settingmodal .modal-body .items .item.choose-yyyymm select:disabled {
+.settingmodal .modal-body .items .item.choose-yyyymm input {
   background-color: #f8f9fa;
-  cursor: not-allowed;
-  opacity: 0.8;
+  border: 1px solid #dee2e6;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 5px;
+  cursor: default;
+}
+
+.settingmodal .modal-body .items .item.choose-yyyymm input:read-only {
+  background-color: #f8f9fa;
 }
 
 /* 레이아웃 선택 */
