@@ -582,6 +582,27 @@ body {
 
   display:flex;
   justify-content: center;
-  align-items: center;
-  gap : 10px;
+  align-items: start;
+  gap : 15px;
+  font-size : .8rem;
+}
+
+.fullcalendar-custom-event-modal .modal-schedule{
+}
+
+.fullcalendar-custom-event-modal .modal-schedule>div{
+  display:flex;
+  justify-content: left;
+  align-items: left;
+  flex-direction: column;
+  font-size : .7rem;
+  margin-bottom : 15px;
+}
+.fullcalendar-custom-event-modal .modal-schedule>div>label{
+  font-size : .7rem;
+}
+.fullcalendar-custom-event-modal .modal-schedule>div>span{
+  border : 1px solid lightgray;
+  padding : 2px;
+  
 }

@@ -34,7 +34,7 @@ function Calendar() {
     if (uploadModal && isUploadModalOpen) {
       const modal = new window.bootstrap.Modal(uploadModal);
       modal.show();
-      
+
       // 모달이 닫힐 때 상태 업데이트
       uploadModal.addEventListener('hidden.bs.modal', () => {
         setIsUploadModalOpen(false);
@@ -47,7 +47,7 @@ function Calendar() {
       if (isSettingsModalOpen) {
         const bsModal = new window.bootstrap.Modal(settingsModal);
         bsModal.show();
-        
+
         // 모달이 닫힐 때 상태 업데이트
         settingsModal.addEventListener('hidden.bs.modal', () => {
           setIsSettingsModalOpen(false);
@@ -337,16 +337,16 @@ function Calendar() {
         `http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?` +
         `serviceKey=${serviceKey}&solYear=${year}&numOfRows=100&_type=json`
       );
-      
+
       const data = await response.json();
-      
+
       if (!data.response?.body?.items?.item) {
         console.error('공휴일 데이터 형식이 올바르지 않음:', data);
         return;
       }
-      
+
       const items = data.response.body.items.item;
-      
+
       // 공휴일 데이터를 FullCalendar 이벤트 형식으로 변환
       const holidayEvents = items.reduce((acc, item) => {
         const date = item.locdate.toString();
@@ -354,13 +354,13 @@ function Calendar() {
         const month = date.substring(4, 6);
         const day = date.substring(6, 8);
         const formattedDate = `${year}-${month}-${day}`;
-        
+
         // 대체공휴일 여부 확인 (dateName에 "대체" 문자열이 포함되어 있는지)
         const isAlternativeHoliday = item.dateName.includes('대체');
-        
+
         // 같은 날짜의 이벤트가 있는지 확인
         const existingEventIndex = acc.findIndex(event => event.start === formattedDate);
-        
+
         if (existingEventIndex !== -1) {
           // 기존 이벤트가 있으면 제목에 추가
           acc[existingEventIndex] = {
@@ -369,8 +369,8 @@ function Calendar() {
             extendedProps: {
               ...acc[existingEventIndex].extendedProps,
               isHoliday: true,
-              holidayNames: [...(acc[existingEventIndex].extendedProps.holidayNames || []), 
-                { name: item.dateName, isAlternative: isAlternativeHoliday }]
+              holidayNames: [...(acc[existingEventIndex].extendedProps.holidayNames || []),
+              { name: item.dateName, isAlternative: isAlternativeHoliday }]
             }
           };
         } else {
@@ -387,7 +387,7 @@ function Calendar() {
             }
           });
         }
-        
+
         return acc;
       }, []);
 
@@ -504,13 +504,13 @@ function Calendar() {
                 return (
                   <div className="holiday-labels-container">
                     {holidayNames.map((holiday, index) => (
-                      <div 
-                        key={index} 
+                      <div
+                        key={index}
                         className={`holiday-label ${holiday.isAlternative ? 'alternative-holiday' : ''}`}
                       >
                         {holiday.name}
                         {holiday.isAlternative && (
-                          <span style={{ 
+                          <span style={{
                             marginLeft: '2px',
                             color: '#FF6B6B',
                             fontStyle: 'italic'
@@ -532,18 +532,18 @@ function Calendar() {
               const dateString = args.date.toISOString().split('T')[0];
               const dayNumber = args.dayNumberText.replace('일', '');
               const isOtherMonth = !args.isInCurrentMonth;
-              
-              const holidayEvent = holidays.find(holiday => 
-                holiday.start === dateString && 
+
+              const holidayEvent = holidays.find(holiday =>
+                holiday.start === dateString &&
                 holiday.extendedProps?.isHoliday
               );
 
               const holidayNames = holidayEvent?.extendedProps?.holidayNames || [];
               const isAlternativeHoliday = holidayNames.some(h => h.isAlternative);
-              
+
               const isSunday = day === 0;
               const isSaturday = day === 6;
-              
+
               let textColor;
               if (isSunday) {
                 textColor = 'rgb(255, 0, 0)';  // 일요일은 항상 빨간색
@@ -566,7 +566,7 @@ function Calendar() {
                 >
                   {dayNumber}
                   {isAlternativeHoliday && (
-                    <span style={{ 
+                    <span style={{
                       position: 'absolute',
                       top: '50%',
                       right: '-12px',
@@ -621,8 +621,8 @@ function Calendar() {
                     className="img-block"
                     style={{
                       width: "100%",
-                     
-                     
+
+
                     }}
                   >
                     <img
@@ -630,7 +630,7 @@ function Calendar() {
                         width: "100%",
                         height: "100%",
                         objectFit: "contain",
-                  
+
                       }}
                       src={`${process.env.PUBLIC_URL}/modal_1.png`}
                       alt="Example"
@@ -641,20 +641,32 @@ function Calendar() {
                   </div>
                   <div className="modal-schedule">
                     <div>
-                      <strong>일정 시작:</strong>{" "}
-                      {convertToKST(selectedEvent.start)}
+                      <label>시작 시간:</label>{" "}
+                      <span>
+                        {convertToKST(selectedEvent.start)}
+                      </span>
+
                     </div>
                     <div>
-                      <strong>일정 끝:</strong>{" "}
-                      {convertToKST(selectedEvent.end) || "종료 시간 없음"}
+                      <label>종료 시간:</label>{" "}
+                      <span>
+                        {convertToKST(selectedEvent.end) || "종료 시간 없음"}
+
+                      </span>
                     </div>
                     <div>
-                      <strong>설명:</strong>{" "}
-                      {selectedEvent.extendedProps.description || "설명 없음"}
+                      <label>설명:</label>{" "}
+                      <span>
+                        {selectedEvent.extendedProps.description || "설명 없음"}
+
+                      </span>
                     </div>
                     <div>
-                      <strong>위치:</strong>{" "}
-                      {selectedEvent.extendedProps.location || "위치 정보 없음"}
+                      <label>위치:</label>{" "}
+                      <span>
+                        {selectedEvent.extendedProps.location || "위치 정보 없음"}
+
+                      </span>
                     </div>
                   </div>
                 </div>
