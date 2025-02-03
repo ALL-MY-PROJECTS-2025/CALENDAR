@@ -70,6 +70,7 @@ body {
   align-items: center;
 }
 
+
 .layout-row .postcard-container {
   width: 60%;
   padding-left: 20px;
@@ -81,26 +82,53 @@ body {
   justify-content: flex-start;
   align-items: center;
   gap:0;
+  width : 1080px;
+  height : 1920px;
+  margin : 0 auto;
 }
 
 .layout-col .photo-frame {
   width: 100%;
-  height: 40vh;
-  overflow: hidden;
+  height: 40%;
+  overflow: auto;
   margin-bottom: 0px;
   display: flex;
   align-items: center;
 }
+.layout-col .photo-frame>.items{
+  width : 100%;
+  height : 100%;
+}
+.layout-col .photo-frame>.items>.item{
+  width : 100%;
+  height : 100%;
+}
+.layout-col .photo-frame>.items>.item>img{
+  width : 100%;
+  height : 100%;
+  object-fit: cover;
 
+}
 .layout-col .postcard-container {
   width: 100%;
-  height: 60vh;
+  height : 60%;
 }
+.layout-col .postcard-container .calendar-container{
+  height : 100%;
+
+}
+.layout-col .fc-daygrid-body.fc-daygrid-body-unbalanced.fc-daygrid-body-natural
+{
+  border : 1px solid white;
+  height :60%;
+}
+
+
 
 /* 이미지 컨테이너 스타일 조정 */
 .layout-row .items {
   height: 100%;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .layout-col .items {
@@ -243,8 +271,8 @@ body {
 
 .postcard-container>.controller {
   position: absolute;
-  right: 15px;
-  top: 15px;
+  right: 0;
+  top: 0;;
   z-index: 100;
   z-index:9999;
   

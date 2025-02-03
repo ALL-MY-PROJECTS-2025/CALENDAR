@@ -55,6 +55,9 @@
     border-top-right-radius: 4px !important;
     z-index: 10002 !important;
 }
+.settingmodal .modal-header button{
+    
+}
 .settingmodal .modal-body{
     position: relative !important;
     padding: 1rem !important;
