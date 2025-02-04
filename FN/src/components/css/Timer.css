@@ -1,171 +1,162 @@
 /* PHOTO BLOCK TIMER */
 .postcard-container>.calendar-header .timer-block{
-
-    /* border : 1px solid; */
-    /* position:absolute;
-    left:5px;
-    bottom : 0; */
-    margin : 0;
-
-    background-color: transparent;
-    /* border : 1px solid; */
-    width : 100%;
-    text-align: right;
-    height : 100%;
-  
-  
-    padding : 10px; 
-    position:relative;
-
-    
-    
+  margin : 0;
+  width : 100%;
+  height : 100%;
+  padding : 10px; 
+  position:relative;
 }
 
-
-
-.postcard-container>.calendar-header .timer-block::before{
-  /* content:"TIMER";
-  position:absolute;
-  left:15px;
-  top:15px;
-
-  width : 65px;
-  height : 25px;
+.postcard-container>.calendar-header .timer-block .timer{
+  font-size : 5rem;
+  position:relative;
+  width:100%;
+  height:100%;
+  
   display:flex;
-  justify-content:left;
-  align-items: center;
-  
-  background-color: #8B5A2B;
-  color : white;
-  font-size : .8rem;
-  padding : 5px; */
+  justify-content: right;
+  align-items: end;
+  gap : 10px;
+
+  font-family: 'digit';
+  font-weight:300;
+  color:#1E2B37;
+
+  padding : 10px;
+  padding-bottom : 0;
 }
 
+.postcard-container>.calendar-header .timer-block .timer>.item{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  position:relative;
+  width : 200px;
+}
 
-  .postcard-container>.calendar-header .timer-block .timer{
-    font-size : 5rem;
-    font-weight: 600;;
-    /* border : 1px solid; */
-    position:relative;
-    width:100%;
-    height:100%;
-    
-    display:flex;
-    justify-content: right;
-    align-items: end;
-    gap : 10px;
+.postcard-container>.calendar-header .timer-block .timer>.item:first-child
+{
+  position:absolute;
+  top:0;
+  left:0;
+  font-size : .8rem;
+  z-index: 100;
+}
+.postcard-container>.calendar-header .timer-block .timer>.item .pmam{
+  font-size : 1.5rem;
+  font-weight: 900;
+  font-family:sans-serif;
   
-    font-family: 'digit';
-    font-weight:300;
-    color:#1E2B37;
+  position:absolute;
+  left:0;
+  top:-35px;
+}
+.dot-block{
+  display:flex;
+  align-items: end;
  
-
-    padding : 10px;
-    padding-bottom : 0;
-  }
-
- 
-
-  
-
-  .postcard-container>.calendar-header .timer-block .timer>.item{
-    display:block;
-    
-    
-    width : 100%;
-    max-width:250px;
-    height : 100px;
-
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    position:relative;
-  }
-
-  .postcard-container>.calendar-header .timer-block .timer>.item:nth-child(1)
-  {
-    position:absolute;
-    
-    
-    top:0px;
-    left:0px;
-    width : 0px;
-    height:0px;
-
-    font-size : .8rem;
-    z-index: 100;
-    background-color: white;
-
-    
-  }
-  .postcard-container>.calendar-header .timer-block .timer>.item .pmam{
-    font-size : 1.5rem;
-    font-weight: 900;
-    border-radius: 0;
-    font-family:sans-serif;
-    
-    
-    box-shadow: 0;
-
-    position:absolute;
-    left:0;
-    top:-35px;
-
-  }
-  .dot-block{
-    display:flex;
-    align-items: end;
-   
-    padding-bottom:0;
-    font-size:4rem;
-  }
-  .postcard-container>.calendar-header .timer-block .timer>.item>span{
-    position:relative;
-    left:0;
-    top:0;
-    /* border : 1px solid; */
-  }
+  padding-bottom:0;
+  font-size:4rem;
+}
+.postcard-container>.calendar-header .timer-block .timer>.item>span{
+  position:relative;
+}
 
 .timer-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  width: 60%;
-  padding-right: 15px;
-  height: 100%;
+display: flex;
+justify-content: flex-end;
+align-items: flex-end;
+width: 60%;
+padding-right: 15px;
+height: 100%;
 }
 
 .timer-container .time {
-  text-align: right;
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: baseline;
-  gap: 5px;
+text-align: right;
+width: 100%;
+display: flex;
+justify-content: flex-end;
+align-items: baseline;
+gap: 5px;
 }
 
 .timer-container .time span {
-  display: inline-block;
+display: inline-block;
 }
 
 .timer-container .hours,
 .timer-container .minutes {
-  min-width: 2ch;  /* 2자리 숫자 너비 고정 */
-  text-align: right;
+min-width: 2ch;  /* 2자리 숫자 너비 고정 */
+text-align: right;
 }
 
 .timer-container .seconds {
-  display: inline-block;
-  min-width: 2ch;  /* 2자리 숫자 너비 고정 */
-  text-align: right;
+display: inline-block;
+min-width: 2ch;  /* 2자리 숫자 너비 고정 */
+text-align: right;
 }
 
 .timer-container .colon {
-  margin: 0 2px;  /* 콜론 좌우 간격 조정 */
+margin: 0 2px;  /* 콜론 좌우 간격 조정 */
 }
 
 .timer-container .ampm {
-  margin-right: 10px;  /* AM/PM과 시간 사이 간격 */
-  min-width: 2ch;  /* AM/PM 너비 고정 */
-  text-align: right;
+margin-right: 10px;  /* AM/PM과 시간 사이 간격 */
+min-width: 2ch;  /* AM/PM 너비 고정 */
+text-align: right;
+}
+
+/* 모바일 (767px 이하) */
+@media screen and (max-width: 767px) {
+  /* 모바일 스타일 */
+
+  .postcard-container>.calendar-header .timer-block .timer{
+    font-size :2rem;
+  }
+  .postcard-container>.calendar-header .timer-block .timer>.item{
+    width:30px;
+  }
+  .postcard-container>.calendar-header .timer-block .timer>.item .pmam{
+    font-size : .8rem;
+    font-weight: 800;
+    top:-20px;
+  }
+  .dot-block{
+    font-size:1.8rem;
+  }
+}
+
+/* 태블릿 (768px - 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  /* 태블릿 스타일 */
+
+  .postcard-container>.calendar-header .timer-block .timer{
+    font-size :3rem;
+  }
+  .postcard-container>.calendar-header .timer-block .timer>.item{
+    width:50px;
+  }
+  .postcard-container>.calendar-header .timer-block .timer>.item .pmam{
+    font-size : 1rem;
+    font-weight: 800;
+  }
+  .dot-block{
+    font-size:2.8rem;
+  }
+
+}
+
+/* 데스크탑 (1024px 이상) */
+@media screen and (min-width: 1024px) {
+  /* 데스크탑 스타일 */
+}
+
+/* 가로 모드 대응 */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  /* 가로 모드 스타일 */
+}
+
+/* 고해상도 디스플레이 대응 */
+@media screen and (min-width: 1440px) {
+  /* 고해상도 스타일 */
 }

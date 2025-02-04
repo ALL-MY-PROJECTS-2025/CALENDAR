@@ -1,3 +1,51 @@
+/* Location 모달 스타일 */
+.modal-dialog.modal-dialog-centered{
+  position:relative;
+  z-index: 9999;
+}
+
+.location-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.location-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: auto;
+}
+
+.location-modal .modal-dialog {
+  position: relative;
+
+  pointer-events: auto;
+}
+
+.location-modal .modal-content {
+  position: relative;
+
+  pointer-events: auto;
+}
+
+.location-modal .modal-header {
+  position: relative;
+ 
+  pointer-events: auto;
+  background-color: #1E2B37;
+}
+
 .modal-backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
@@ -36,4 +84,22 @@
 .form-control[readonly] {
   background-color: #fff;
   cursor: default;
+}
+
+/* Location 버튼 스타일 수정 */
+.location-button {
+  position: relative;
+  z-index: 1;
+}
+
+/* 모달이 열렸을 때 컨트롤러 버튼들을 비활성화 */
+.modal-open .calendar-header .controller {
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 툴팁 스타일 수정 */
+.location-button[data-tooltip]::after,
+.location-button[data-tooltip]::before {
+  z-index: 2;
 } 

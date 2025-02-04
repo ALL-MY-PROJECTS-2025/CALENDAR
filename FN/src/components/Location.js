@@ -90,7 +90,6 @@ const Location = ({ isOpen, onClose, onSave, currentLocation }) => {
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
               <div className="mb-3">
-                <label htmlFor="location-input" className="form-label">주소 입력</label>
                 <div className="input-group">
                   <input
                     type="text"

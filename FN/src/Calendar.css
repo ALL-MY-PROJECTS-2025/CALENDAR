@@ -33,16 +33,15 @@ body::-webkit-scrollbar {
   display: none;
   
 }
-:root{
-  font-size : 16px;
+:root {
+  --mobile-breakpoint: 767px;
+  --tablet-breakpoint: 1023px;
+  font-size: 16px;
 }
 body {
-  margin: 0;
-  
-  height: 100vh;
-
-  width : 90vw;
   margin: 0 auto;
+  height: 100vh;
+  width: 90vw;
   font-family:"google-custom";
   font-weight : 400;
 }
@@ -286,6 +285,9 @@ body {
   display: flex;
   width: 100%;
   height: 100%;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 1개 이미지 */
@@ -442,8 +444,7 @@ body {
   /* background-color: rgb(204, 201, 201); */
   width : 100%;
   height : 100%;
-  min-height:180px;
-  max-height : 180px;
+
   margin-top:0;
   margin : 0;
   display:flex;
@@ -463,8 +464,7 @@ body {
   position: absolute;
   right: 0;
   top: 0;;
-  z-index: 100;
-  z-index:9999;
+
   
   display:flex;
   justify-content: right;
@@ -483,6 +483,8 @@ body {
   margin-left: 5px;
   outline: none;
   cursor: pointer;
+ 
+
 }
 
 .controller button:hover {
@@ -882,4 +884,327 @@ body {
 
 .location-button span[style*="ff4444"] {
   animation: pulse 2s infinite;
+}
+
+/* 반응형 레이아웃 */
+@media screen and (max-width: 767px) {
+  /* 모바일 */
+  :root {
+    font-size: 14px;
+  }
+
+  body {
+    width: 95vw;
+  }
+
+  .App {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .layout-row {
+    flex-direction: column;
+  }
+
+  .layout-row .photo-frame {
+    margin-right: 0;
+    height: 40vh;
+  }
+
+  .layout-row .postcard-container,
+  .layout-col .postcard-container {
+    width: 100%;
+    padding-left: 0;
+    height: 60vh;
+  }
+
+  /* 캘린더 헤더 조정 */
+  .calendar-header {
+    min-height: 100px;
+    max-height: 120px;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.5rem !important;
+  }
+
+  .fc-button-group button,
+  .fc-today-button {
+    padding: 5px !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* 그리드 레이아웃 조정 */
+  .layout-col .photo-frame.layout-grid .items {
+    gap: 5px;
+    padding: 5px;
+  }
+
+  /* Timer 조정 */
+  .calendar-header .timer {
+    font-size: 1.8rem;
+  }
+
+  /* Weather 조정 */
+  .calendar-header .weather {
+    font-size: 0.9rem;
+  }
+
+  .calendar-header .weather .temperature {
+    font-size: 1.2rem;
+  }
+
+  .calendar-header .weather img {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* 헤더 내부 요소들 간격 조정 */
+  .calendar-header > * {
+    margin: 5px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  /* 태블릿 */
+  :root {
+    font-size: 15px;
+  }
+
+  body {
+    width: 92vw;
+  }
+
+  .layout-row .photo-frame {
+    margin-right: 10px;
+  }
+
+  .layout-row .postcard-container {
+    width: 55%;
+  }
+
+  /* 캘린더 헤더 조정 */
+  .calendar-header {
+    min-height: 150px;
+    max-height: 160px;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.8rem !important;
+  }
+
+  /* 그리드 레이아웃 조정 */
+  .layout-col .photo-frame.layout-grid .items {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  /* Timer 조정 */
+  .calendar-header .timer {
+    font-size: 2.2rem;
+  }
+
+  /* Weather 조정 */
+  .calendar-header .weather {
+    font-size: 1rem;
+  }
+
+  .calendar-header .weather .temperature {
+    font-size: 1.4rem;
+  }
+
+  .calendar-header .weather img {
+    width: 35px;
+    height: 35px;
+  }
+
+  /* 헤더 내부 요소들 간격 조정 */
+  .calendar-header > * {
+    margin: 8px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  /* 데스크탑 */
+  :root {
+    font-size: 16px;
+  }
+
+  body {
+    width: 90vw;
+  }
+
+  .layout-row .postcard-container {
+    width: 60%;
+  }
+
+  /* 캘린더 헤더 */
+  .calendar-header {
+    min-height: 180px;
+    max-height: 180px;
+  }
+
+  /* 이미지 레이아웃 여백 */
+  .layout-col .photo-frame.layout-grid .items {
+    gap: 10px;
+    padding: 10px;
+  }
+}
+
+/* 가로 모드 대응 */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .App {
+    flex-direction: row;
+  }
+
+  .layout-row .photo-frame {
+    height: 100vh;
+  }
+
+  .calendar-header {
+    min-height: 80px;
+    max-height: 100px;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.3rem !important;
+  }
+
+  .fc-button-group button,
+  .fc-today-button {
+    padding: 3px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* Timer 조정 */
+  .calendar-header .timer {
+    font-size: 1.5rem;
+  }
+
+  /* Weather 조정 */
+  .calendar-header .weather {
+    font-size: 0.8rem;
+  }
+
+  .calendar-header .weather .temperature {
+    font-size: 1.1rem;
+  }
+
+  /* 헤더 내부 요소들을 가로로 배치 */
+  .calendar-header {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+}
+
+/* 고해상도 디스플레이 대응 */
+@media screen and (min-width: 1440px) {
+  :root {
+    font-size: 18px;
+  }
+
+  .layout-row .postcard-container {
+    width: 65%;
+  }
+
+  .calendar-header {
+    min-height: 200px;
+    max-height: 200px;
+  }
+}
+
+/* Controller 관련 스타일 수정 */
+.calendar-header .controller {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  gap: 10px;
+  z-index: 1; /* z-index를 더 낮게 설정 */
+}
+
+/* 모달 관련 스타일 */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998; /* 컨트롤러보다 높게 */
+}
+
+.modal-dialog {
+  z-index: 9999; /* backdrop보다 높게 */
+}
+
+/* FullCalendar 헤더 툴바 반응형 스타일 */
+.fc-header-toolbar.fc-toolbar {
+  margin-bottom: 1em !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 모바일 (767px 이하) */
+@media screen and (max-width: 767px) {
+  .postcard-container>.calendar-header{
+   
+  }
+  .fc-header-toolbar.fc-toolbar {
+    gap: 1rem;
+  }
+  .fc-header-toolbar.fc-toolbar .fc-toolbar-title {
+    font-size: .9rem !important;
+  }
+
+  .fc-header-toolbar.fc-toolbar .fc-button {
+    
+    font-size: 0.5rem !important;
+  }
+
+  .fc-header-toolbar.fc-toolbar .fc-button-group {
+    margin: 0 !important;
+  }
+}
+
+/* 태블릿 (768px - 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .fc-header-toolbar.fc-toolbar .fc-toolbar-title {
+    font-size: 1.4rem !important;
+  }
+
+  .fc-header-toolbar.fc-toolbar .fc-button {
+    padding: 0.3em 0.6em !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* 데스크탑 (1024px 이상) */
+@media screen and (min-width: 1024px) {
+  .fc-header-toolbar.fc-toolbar .fc-toolbar-title {
+    font-size: 1.6rem !important;
+  }
+
+  .fc-header-toolbar.fc-toolbar .fc-button {
+    padding: 0.4em 0.8em !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* 가로 모드 대응 */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .fc-header-toolbar.fc-toolbar {
+    flex-direction: row;
+    gap: 0.3em;
+  }
+
+  .fc-header-toolbar.fc-toolbar .fc-toolbar-title {
+    font-size: 1.1rem !important;
+  }
+
+  .fc-header-toolbar.fc-toolbar .fc-button {
+    padding: 0.2em 0.4em !important;
+    font-size: 0.75rem !important;
+  }
 }
