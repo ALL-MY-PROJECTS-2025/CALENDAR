@@ -31,7 +31,7 @@
   justify-content: center;
   align-items: center;
   position:relative;
-  width : clamp(80px,9.417vw,180px);
+  width : clamp(80px,8.8vw,100%);
 }
 
 .postcard-container>.calendar-header .timer-block .timer>.item:first-child
