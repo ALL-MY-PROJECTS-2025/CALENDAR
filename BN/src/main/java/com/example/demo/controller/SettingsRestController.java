@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.config.auth.PrincipalDetails;
 import com.example.demo.domain.dto.SettingsDto;
 import com.example.demo.domain.entity.Settings;
 import com.example.demo.domain.repository.SettingsRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
@@ -35,19 +37,21 @@ public class SettingsRestController
     @Autowired
     private SettingsRepository settingsRepository;
     @PostMapping("/month")
-    public ResponseEntity<String> saveMonthSettings(@RequestBody SettingsDto dto) {
+    public ResponseEntity<String> saveMonthSettings(@RequestBody SettingsDto dto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         log.info("POST /settings/month..." + dto);
         boolean isDefaultValue = dto.isDefaultValue();
         if(isDefaultValue){
-          Settings defaultSettings =  settingsRepository.findByDefaultValue(true);
+          Settings defaultSettings =  settingsRepository.findByDefaultValueAndUser(true, principalDetails.getUsername());
           System.out.println("FIND DEFAULT : " + defaultSettings);
+
           if(defaultSettings!=null){
               defaultSettings.setDefaultValue(false);
               settingsRepository.save(defaultSettings);
           }
+
         }
-        Settings settings =  settingsRepository.findByYearAndMonth(dto.getYear(),dto.getMonth());
+        Settings settings =  settingsRepository.findByYearAndMonthAndUser(dto.getYear(),dto.getMonth(), principalDetails.getUsername());
 
         if(settings==null) {
             // Dto를 Entity로 변환
@@ -57,10 +61,12 @@ public class SettingsRestController
             settings.setLayout(dto.getLayout());
             settings.setImageArray(dto.getImageArray());
             settings.setDefaultValue(dto.isDefaultValue());
+            settings.setUser(principalDetails.getUsername());
         }else{
             settings.setImageArray(dto.getImageArray());
             settings.setLayout(dto.getLayout());
             settings.setDefaultValue(dto.isDefaultValue());
+
         }
         settingsRepository.save(settings);
         //이곳 완성해줘
@@ -71,16 +77,21 @@ public class SettingsRestController
     @GetMapping("/get/{year}/{month}")
     public ResponseEntity<Map<String, Object>> getSettings(
             @PathVariable("year") String year,
-            @PathVariable("month") String month
+            @PathVariable("month") String month,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         log.info("GET /settings/getSettings/{}/{}", year, month);
 
         Map<String, Object> response = new LinkedHashMap<>();
-        Settings settings = settingsRepository.findByYearAndMonth(year, month);
+        Settings settings = settingsRepository.findByYearAndMonthAndUser(year, month,principalDetails.getUsername());
 
         if (settings == null) {
+
             response.put("message", "해당 월에 대한 설정이 존재하지 않습니다.");
-            Settings defaultSettings  =  settingsRepository.findByDefaultValue(true);
+            Settings defaultSettings  =  settingsRepository.findByDefaultValueAndUser(true,principalDetails.getUsername());
+            if(defaultSettings==null){
+                defaultSettings  =  settingsRepository.findByDefaultValueAndUser(true,"anonymous");
+            }
             System.out.println("DefaultSettings..."+defaultSettings);
             //해당연월을 기본값으로 저장
             settings = new Settings();
@@ -89,6 +100,7 @@ public class SettingsRestController
             settings.setLayout(defaultSettings.getLayout());
             settings.setDefaultValue(false);
             settings.setImageArray(defaultSettings.getImageArray());
+            settings.setUser(principalDetails.getUsername());
 
             settingsRepository.save(settings);
 

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface SettingsRepository extends JpaRepository<Settings,Long> {
 
     Settings findByYearAndMonth(String year, String month);
+    Settings findByYearAndMonthAndUser(String year, String month,String user);
 
     Settings findByDefaultValue(boolean defaultValue);
+    Settings findByDefaultValueAndUser(boolean defaultValue,String user);
 }

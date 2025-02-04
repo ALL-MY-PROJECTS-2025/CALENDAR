@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.config.auth.PrincipalDetails;
 import com.example.demo.domain.entity.Location;
 import com.example.demo.domain.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/location")
 public class LocationRestController {
 
@@ -22,9 +23,9 @@ public class LocationRestController {
     private LocationRepository locationRepository;
 
     @PostMapping
-    public ResponseEntity<?> saveLocation(@RequestBody LocationRequest request) {
+    public ResponseEntity<?> saveLocation(@RequestBody LocationRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 기존 사용자의 위치 정보 확인
-        String user = request.getUser() != null ? request.getUser() : "anonymous";
+        String user = principalDetails.getUsername();
         Location existingLocation = locationRepository.findByUser(user);
         
         Location location;
@@ -46,11 +47,9 @@ public class LocationRestController {
     @GetMapping("/{user}")
     public ResponseEntity<?> getLocationByUser(@PathVariable("user") String user) {
         Location location = locationRepository.findByUser(user);
-        
         if (location == null) {
             return ResponseEntity.notFound().build();
         }
-        
         return ResponseEntity.ok(location);
     }
 }

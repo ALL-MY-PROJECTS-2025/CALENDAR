@@ -23,4 +23,6 @@ public class Settings {
     private String layout;
     private String imageArray;
     private boolean defaultValue;
+
+    private String user;
 }

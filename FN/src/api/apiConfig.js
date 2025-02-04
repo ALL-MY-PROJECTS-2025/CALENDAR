@@ -11,9 +11,9 @@ const api = axios.create({
   withCredentials: true, // HTTP-Only 쿠키 포함
 });
 
-//------------------------
+// ------------------------
 // 요청 인터셉터 설정
-//------------------------
+// ------------------------
 api.interceptors.request.use(
   async (config) => {
     // 인증이 필요없는 경로들
@@ -40,20 +40,22 @@ api.interceptors.request.use(
   }
 );
 
-//------------------------
-// 응답 인터셉터 설정
-//------------------------
-api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    console.log("[오류-응답 인터셉터] ", error);
-    if (error.response?.status === 401) {
-      window.location.href = '/#/login';
-    }
-    return Promise.reject(error);
-  }
-);
+// //------------------------
+// // 응답 인터셉터 설정
+// //------------------------
+// api.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   (error) => {
+//     console.log("[오류-응답 인터셉터] ", error);
+//     if (error.response?.status === 401) {
+//       window.location.href = '/#/login';
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
+
 
 export default api; 

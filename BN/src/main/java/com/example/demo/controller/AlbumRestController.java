@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.config.auth.PrincipalDetails;
 import com.example.demo.properties.UPLOADPATH;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +37,9 @@ public class AlbumRestController {
     public void upload(
             @RequestParam("yyyy") String yyyy,
             @RequestParam("mm") String mm,
-            @RequestParam("files") MultipartFile[] files) {
+            @RequestParam("files") MultipartFile[] files,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+            ) {
 
         if (files == null || files.length == 0) {
             log.warn("업로드할 파일이 없습니다.");
@@ -44,7 +48,7 @@ public class AlbumRestController {
 
         // ✅ 현재 날짜 기준으로 YYYY/MM 폴더 경로 생성
         String currentDatePath = yyyy + File.separator + mm;
-        Path uploadPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH, currentDatePath);
+        Path uploadPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH + File.separator + principalDetails.getUsername(), currentDatePath);
 
         try {
             // ✅ 디렉토리가 없으면 생성
@@ -93,10 +97,11 @@ public class AlbumRestController {
     @GetMapping("/getAlbum/{year}/{month}")
     public ResponseEntity<Map<String, String>> getAlbum(
             @PathVariable("year") String year,
-            @PathVariable("month") String month
+            @PathVariable("month") String month,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         // ✅ 이미지 파일이 있는 경로 설정
-        Path imageDirPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH, year, month);
+        Path imageDirPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH +File.separator+principalDetails.getUsername(), year, month);
 
         if (!Files.exists(imageDirPath) || !Files.isDirectory(imageDirPath)) {
             log.warn("요청한 디렉토리가 존재하지 않습니다: {}", imageDirPath);
@@ -134,14 +139,14 @@ public class AlbumRestController {
     }
     // ✅ 이미지 삭제 API (YYYY/MM/파일명 처리)
     @DeleteMapping("/deleteImage")
-    public ResponseEntity<String> deleteImage(@RequestBody Map<String, String> request) {
+    public ResponseEntity<String> deleteImage(@RequestBody Map<String, String> request , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         String filePath = request.get("filePath"); // 요청에서 "YYYY/MM/파일명" 형식의 경로 가져오기
         if (filePath == null || filePath.isEmpty()) {
             return ResponseEntity.badRequest().body("파일 경로가 제공되지 않았습니다.");
         }
 
         // ✅ 삭제할 파일의 전체 경로 설정
-        Path fullPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH, filePath);
+        Path fullPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH + File.separator + principalDetails.getUsername(), filePath);
         File file = fullPath.toFile();
 
         // ✅ 파일이 존재하면 삭제
@@ -162,12 +167,13 @@ public class AlbumRestController {
     @GetMapping("/downloadAlbum/{year}/{month}")
     public ResponseEntity<byte[]> downloadAlbum(
             @PathVariable("year") String year,
-            @PathVariable("month") String month
+            @PathVariable("month") String month,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         log.info("GET /downloadAlbum/{}/{}", year, month);
 
         // 이미지 파일이 있는 경로 설정
-        Path imageDirPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH, year, month);
+        Path imageDirPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH + File.separator +principalDetails.getUsername(), year, month);
 
         if (!Files.exists(imageDirPath) || !Files.isDirectory(imageDirPath)) {
             log.warn("요청한 디렉토리가 존재하지 않습니다: {}", imageDirPath);
@@ -216,10 +222,10 @@ public class AlbumRestController {
     }
     //
     @GetMapping("/downloadAllAlbums")
-    public ResponseEntity<byte[]> downloadAllAlbums() {
+    public ResponseEntity<byte[]> downloadAllAlbums(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("GET /downloadAllAlbums");
 
-        Path rootPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH);
+        Path rootPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH + File.separator + principalDetails.getUsername());
 
         if (!Files.exists(rootPath) || !Files.isDirectory(rootPath)) {
             log.warn("루트 디렉토리가 존재하지 않습니다: {}", rootPath);
