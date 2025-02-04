@@ -8,7 +8,7 @@
 }
 
 .postcard-container>.calendar-header .timer-block .timer{
-  font-size : 5rem;
+  font-size : clamp(1rem, 4.167vw, 5rem);
   position:relative;
   width:100%;
   height:100%;
@@ -31,7 +31,7 @@
   justify-content: center;
   align-items: center;
   position:relative;
-  width : 200px;
+  width : clamp(80px,9.417vw,180px);
 }
 
 .postcard-container>.calendar-header .timer-block .timer>.item:first-child
@@ -52,11 +52,8 @@
   top:-35px;
 }
 .dot-block{
-  display:flex;
-  align-items: end;
- 
   padding-bottom:0;
-  font-size:4rem;
+  
 }
 .postcard-container>.calendar-header .timer-block .timer>.item>span{
   position:relative;

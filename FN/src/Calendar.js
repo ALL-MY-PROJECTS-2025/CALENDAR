@@ -28,6 +28,7 @@ import "swiper/css/autoplay";
 import "./Calendar.css";
 
 import api from './api/apiConfig';
+import { useNavigate } from 'react-router-dom';
 
 function Calendar() {
 
@@ -454,6 +455,15 @@ function Calendar() {
     fetchLocation();
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행
 
+  const navigate = useNavigate();
+
+  //LOGOUT
+  const handleLogoutClick = () => {
+    if(window.confirm('로그아웃 하시겠습니까?')) {
+      navigate('/logout');
+    }
+  }
+
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
@@ -564,6 +574,10 @@ function Calendar() {
           </button>
           <button onClick={handleSettingsClick}>
             <span className="material-symbols-outlined">settings</span>
+          </button>
+          
+          <button onClick={handleLogoutClick}>
+            <span className="material-symbols-outlined">logout</span>
           </button>
         </div>
 
