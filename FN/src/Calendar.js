@@ -27,6 +27,8 @@ import "swiper/css/effect-fade";
 import "swiper/css/autoplay";
 import "./Calendar.css";
 
+import { API_URLS } from './api/apiConfig';
+
 function Calendar() {
 
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -121,17 +123,8 @@ function Calendar() {
   // DATA FETCHING AND SETTINGS MANAGEMENT
   //----------------------------
   const fetchSettings = async (year, month) => {
-    // 이전 요청과 동일한 요청인지 확인
-    const requestKey = `${year}-${month}`;
-    if (fetchSettings.lastRequest === requestKey) {
-      return;
-    }
-    fetchSettings.lastRequest = requestKey;
-
     try {
-      const response = await fetch(
-        `http://localhost:8095/settings/get/${year}/${month}`
-      );
+      const response = await fetch(API_URLS.settings.get(year, month));
       if (!response.ok) return;
 
       const data = await response.json();
@@ -176,7 +169,7 @@ function Calendar() {
   const handleSettingsUpdate = async (newSettings) => {
     try {
       if (newSettings.defaultValue !== null) {
-        const response = await fetch("http://localhost:8095/settings/month", {
+        const response = await fetch(API_URLS.settings.update, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -216,7 +209,7 @@ function Calendar() {
 
       try {
         const response = await fetch(
-          `http://localhost:8095/getAlbum/${year}/${monthString}`
+          API_URLS.album.get(year, monthString)
         );
 
         // 404 응답은 에러가 아닌 정상적인 "데이터 없음" 상태로 처리
@@ -471,7 +464,7 @@ function Calendar() {
   // 위치 정보 저장 핸들러
   const handleLocationSave = async (address) => {
     try {
-      const response = await fetch('http://localhost:8095/location', {
+      const response = await fetch(API_URLS.location.base, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -497,7 +490,7 @@ function Calendar() {
   // 위치 정보 가져오기
   const fetchLocation = async () => {
     try {
-      const response = await fetch('http://localhost:8095/location/anonymous');
+      const response = await fetch(API_URLS.location.anonymous);
       if (response.ok) {
         const data = await response.json();
         setLocation(data.location); // 서버에서 받은 위치 정보 저장

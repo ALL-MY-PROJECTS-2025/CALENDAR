@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./css/SettingsModal.css";
+import { API_URLS } from '../api/apiConfig';
 
 const SettingsModal = ({
   years,
@@ -23,7 +24,7 @@ const SettingsModal = ({
     const fetchInitialSettings = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8095/settings/get/${currentYear}/${currentMonth}`
+          API_URLS.settings.get(currentYear, currentMonth)
         );
         if (!response.ok) {
           console.warn("⚠️ 서버에서 설정을 가져올 수 없음. 기본 설정 사용.");
@@ -32,7 +33,6 @@ const SettingsModal = ({
         const data = await response.json();
         console.log("📌 서버에서 가져온 초기 설정:", data);
 
-        // 서버에서 가져온 설정으로 상태 업데이트
         setModalYear(data.year);
         setModalMonth(data.month);
         onSettingsUpdate({
@@ -48,7 +48,7 @@ const SettingsModal = ({
     };
 
     fetchInitialSettings();
-  }, []); // 모달이 처음 열릴 때만 실행
+  }, []);
 
   //-----------------------------------
   // 연도 및 월 변경 시 초기화
@@ -100,15 +100,13 @@ const SettingsModal = ({
   const fetchSettings = async (year, month) => {
     console.log("upload modal's fetchSettings func ...",year,month);
     try {
-      const response = await fetch(`http://localhost:8095/settings/get/${year}/${month}`);
+      const response = await fetch(API_URLS.settings.get(year, month));
       if (!response.ok) {
         console.warn("⚠️ 서버에서 설정을 가져올 수 없음. 기본 설정 사용.");
-        
       }
       const data = await response.json();
       console.log("📌 서버에서 가져온 설정:", data);
 
-      // 가져온 데이터를 상태에 저장
       onSettingsUpdate({
         year: data.year,
         month: data.month,
@@ -175,6 +173,32 @@ const SettingsModal = ({
 
   const handleClose = () => {
     onClose();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(API_URLS.settings.update, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...selectedSettings,
+          defaultValue: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("설정 저장 실패");
+      }
+
+      onClose();
+    } catch (error) {
+      console.error("설정 저장 중 오류:", error);
+      alert("설정 저장에 실패했습니다.");
+    }
   };
 
   return (

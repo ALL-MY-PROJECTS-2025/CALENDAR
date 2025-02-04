@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./css/UploadModal.css";
+import { API_URLS } from '../api/apiConfig';
 
 const UploadModal = ({ onClose, ...props }) => {
   // Bootstrap 모달 인스턴스 참조를 위한 상태 추가
@@ -139,36 +140,32 @@ const UploadModal = ({ onClose, ...props }) => {
   // 업로드 버튼 클릭 시 호출
   //--------------------------------------
   const handleUpload = async () => {
-    if (props.uploadedImages.length === 0) {
-      alert("업로드할 이미지가 없습니다.");
-      return;
-    }
+    if (!props.uploadedImages.length) return;
 
     const formData = new FormData();
     props.uploadedImages.forEach((file) => {
       formData.append("files", file);
     });
 
-    const yyyy = props.currentDate.getFullYear();
-    const mm = String(props.currentDate.getMonth() + 1).padStart(2, "0");
-    formData.append("yyyy", yyyy);
-    formData.append("mm", mm);
+    const year = props.currentDate.getFullYear();
+    const month = String(props.currentDate.getMonth() + 1).padStart(2, "0");
 
     try {
-      const response = await fetch("http://localhost:8095/upload", {
+      const response = await fetch(
+        `${API_URLS.album.get(year, month)}`, {
         method: "POST",
         body: formData,
       });
 
-      if (response.ok) {
-        alert("이미지 업로드가 완료되었습니다.");
-        onClose(); // 모달 닫기
-        fetchImagesFromServer(); // 이미지 목록 새로고침
-      } else {
-        alert("업로드 요청에 실패했습니다.");
+      if (!response.ok) {
+        throw new Error("업로드 실패");
       }
+
+      alert("이미지 업로드가 완료되었습니다.");
+      onClose(); // 모달 닫기
+      fetchImagesFromServer(); // 이미지 목록 새로고침
     } catch (error) {
-      console.error("API 호출 중 오류 발생:", error);
+      console.error("업로드 중 오류 발생:", error);
     }
 
     props.setUploadedImages([]); // 새로 추가한 이미지는 초기화
