@@ -5,13 +5,11 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
   ? '/bn' 
   : 'http://localhost:8095';
 
-
-  // axios 인스턴스 생성
+// axios 인스턴스 생성
 const api = axios.create({
   baseURL: API_BASE_URL,
-//   withCredentials: true, // HTTP-Only 쿠키 포함
+  withCredentials: true, // HTTP-Only 쿠키 포함
 });
-
 
 //------------------------
 // 요청 인터셉터 설정
@@ -48,44 +46,26 @@ const api = axios.create({
 //   }
 // );
 
-// //------------------------
-// // 응답 인터셉터 설정
-// //------------------------
-// api.interceptors.response.use(
-//   (response) => {
-//     console.log("[정상-응답 인터셉터] ",response);
-//     if (response.data?.auth === false) {
-//       window.location.href = '/login';
-//       return Promise.reject('세션이 만료되었습니다.');
-//     }
-//     return response;
-//   },
-//   (error) => {
+//------------------------
+// 응답 인터셉터 설정
+//------------------------
+api.interceptors.response.use(
+  (response) => {
+    console.log("[정상-응답 인터셉터] ",response);
+    if (response.data?.auth === false) {
+      window.location.href = '/login';
+      return Promise.reject('세션이 만료되었습니다.');
+    }
+    return response;
+  },
+  (error) => {
   
-//     console.log("[오류-응답 인터셉터] ",error);
-//     if (error.response?.data?.expired === true) {
-//       window.location.href = '/login';
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
-
-export const API_URLS = {
-  settings: {
-    get: (year, month) => `${API_BASE_URL}/settings/get/${year}/${month}`,
-    update: `${API_BASE_URL}/settings/month`
-  },
-  album: {
-    get: (year, month) => `${API_BASE_URL}/getAlbum/${year}/${month}`,
-    upload: (year, month) => `${API_BASE_URL}/upload`,
-    download: (year, month) => `${API_BASE_URL}/downloadAlbum/${year}/${month}`,
-    downloadAll: `${API_BASE_URL}/downloadAllAlbums`
-  },
-  location: {
-    base: `${API_BASE_URL}/location`,
-    anonymous: `${API_BASE_URL}/location/anonymous`
+    console.log("[오류-응답 인터셉터] ",error);
+    if (error.response?.data?.expired === true) {
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
   }
-};
+);
 
-export default API_BASE_URL; 
+export default api; 

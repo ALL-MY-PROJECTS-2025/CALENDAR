@@ -74,7 +74,6 @@ public class SecurityConfig {
         http.authorizeHttpRequests((auth)->{
             auth.requestMatchers("/**").permitAll();
 
-
 //            auth.requestMatchers("/","/join","/login","/validate").permitAll();
 //            auth.requestMatchers("/user").hasRole("USER");
 //            auth.requestMatchers("/member").hasRole("MEMBER");

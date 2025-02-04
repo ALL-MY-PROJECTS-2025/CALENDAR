@@ -27,7 +27,7 @@ import "swiper/css/effect-fade";
 import "swiper/css/autoplay";
 import "./Calendar.css";
 
-import { API_URLS } from './api/apiConfig';
+import api from './api/apiConfig';
 
 function Calendar() {
 
@@ -124,10 +124,8 @@ function Calendar() {
   //----------------------------
   const fetchSettings = async (year, month) => {
     try {
-      const response = await fetch(API_URLS.settings.get(year, month));
-      if (!response.ok) return;
-
-      const data = await response.json();
+      const response = await api.get(`/settings/get/${year}/${month}`);
+      const data = response.data;  // axios는 자동으로 JSON 파싱
       console.log("📌 서버 설정:", { year, month, ...data });
 
       setSelectedSettings({
@@ -169,23 +167,12 @@ function Calendar() {
   const handleSettingsUpdate = async (newSettings) => {
     try {
       if (newSettings.defaultValue !== null) {
-        const response = await fetch(API_URLS.settings.update, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newSettings),
-        });
-
-        if (!response.ok) {
-          throw new Error("설정 저장 실패");
-        }
-
+        await api.post('/settings/month', newSettings);
         setSelectedSettings(newSettings);
         if (
           newSettings.year !== selectedSettings.year ||
           newSettings.month !== selectedSettings.month ||
-          newSettings.address !== selectedSettings.address // 주소 변경 확인
+          newSettings.address !== selectedSettings.address
         ) {
           await fetchSettings(newSettings.year, newSettings.month);
         }
@@ -200,41 +187,11 @@ function Calendar() {
   useEffect(() => {
     const fetchImagesFromServer = async () => {
       const year = currentDate.getFullYear();
-      const month = currentDate.getMonth() + 1;
-
-      // year와 month가 유효한지 확인
-      if (isNaN(year) || isNaN(month)) return;
-
-      const monthString = String(month).padStart(2, "0");
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
 
       try {
-        const response = await fetch(
-          API_URLS.album.get(year, monthString)
-        );
-
-        // 404 응답은 에러가 아닌 정상적인 "데이터 없음" 상태로 처리
-        if (response.status === 404) {
-          setImages([]);
-          setPreviewImages([]);
-          return;
-        }
-
-        // 다른 에러 응답 처리
-        if (!response.ok) {
-          setImages([]);
-          setPreviewImages([]);
-          return;
-        }
-
-        // 응답이 JSON인지 확인
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          setImages([]);
-          setPreviewImages([]);
-          return;
-        }
-
-        const data = await response.json();
+        const response = await api.get(`/getAlbum/${year}/${month}`);
+        const data = response.data;
 
         if (data && Object.keys(data).length > 0) {
           const imageArray = Object.entries(data).map(([filename, base64]) => ({
@@ -249,6 +206,9 @@ function Calendar() {
           setPreviewImages([]);
         }
       } catch (error) {
+        if (error.response?.status !== 404) {
+          console.error('이미지 가져오기 실패:', error);
+        }
         setImages([]);
         setPreviewImages([]);
       }
@@ -464,22 +424,11 @@ function Calendar() {
   // 위치 정보 저장 핸들러
   const handleLocationSave = async (address) => {
     try {
-      const response = await fetch(API_URLS.location.base, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          address,
-          user: 'anonymous' // 사용자 정보 추가
-        }),
+      const response = await api.post('/location', { 
+        address,
+        user: 'anonymous'
       });
-
-      if (!response.ok) {
-        throw new Error('위치 정보 저장 실패');
-      }
-
-      const savedData = await response.json();
+      const savedData = response.data;
       setLocation(savedData.location);
       console.log('저장된 위치 정보:', savedData.location);
     } catch (error) {
@@ -490,15 +439,10 @@ function Calendar() {
   // 위치 정보 가져오기
   const fetchLocation = async () => {
     try {
-      const response = await fetch(API_URLS.location.anonymous);
-      if (response.ok) {
-        const data = await response.json();
-        setLocation(data.location); // 서버에서 받은 위치 정보 저장
-        console.log('서버에서 받은 위치 정보:', data.location);
-      } else {
-        console.log('위치 정보가 없습니다. 위치를 입력해주세요.');
-        setLocation(''); // 위치 정보가 없으면 빈 문자열로 설정
-      }
+      const response = await api.get('/location/anonymous');
+      const data = response.data;
+      setLocation(data.location);
+      console.log('서버에서 받은 위치 정보:', data.location);
     } catch (error) {
       console.error('위치 정보 가져오기 실패:', error);
       setLocation('');

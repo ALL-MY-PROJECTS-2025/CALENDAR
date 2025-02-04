@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./css/SettingsModal.css";
-import { API_URLS } from '../api/apiConfig';
+import api from '../api/apiConfig';
 import axios from 'axios';
 
 const SettingsModal = ({
@@ -24,14 +24,8 @@ const SettingsModal = ({
   useEffect(() => {
     const fetchInitialSettings = async () => {
       try {
-        const response = await fetch(
-          API_URLS.settings.get(currentYear, currentMonth)
-        );
-        if (!response.ok) {
-          console.warn("⚠️ 서버에서 설정을 가져올 수 없음. 기본 설정 사용.");
-          return;
-        }
-        const data = await response.json();
+        const response = await api.get(`/settings/get/${currentYear}/${currentMonth}`);
+        const data = response.data;
         console.log("📌 서버에서 가져온 초기 설정:", data);
 
         setModalYear(data.year);
@@ -101,11 +95,8 @@ const SettingsModal = ({
   const fetchSettings = async (year, month) => {
     console.log("upload modal's fetchSettings func ...",year,month);
     try {
-      const response = await fetch(API_URLS.settings.get(year, month));
-      if (!response.ok) {
-        console.warn("⚠️ 서버에서 설정을 가져올 수 없음. 기본 설정 사용.");
-      }
-      const data = await response.json();
+      const response = await api.get(`/settings/get/${year}/${month}`);
+      const data = response.data;
       console.log("📌 서버에서 가져온 설정:", data);
 
       onSettingsUpdate({
@@ -115,7 +106,6 @@ const SettingsModal = ({
         imageArray: data.imageArray,
         defaultValue: data.defaultValue,
       });
-
     } catch (error) {
       console.error("❌ 설정 데이터를 가져오는 중 오류 발생:", error);
     }
@@ -158,15 +148,15 @@ const SettingsModal = ({
         const month = String(selectedSettings.month).padStart(2, '0');
         
         console.log(`📌 월별 사진 다운로드 시도: ${year}년 ${month}월`);
-        response = await fetch(API_URLS.album.download(year, month), {
-          method: 'GET'
+        response = await api.get(`/downloadAlbum/${year}/${month}`, {
+          responseType: 'blob'
         });
         filename = `album_${year}_${month}.zip`;
       } 
       else if (option === "전체 사진") {
         console.log('📌 전체 사진 다운로드 시도');
-        response = await fetch(API_URLS.album.downloadAll, {
-          method: 'GET'
+        response = await api.get('/downloadAllAlbums', {
+          responseType: 'blob'
         });
         
         const today = new Date();
@@ -174,11 +164,7 @@ const SettingsModal = ({
         filename = `all_albums_${dateStr}.zip`;
       }
 
-      if (!response.ok) {
-        throw new Error(`다운로드 실패 (${response.status}): ${response.statusText}`);
-      }
-
-      const blob = await response.blob();
+      const blob = new Blob([response.data]);
       
       if (blob.size === 0) {
         throw new Error(option === "월별 사진" ? 
@@ -197,7 +183,6 @@ const SettingsModal = ({
       document.body.appendChild(a);
       a.click();
       
-      // cleanup
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
@@ -243,16 +228,10 @@ const SettingsModal = ({
     e.preventDefault();
 
     try {
-      const response = await fetch(API_URLS.settings.update, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...selectedSettings,
-          defaultValue: true,
-        }),
-      });
+      const response = await fetch(api.post('/settings', {
+        ...selectedSettings,
+        defaultValue: true,
+      }));
 
       if (!response.ok) {
         throw new Error("설정 저장 실패");

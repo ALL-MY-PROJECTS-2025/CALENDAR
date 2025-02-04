@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./css/UploadModal.css";
-import { API_URLS } from '../api/apiConfig';
+import api from '../api/apiConfig';
 
 const UploadModal = ({ onClose, ...props }) => {
   // Bootstrap 모달 인스턴스 참조를 위한 상태 추가
@@ -93,18 +93,13 @@ const UploadModal = ({ onClose, ...props }) => {
   // 특정 이미지를 제거하는 함수 (서버에도 삭제 요청)
   //--------------------------------------
   const handleRemoveImage = async (index) => {
-    // ✅ 새로 추가된 이미지인지 확인
     if (index < props.uploadedImages.length) {
-      console.log("!!!!!!!! 새로 추가된 이미지, 서버 요청 없이 제거");
-
-      // 새로 추가된 이미지는 서버 요청 없이 제거
       props.setUploadedImages((prev) => prev.filter((_, i) => i !== index));
       props.setPreviewImages((prev) => prev.filter((_, i) => i !== index));
       return;
     }
 
-    // ✅ 서버에 저장된 이미지인 경우 요청 보냄
-    const realIndex = index - props.uploadedImages.length; // 서버 이미지의 실제 인덱스
+    const realIndex = index - props.uploadedImages.length;
     const year = props.currentDate.getFullYear();
     const month = String(props.currentDate.getMonth() + 1).padStart(2, "0");
     const filename = props.images[realIndex]?.filename;
@@ -112,27 +107,16 @@ const UploadModal = ({ onClose, ...props }) => {
 
     try {
       if (filePath) {
-        console.log("!!!!!!!! 서버 저장된 이미지, 삭제 요청 보냄:", filePath);
-
-        const response = await fetch(`http://localhost:8095/deleteImage`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filePath }),
+        await api.delete('/deleteImage', {
+          data: { filePath }
         });
-
-        if (response.ok) {
-          console.log("!!!!!!!! 서버 삭제 완료:", filePath);
-        } else {
-          console.error("!!!!!!!! 서버에서 이미지 삭제 실패");
-        }
+        console.log("!!!!!!!! 서버 삭제 완료:", filePath);
       }
     } catch (error) {
       console.error("!!!!!!!! 이미지 삭제 중 오류 발생:", error);
     } finally {
-      // ✅ 서버 응답과 관계없이 UI에서 삭제
       props.setPreviewImages((prev) => prev.filter((_, i) => i !== index));
       props.setImages((prev) => prev.filter((_, i) => i !== realIndex));
-      console.log("!!!!!!!! 이미지가 UI에서 제거되었습니다.");
     }
   };
 
@@ -143,32 +127,37 @@ const UploadModal = ({ onClose, ...props }) => {
     if (!props.uploadedImages.length) return;
 
     const formData = new FormData();
+    // 파일들을 formData에 추가 - 서버가 요구하는 "files" 파라미터명 사용
     props.uploadedImages.forEach((file) => {
-      formData.append("files", file);
+      formData.append("files", file);  // "file" 대신 "files"로 변경
     });
 
+    // year와 month를 서버가 요구하는 파라미터명으로 추가
     const year = props.currentDate.getFullYear();
     const month = String(props.currentDate.getMonth() + 1).padStart(2, "0");
+    formData.append("yyyy", year);    // "year" 대신 "yyyy"
+    formData.append("mm", month);     // "month" 대신 "mm"
 
     try {
-      const response = await fetch(
-        `${API_URLS.album.get(year, month)}`, {
-        method: "POST",
-        body: formData,
+      await api.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
-      if (!response.ok) {
-        throw new Error("업로드 실패");
-      }
-
       alert("이미지 업로드가 완료되었습니다.");
-      onClose(); // 모달 닫기
+      props.setUploadedImages([]); // 새로 추가한 이미지는 초기화
       fetchImagesFromServer(); // 이미지 목록 새로고침
+      onClose(); // 모달 닫기
     } catch (error) {
       console.error("업로드 중 오류 발생:", error);
+      if (error.response) {
+        console.error("서버 응답:", error.response.data);
+        alert(`업로드 실패: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
+      } else {
+        alert("업로드에 실패했습니다. 네트워크 연결을 확인해주세요.");
+      }
     }
-
-    props.setUploadedImages([]); // 새로 추가한 이미지는 초기화
   };
 
   //--------------------------------------
@@ -176,40 +165,26 @@ const UploadModal = ({ onClose, ...props }) => {
   //--------------------------------------
   const fetchImagesFromServer = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8095/getAlbum/${props.currentDate.getFullYear()}/${String(props.currentDate.getMonth() + 1).padStart(2, "0")}`
-      );
-  
-      // 🔹 응답이 JSON인지, 또는 비어 있는지 체크
-      const contentType = response.headers.get("content-type");
-      const contentLength = response.headers.get("content-length");
-  
-      if (!response.ok) {
-        console.warn("⚠️ 서버에서 정상적인 응답을 받지 못함:", response.status);
-        return;
-      }
-  
-      if (!contentType || !contentType.includes("application/json") || contentLength === "0") {
-        console.warn("⚠️ 응답이 비어 있음 또는 JSON이 아님");
-        props.setPreviewImages([]); // 미리보기 초기화
-        return;
-      }
-  
-      const data = await response.json();
-      console.log("📌 가져온 이미지 데이터(UPLOADMODAL):", data);
-  
+      const year = props.currentDate.getFullYear();
+      const month = String(props.currentDate.getMonth() + 1).padStart(2, "0");
+      
+      const response = await api.get(`/getAlbum/${year}/${month}`);
+      const data = response.data;
+      
       if (data) {
         const imageArray = Object.entries(data).map(([filename, base64]) => ({
           filename,
           base64: `data:image/jpeg;base64,${base64}`,
         }));
-  
-        props.setPreviewImages(imageArray.map((img) => img.base64)); // ✅ 미리보기 업데이트
-        props.setImages(imageArray); // ✅ images 상태 업데이트
+
+        props.setPreviewImages(imageArray.map((img) => img.base64));
+        props.setImages(imageArray);
       }
     } catch (error) {
-      console.error("❌ 이미지 데이터 가져오기 오류:", error);
-      props.setPreviewImages([]); // 미리보기 초기화
+      if (error.response?.status !== 404) {
+        console.error("❌ 이미지 데이터 가져오기 오류:", error);
+      }
+      props.setPreviewImages([]);
     }
   };
   

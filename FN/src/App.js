@@ -13,7 +13,6 @@ const App = () => {
                 <Route path="/join" element={<Join />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
-
             </Routes>
         </Router>
     )
