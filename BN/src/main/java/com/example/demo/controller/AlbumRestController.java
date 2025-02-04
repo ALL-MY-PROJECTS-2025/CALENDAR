@@ -3,7 +3,6 @@ package com.example.demo.controller;
 
 import com.example.demo.properties.UPLOADPATH;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.ssl.SslProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -212,6 +214,69 @@ public class AlbumRestController {
             return ResponseEntity.internalServerError().build();
         }
     }
+    //
+    @GetMapping("/downloadAllAlbums")
+    public ResponseEntity<byte[]> downloadAllAlbums() {
+        log.info("GET /downloadAllAlbums");
+
+        Path rootPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH);
+
+        if (!Files.exists(rootPath) || !Files.isDirectory(rootPath)) {
+            log.warn("루트 디렉토리가 존재하지 않습니다: {}", rootPath);
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ZipOutputStream zos = new ZipOutputStream(baos);
+
+            // 모든 하위 디렉토리 탐색
+            Files.walk(rootPath)
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.toString().matches(".*\\.(png|jpg|jpeg)$"))
+                    .forEach(path -> {
+                        try {
+                            // 상대 경로 계산 (YYYY/MM/파일명 형식 유지)
+                            String relativePath = rootPath.relativize(path).toString();
+
+                            // ZIP 엔트리 생성
+                            ZipEntry zipEntry = new ZipEntry(relativePath);
+                            zos.putNextEntry(zipEntry);
+
+                            // 파일 데이터를 ZIP에 쓰기
+                            byte[] bytes = Files.readAllBytes(path);
+                            zos.write(bytes);
+                            zos.closeEntry();
+
+                            log.debug("Added file to ZIP: {}", relativePath);
+                        } catch (IOException e) {
+                            log.error("파일 추가 중 오류 발생: {}", e.getMessage());
+                        }
+                    });
+
+            zos.close();
+
+            // 현재 날짜를 파일명에 포함
+            String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            String fileName = "all_albums_" + currentDate + ".zip";
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", fileName);
+
+            log.info("전체 앨범 ZIP 파일 생성 완료. 크기: {} bytes", baos.size());
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(baos.toByteArray());
+
+        } catch (IOException e) {
+            log.error("전체 ZIP 파일 생성 중 오류 발생: {}", e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+//
 
 
 }

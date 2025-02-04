@@ -150,45 +150,58 @@ const SettingsModal = ({
     e.preventDefault();
     
     try {
+      let response;
+      let filename;
+
       if (option === "월별 사진") {
         const year = selectedSettings.year;
         const month = String(selectedSettings.month).padStart(2, '0');
         
         console.log(`📌 월별 사진 다운로드 시도: ${year}년 ${month}월`);
-        
-        const response = await fetch(API_URLS.album.download(year, month), {
+        response = await fetch(API_URLS.album.download(year, month), {
           method: 'GET'
         });
-
-        if (!response.ok) {
-          throw new Error(`다운로드 실패 (${response.status}): ${response.statusText}`);
-        }
-
-        const blob = await response.blob();
+        filename = `album_${year}_${month}.zip`;
+      } 
+      else if (option === "전체 사진") {
+        console.log('📌 전체 사진 다운로드 시도');
+        response = await fetch(API_URLS.album.downloadAll, {
+          method: 'GET'
+        });
         
-        if (blob.size === 0) {
-          throw new Error('⚠️ 해당 월에 다운로드할 사진이 없습니다.');
-        }
-
-        // 다운로드 처리
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = `album_${year}_${month}.zip`;
-        
-        document.body.appendChild(a);
-        a.click();
-        
-        // cleanup
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-
-        console.log('✅ 다운로드 완료');
-
-      } else if (option === "전체 사진") {
-        alert('전체 사진 다운로드 기능은 아직 준비중입니다.');
+        const today = new Date();
+        const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
+        filename = `all_albums_${dateStr}.zip`;
       }
+
+      if (!response.ok) {
+        throw new Error(`다운로드 실패 (${response.status}): ${response.statusText}`);
+      }
+
+      const blob = await response.blob();
+      
+      if (blob.size === 0) {
+        throw new Error(option === "월별 사진" ? 
+          '⚠️ 해당 월에 다운로드할 사진이 없습니다.' : 
+          '⚠️ 다운로드할 사진이 없습니다.'
+        );
+      }
+
+      // 다운로드 처리
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = filename;
+      
+      document.body.appendChild(a);
+      a.click();
+      
+      // cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      console.log('✅ 다운로드 완료:', filename);
 
     } catch (error) {
       console.error('❌ 다운로드 중 오류 발생:', error);
