@@ -4,7 +4,6 @@ import com.example.demo.config.auth.exceptionHandler.CustomAccessDeniedHandler;
 import com.example.demo.config.auth.exceptionHandler.CustomAuthenticationEntryPoint;
 import com.example.demo.config.auth.jwt.JwtAuthorizationFilter;
 import com.example.demo.config.auth.jwt.JwtTokenProvider;
-import com.example.demo.config.auth.loginHandler.CustomAuthenticationFailureHandler;
 import com.example.demo.config.auth.loginHandler.CustomLoginSuccessHandler;
 import com.example.demo.config.auth.logoutHandler.CustomLogoutHandler;
 import com.example.demo.config.auth.logoutHandler.CustomLogoutSuccessHandler;
@@ -29,7 +28,6 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -76,13 +74,13 @@ public class SecurityConfig {
         http.authorizeHttpRequests((auth)->{
             auth.requestMatchers("/**").permitAll();
 
-//
+
 //            auth.requestMatchers("/","/join","/login","/validate").permitAll();
 //            auth.requestMatchers("/user").hasRole("USER");
 //            auth.requestMatchers("/member").hasRole("MEMBER");
 //            auth.requestMatchers("/admin").hasRole("ADMIN");
-//
-//            auth.anyRequest().authenticated();
+
+            auth.anyRequest().authenticated();
         });
 
 
