@@ -78,7 +78,8 @@ export const API_URLS = {
   },
   album: {
     get: (year, month) => `${API_BASE_URL}/getAlbum/${year}/${month}`,
-    upload: (year, month) => `${API_BASE_URL}/getAlbum/${year}/${month}`
+    upload: (year, month) => `${API_BASE_URL}/upload`,
+    download: (year, month) => `${API_BASE_URL}/downloadAlbum/${year}/${month}`
   },
   location: {
     base: `${API_BASE_URL}/location`,

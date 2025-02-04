@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./css/SettingsModal.css";
 import { API_URLS } from '../api/apiConfig';
+import axios from 'axios';
 
 const SettingsModal = ({
   years,
@@ -145,8 +146,54 @@ const SettingsModal = ({
   //-----------------------------------
   // 다운로드 버튼 클릭 핸들러
   //-----------------------------------
-  const handleDownloadClick = (option) => {
-    console.log("download btn clicked..");
+  const handleDownloadClick = async (e, option) => {
+    e.preventDefault();
+    
+    try {
+      if (option === "월별 사진") {
+        const year = selectedSettings.year;
+        const month = String(selectedSettings.month).padStart(2, '0');
+        
+        console.log(`📌 월별 사진 다운로드 시도: ${year}년 ${month}월`);
+        
+        const response = await fetch(API_URLS.album.download(year, month), {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error(`다운로드 실패 (${response.status}): ${response.statusText}`);
+        }
+
+        const blob = await response.blob();
+        
+        if (blob.size === 0) {
+          throw new Error('⚠️ 해당 월에 다운로드할 사진이 없습니다.');
+        }
+
+        // 다운로드 처리
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `album_${year}_${month}.zip`;
+        
+        document.body.appendChild(a);
+        a.click();
+        
+        // cleanup
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        console.log('✅ 다운로드 완료');
+
+      } else if (option === "전체 사진") {
+        alert('전체 사진 다운로드 기능은 아직 준비중입니다.');
+      }
+
+    } catch (error) {
+      console.error('❌ 다운로드 중 오류 발생:', error);
+      alert(`❌ 사진 다운로드 실패:\n${error.message}`);
+    }
   };
 
   //-----------------------------------
@@ -173,6 +220,10 @@ const SettingsModal = ({
 
   const handleClose = () => {
     onClose();
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();  // 폼 기본 동작 방지
   };
 
   const handleSubmit = async (e) => {
@@ -225,7 +276,7 @@ const SettingsModal = ({
             ></button>
           </div>
           <div className="modal-body">
-            <form>
+            <form onSubmit={handleFormSubmit}>
               <div className="items">
                 {/* YYYY/MM 정보 표시 */}
                 <div className="item choose-yyyymm">
@@ -349,7 +400,7 @@ const SettingsModal = ({
                   <div className="item">
                     <button
                       className="btn"
-                      onClick={() => handleDownloadClick("월별 사진")}
+                      onClick={(e) => handleDownloadClick(e, "월별 사진")}
                     >
                       월별 사진 받기
                     </button>
@@ -357,7 +408,7 @@ const SettingsModal = ({
                   <div className="item">
                     <button
                       className="btn"
-                      onClick={() => handleDownloadClick("전체 사진")}
+                      onClick={(e) => handleDownloadClick(e, "전체 사진")}
                     >
                       전체 사진 받기
                     </button>
