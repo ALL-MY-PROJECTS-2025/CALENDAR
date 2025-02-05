@@ -72,7 +72,6 @@ public class SecurityConfig {
 
         //권한 체크
         http.authorizeHttpRequests((auth)->{
-            auth.requestMatchers("/**").permitAll();
 
             auth.requestMatchers("/","/join","/login","/validate").permitAll();
 
@@ -88,9 +87,6 @@ public class SecurityConfig {
 
             auth.requestMatchers("/settings/month").hasRole("USER");
             auth.requestMatchers("/settings/get").hasRole("USER");
-
-
-
             auth.anyRequest().authenticated();
         });
 

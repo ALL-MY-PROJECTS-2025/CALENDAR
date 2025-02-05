@@ -153,19 +153,14 @@ public class UserRestController {
     @GetMapping("/validate")
     public ResponseEntity<String> validateToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication : " + authentication);
-        Collection<? extends GrantedAuthority> auth =  authentication.getAuthorities();
-        auth.forEach(System.out::println);
-        boolean hasRoleAnon = auth.stream()
+        boolean hasRoleAnon = authentication.getAuthorities().stream()
                 .anyMatch(authority -> "ROLE_ANONYMOUS".equals(authority.getAuthority()));
 
         if (authentication.isAuthenticated() && !hasRoleAnon) {
-            System.out.println("인증된 상태입니다.");
-            return new ResponseEntity<>("",HttpStatus.OK);
+            return new ResponseEntity<>("authenticated", HttpStatus.OK);
         }
 
-        System.out.println("미인증된 상태입니다.");
-        return new ResponseEntity<>("",HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>("unauthenticated", HttpStatus.OK); // 401 대신 200
     }
 
 }

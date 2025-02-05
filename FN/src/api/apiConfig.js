@@ -1,19 +1,10 @@
 import axios from 'axios';
 
-// API 기본 URL 설정
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/bn' 
-  : 'http://localhost:8095';
-
 // axios 인스턴스 생성
 const api = axios.create({
   baseURL: '/bn',
-  headers: {
-    'Content-Type': 'application/json'
-  },
   withCredentials: true, // HTTP-Only 쿠키 포함
 });
-
 
 //------------------------
 // 요청 인터셉터 설정
@@ -36,6 +27,7 @@ api.interceptors.request.use(
       return config;
 
     } catch (error) {
+      
       console.log("[오류-요청 인터셉터] ",error);
       window.location.href = '/login';
       return Promise.reject('인증이 필요합니다.');
@@ -49,30 +41,26 @@ api.interceptors.request.use(
   }
 );
 
-// //------------------------
-// // 응답 인터셉터 설정
-// //------------------------
-// api.interceptors.response.use(
-//   (response) => {
-//     console.log("[정상-응답 인터셉터] ",response);
-//     if (response.data?.auth === false) {
-//       window.location.href = '/login';
-//       return Promise.reject('세션이 만료되었습니다.');
-//     }
-//     return response;
-//   },
-//   (error) => {
+//------------------------
+// 응답 인터셉터 설정
+//------------------------
+api.interceptors.response.use(
+  (response) => {
+    console.log("[정상-응답 인터셉터] ",response);
+    if (response.data?.auth === false) {
+      window.location.href = '/login';
+      return Promise.reject('세션이 만료되었습니다.');
+    }
+    return response;
+  },
+  (error) => {
   
-//     console.log("[오류-응답 인터셉터] ",error);
-//     if (error.response?.data?.expired === true) {
-//       window.location.href = '/login';
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
-
-
-
+    console.log("[오류-응답 인터셉터] ",error);
+    if (error.response?.data?.expired === true) {
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default api; 
