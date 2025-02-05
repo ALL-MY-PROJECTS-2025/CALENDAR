@@ -18,8 +18,8 @@ public class DataSourceConfig {
 
 		HikariDataSource dataSource = new HikariDataSource();
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1:3330/bookdb");
-//		dataSource.setJdbcUrl("jdbc:mysql://mysql8-container:3306/bookdb");
+//		dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1:3330/bookdb");
+		dataSource.setJdbcUrl("jdbc:mysql://mysql8-container:3306/bookdb");
 
 		dataSource.setUsername("root");
 		dataSource.setPassword("Zhfldk11!");
