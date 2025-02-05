@@ -425,9 +425,10 @@ function Calendar() {
   // 위치 정보 저장 핸들러
   const handleLocationSave = async (address) => {
     try {
-      const response = await api.post('/location', { 
+
+
+      const response = await api.post('/location/save', { 
         address,
-        user: 'anonymous'
       });
       const savedData = response.data;
       setLocation(savedData.location);
@@ -440,7 +441,7 @@ function Calendar() {
   // 위치 정보 가져오기
   const fetchLocation = async () => {
     try {
-      const response = await api.get('/location/anonymous');
+      const response = await api.get(`/location/get`);
       const data = response.data;
       setLocation(data.location);
       console.log('서버에서 받은 위치 정보:', data.location);

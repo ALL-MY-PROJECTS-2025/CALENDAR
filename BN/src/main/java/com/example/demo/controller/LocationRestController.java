@@ -4,6 +4,7 @@ package com.example.demo.controller;
 import com.example.demo.config.auth.PrincipalDetails;
 import com.example.demo.domain.entity.Location;
 import com.example.demo.domain.repository.LocationRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,17 +18,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/location")
+@Slf4j
 public class LocationRestController {
 
     @Autowired
     private LocationRepository locationRepository;
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<?> saveLocation(@RequestBody LocationRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 기존 사용자의 위치 정보 확인
         String user = principalDetails.getUsername();
         Location existingLocation = locationRepository.findByUser(user);
-        
+
+        log.info("existingLocation..{}",existingLocation);
+
         Location location;
         if (existingLocation != null) {
             // 기존 데이터가 있으면 주소만 업데이트
@@ -44,9 +48,9 @@ public class LocationRestController {
         return ResponseEntity.ok(location);
     }
 
-    @GetMapping("/{user}")
-    public ResponseEntity<?> getLocationByUser(@PathVariable("user") String user) {
-        Location location = locationRepository.findByUser(user);
+    @GetMapping("/get")
+    public ResponseEntity<?> getLocationByUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Location location = locationRepository.findByUser(principalDetails.getUsername());
         if (location == null) {
             return ResponseEntity.notFound().build();
         }
