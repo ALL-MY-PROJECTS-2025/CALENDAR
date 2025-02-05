@@ -50,6 +50,7 @@ public class AlbumRestController {
         String currentDatePath = yyyy + File.separator + mm;
         Path uploadPath = Paths.get(UPLOADPATH.ROOTDIRPATH + File.separator + UPLOADPATH.UPPERDIRPATH + File.separator + principalDetails.getUsername(), currentDatePath);
 
+
         try {
             // ✅ 디렉토리가 없으면 생성
             if (!Files.exists(uploadPath)) {

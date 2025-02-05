@@ -25,4 +25,3 @@ CMD ["nginx", "-g", "daemon off;"]
 # Default to bash instead of starting the app
 #CMD ["/bin/bash"]
 
-

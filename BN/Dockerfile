@@ -26,6 +26,6 @@ EXPOSE 8095
 
 # 실행 명령
 # 기본적으로 bash로 실행되며, 필요에 따라 주석을 제거하여 애플리케이션 실행
-CMD ["java", "-jar", "app.jar"] 
+CMD ["java", "-jar", "app.jar"]
 
-#CMD ["/bin/bash"]
+# CMD ["/bin/bash"]
