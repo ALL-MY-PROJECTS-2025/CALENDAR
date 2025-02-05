@@ -492,6 +492,7 @@ function Calendar() {
                       src={img.base64}
                       alt={img.filename}
                       className="month-image"
+                      style={{objectFit:"cover"}}
                     />
                     <video autoPlay muted loop>
                       <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
