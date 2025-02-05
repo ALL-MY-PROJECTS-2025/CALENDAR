@@ -7,7 +7,10 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
 
 // axios 인스턴스 생성
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: '/bn',
+  headers: {
+    'Content-Type': 'application/json'
+  },
   withCredentials: true, // HTTP-Only 쿠키 포함
 });
 
@@ -20,6 +23,11 @@ api.interceptors.request.use(
     const publicPaths = ['/login', '/join', '/validate'];
     if (publicPaths.some(path => config.url.includes(path))) {
       return config;
+    }
+
+    const token = localStorage.getItem('accesstoken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     try {

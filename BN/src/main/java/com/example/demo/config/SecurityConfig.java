@@ -220,13 +220,13 @@ public class SecurityConfig {
         config.setAllowedMethods(Collections.singletonList("*")); // 허용 메서드
 
         // 허용할 도메인 추가
-        config.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost:3000",
-                "http://192.168.1.10:3000",
-                "http://react-container:3000",
-                "http://localhost",
-                "http://192.168.1.10",
-                "http://react-container"
+        config.setAllowedOriginPatterns(Arrays.asList("*"
+//                "http://localhost:3000",
+//                "http://192.168.1.10:3000",
+//                "http://react-container:3000",
+//                "http://localhost",
+//                "http://192.168.1.10",
+//                "http://react-container"
         ));
 
         config.setAllowCredentials(true); // COOKIE TOKEN OPTION
