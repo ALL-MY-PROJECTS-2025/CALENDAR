@@ -74,10 +74,22 @@ public class SecurityConfig {
         http.authorizeHttpRequests((auth)->{
             auth.requestMatchers("/**").permitAll();
 
-//            auth.requestMatchers("/","/join","/login","/validate").permitAll();
-//            auth.requestMatchers("/user").hasRole("USER");
-//            auth.requestMatchers("/member").hasRole("MEMBER");
-//            auth.requestMatchers("/admin").hasRole("ADMIN");
+            auth.requestMatchers("/","/join","/login","/validate").permitAll();
+
+            auth.requestMatchers("/upload").hasRole("USER");
+            auth.requestMatchers("/getAlbum").hasRole("USER");
+            auth.requestMatchers("/deleteImage").hasRole("USER");
+            auth.requestMatchers("/downloadAlbum").hasRole("USER");
+            auth.requestMatchers("/downloadAllAlbums").hasRole("USER");
+
+            auth.requestMatchers("/location/save").hasRole("USER");
+            auth.requestMatchers("/location/get").hasRole("USER");
+
+
+            auth.requestMatchers("/settings/month").hasRole("USER");
+            auth.requestMatchers("/settings/get").hasRole("USER");
+
+
 
             auth.anyRequest().authenticated();
         });

@@ -70,6 +70,11 @@ dependencies {
 	implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
 
 
+	//HEALTH_CHECK DOCKER COMPOSE
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+
+
 	//TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
