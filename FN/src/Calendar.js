@@ -472,15 +472,6 @@ function Calendar() {
       navigate('/logout');
     }
   }
-
-<<<<<<< HEAD
-  
-=======
-
-
-
->>>>>>> ca62672f4d1c579eee2439721438a28fe7dc9035
-
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
