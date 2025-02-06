@@ -73,7 +73,8 @@ public class SecurityConfig {
         //권한 체크
         http.authorizeHttpRequests((auth)->{
 
-            auth.requestMatchers("/","/join","/login","/validate").permitAll();
+            auth.requestMatchers("/join","/login","/validate").permitAll();
+
 
             auth.requestMatchers("/upload").hasRole("USER");
             auth.requestMatchers("/getAlbum").hasRole("USER");
