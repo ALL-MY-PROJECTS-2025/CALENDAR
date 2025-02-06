@@ -27,15 +27,21 @@ import "swiper/css/effect-fade";
 import "swiper/css/autoplay";
 import "./Calendar.css";
 
+
+
 import api from './api/apiConfig';
 import { useNavigate } from 'react-router-dom';
 
 function Calendar() {
-
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [location, setLocation] = useState('');
+
+
+
+
+
 
   // Bootstrap 모달 초기화 및 제어
   useEffect(() => {
@@ -427,7 +433,7 @@ function Calendar() {
     try {
 
 
-      const response = await api.post('/location/save', { 
+      const response = await api.post('/location/save', {
         address,
       });
       const savedData = response.data;
@@ -457,17 +463,23 @@ function Calendar() {
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행
 
 
-  
+
   const navigate = useNavigate();
 
   //LOGOUT
   const handleLogoutClick = () => {
-    if(window.confirm('로그아웃 하시겠습니까?')) {
+    if (window.confirm('로그아웃 하시겠습니까?')) {
       navigate('/logout');
     }
   }
 
+<<<<<<< HEAD
   
+=======
+
+
+
+>>>>>>> ca62672f4d1c579eee2439721438a28fe7dc9035
 
   return (
     <div
@@ -496,7 +508,7 @@ function Calendar() {
                       src={img.base64}
                       alt={img.filename}
                       className="month-image"
-                      style={{objectFit:"cover"}}
+                      style={{ objectFit: "cover" }}
                     />
                     <video autoPlay muted loop>
                       <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
@@ -563,12 +575,12 @@ function Calendar() {
           <button onClick={handleRefresh}>
             <span className="material-symbols-outlined refresh">refresh</span>
           </button>
-          <button 
+          <button
             onClick={handleLocationClick}
             className="location-button"
             data-tooltip={!location ? "위치를 입력해주세요" : ""}
           >
-            <span 
+            <span
               className="material-symbols-outlined"
               style={{ color: !location ? '#ff4444' : 'inherit' }}
             >
@@ -581,7 +593,7 @@ function Calendar() {
           <button onClick={handleSettingsClick}>
             <span className="material-symbols-outlined">settings</span>
           </button>
-          
+
           <button onClick={handleLogoutClick}>
             <span className="material-symbols-outlined">logout</span>
           </button>
