@@ -467,8 +467,6 @@ function Calendar() {
     }
   }
 
-
-
   
 
   return (
