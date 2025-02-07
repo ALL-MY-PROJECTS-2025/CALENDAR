@@ -501,9 +501,13 @@ function Calendar() {
                       className="month-image"
                       style={{ objectFit: "cover" }}
                     />
+
+{/* 
                     <video autoPlay muted loop>
                       <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
-                    </video>
+                    </video> */}
+
+
                   </div>
                 </SwiperSlide>
               ))
@@ -515,9 +519,13 @@ function Calendar() {
                     alt="Default Image"
                     className="month-image default-image"
                   />
+
+{/* 
                   <video autoPlay muted loop>
                     <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
-                  </video>
+                  </video> */}
+
+
                 </div>
               </SwiperSlide>
             )}
@@ -533,9 +541,13 @@ function Calendar() {
                     alt={img.filename}
                     className="month-image"
                   />
+
+{/* 
                   <video autoPlay muted loop>
                     <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
                   </video>
+
+                   */}
                 </div>
               ))
             ) : (
@@ -546,9 +558,13 @@ function Calendar() {
                     alt={`Default Image ${index + 1}`}
                     className="month-image default-image"
                   />
+
+{/* 
                   <video autoPlay muted loop>
                     <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
-                  </video>
+                  </video> */}
+
+
                 </div>
               ))
             )}
@@ -768,9 +784,11 @@ function Calendar() {
                       src={`${process.env.PUBLIC_URL}/modal_1.png`}
                       alt="Example"
                     />
+{/* 
                     <video autoPlay muted loop>
                       <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_01.mp4" />
                     </video>
+                     */}
                   </div>
                   <div className="modal-schedule">
                     <div>
