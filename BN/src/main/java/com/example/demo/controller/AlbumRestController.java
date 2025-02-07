@@ -31,7 +31,6 @@ import java.util.zip.ZipOutputStream;
 @Slf4j
 public class AlbumRestController {
 
-    private static final String BASE_UPLOAD_DIR = "/your/upload/directory"; // ✅ 업로드할 기본 폴더 경로 설정 (예: "/home/uploads")
 
     @PostMapping("/upload")
     public void upload(

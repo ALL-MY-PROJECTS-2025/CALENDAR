@@ -229,8 +229,9 @@ public class SecurityConfig {
         config.setAllowedMethods(Collections.singletonList("*")); // 허용 메서드
 
         // 허용할 도메인 추가
-        config.setAllowedOriginPatterns(Arrays.asList("*"
-//                "http://localhost:3000",
+        config.setAllowedOriginPatterns(Arrays.asList(
+//                "*"
+                "http://52.79.188.126:3000"
 //                "http://192.168.1.10:3000",
 //                "http://react-container:3000",
 //                "http://localhost",
