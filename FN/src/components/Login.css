@@ -7,7 +7,6 @@
   position:relative;
 }
 
-
 .login-background{
   display:grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -18,7 +17,6 @@
   padding : 10px 0;
   
 }
-
 .login-background .item{
   
   width : 100%;
@@ -159,7 +157,7 @@
     
 }
 .login-form:hover .show-login > .material-symbols-outlined{
-  color:royalblue;
+  color:black;
 }
 
 
@@ -219,7 +217,7 @@
 .register-link {
   text-align: center;
   margin-top: 20px;
- 
+  font-size : .8rem;
   color: #666;
 }
 
@@ -227,6 +225,7 @@
   color: #4a90e2;
   text-decoration: none;
   margin-left: 5px;
+  font-size : .8rem;
 }
 
 .register-link a:hover {
