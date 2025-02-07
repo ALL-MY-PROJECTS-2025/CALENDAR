@@ -939,7 +939,7 @@ body {
 
   /* 캘린더 헤더 조정 */
   .calendar-header {
-    min-height: 100px;
+    min-height: 120px;
     max-height: 120px;
   }
 
