@@ -886,36 +886,55 @@ body {
   animation: pulse 2s infinite;
 }
 
-/* 반응형 레이아웃 */
+/* 모바일 반응형 스크롤 설정 */
 @media screen and (max-width: 767px) {
-  /* 모바일 */
-  :root {
-    font-size: 14px;
-  }
-
-  body {
-    width: 95vw;
-  }
-
+  /* 기존 모바일 스타일 유지 */
   .App {
     flex-direction: column;
     gap: 5px;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .layout-row {
-    flex-direction: column;
+  .calendar-container {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding-bottom: 50px;
+  }
+
+  .layout-row .postcard-container,
+  .layout-col .postcard-container {
+    height: auto;
+    min-height: 50vh;
+  }
+
+  .fc-view-harness.fc-view-harness-active {
+    height: auto !important;
+    min-height: 500px;
+  }
+
+  /* 스크롤 부드럽게 처리 */
+  .fc-scroller {
+    overflow-y: visible !important;
+    height: auto !important;
+  }
+
+  .fc-scrollgrid-sync-table {
+    height: auto !important;
   }
 
   .layout-row .photo-frame {
     margin-right: 0;
-    height: 40vh;
+    height: 50vh;
   }
 
   .layout-row .postcard-container,
   .layout-col .postcard-container {
     width: 100%;
     padding-left: 0;
-    height: 60vh;
   }
 
   /* 캘린더 헤더 조정 */
@@ -962,6 +981,83 @@ body {
   /* 헤더 내부 요소들 간격 조정 */
   .calendar-header > * {
     margin: 5px;
+  }
+
+  /* FullCalendar 헤더 툴바 반응형 스타일 - 모바일 수정 */
+  .fc-header-toolbar.fc-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    padding: 0 5px;
+  }
+
+  /* 타이틀(연월) 스타일 */
+  .fc-toolbar-title {
+    font-size: 0.9rem !important;
+    white-space: nowrap;
+  }
+
+  /* 버튼 그룹 스타일 */
+  .fc-button-group {
+    margin: 0 !important;
+  }
+
+  .fc-button-group button {
+    padding: 3px 6px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* Today 버튼 스타일 */
+  .fc-today-button {
+    padding: 3px 6px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* 각 섹션의 너비 조절 */
+  .fc-toolbar-chunk {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  /* 중앙 타이틀 섹션 */
+  .fc-toolbar-chunk:nth-child(2) {
+    flex: 1;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  /* 좌우 버튼 섹션 */
+  .fc-toolbar-chunk:first-child,
+  .fc-toolbar-chunk:last-child {
+    flex: 0 0 auto;
+  }
+}
+
+/* 작은 모바일 화면 대응 */
+@media screen and (max-width: 480px) {
+  .calendar-container {
+    padding-bottom: 30px;
+  }
+
+  .fc-view-harness.fc-view-harness-active {
+    min-height: 400px;
+  }
+
+  /* 더 작은 모바일 화면 대응 */
+  .fc-header-toolbar.fc-toolbar {
+    gap: 2px;
+    padding: 0 2px;
+  }
+
+  .fc-toolbar-title {
+    font-size: 0.8rem !important;
+  }
+
+  .fc-button-group button,
+  .fc-today-button {
+    padding: 2px 4px !important;
+    font-size: 0.6rem !important;
   }
 }
 
@@ -1074,20 +1170,6 @@ body {
   .fc-today-button {
     padding: 3px !important;
     font-size: 0.7rem !important;
-  }
-
-  /* Timer 조정 */
-  .calendar-header .timer {
-    font-size: 1.5rem;
-  }
-
-  /* Weather 조정 */
-  .calendar-header .weather {
-    font-size: 0.8rem;
-  }
-
-  .calendar-header .weather .temperature {
-    font-size: 1.1rem;
   }
 
   /* 헤더 내부 요소들을 가로로 배치 */

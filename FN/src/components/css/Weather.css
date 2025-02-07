@@ -5,7 +5,7 @@
   padding: 5px;
   height: 100%;
   position: relative;
-  width: 60%;
+  width: 66%;
   overflow: hidden;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .postcard-container>.calendar-header .weather-block .items .item .icon>span {
-  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
 
 .postcard-container>.calendar-header .weather-block .items .item .obsrValue {
