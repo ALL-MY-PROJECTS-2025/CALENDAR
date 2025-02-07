@@ -30,17 +30,43 @@ import "./Calendar.css";
 
 
 import api from './api/apiConfig';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Calendar() {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [location, setLocation] = useState('');
+
+
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [isAuthenticated, setIsAuthenticated] = useState('');
+  const [isLoading, setIsLoading] = useState('');
+  useEffect(() => {
+    const validateAuth = async () => {
+      try {
+        const response = await axios.get('/bn/validate', {
+          withCredentials: true
+        });
+        
+        if (response.data === 'authenticated') {
+          setIsAuthenticated(true);
+        } else {
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('인증 확인 중 오류 발생:', error);
+        navigate('/login');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    validateAuth();
+  }, [navigate]);
+  
+
 
   // Bootstrap 모달 초기화 및 제어
   useEffect(() => {
@@ -70,37 +96,6 @@ function Calendar() {
       }
     }
   }, [isUploadModalOpen, isSettingsModalOpen]);
-
-  // 인증 확인
-  useEffect(() => {
-    const validateAuth = async () => {
-      try {
-        const response = await axios.get('/bn/validate', {
-          withCredentials: true
-        });
-        
-        if (response.data === 'authenticated') {
-          setIsAuthenticated(true);
-        } else {
-          navigate('/#/login');
-        }
-      } catch (error) {
-        console.error('인증 확인 중 오류 발생:', error);
-        navigate('/#/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    validateAuth();
-  }, [navigate]);
-
-  if (isLoading) {
-    return <div>Loading...</div>; // 로딩 상태 표시
-  }
-
-  if (!isAuthenticated) {
-    return null; // 인증되지 않은 경우 아무것도 렌더링하지 않음
-  }
 
   //----------------------------
   // STATE MANAGEMENT
@@ -494,7 +489,13 @@ function Calendar() {
 
 
 
-
+ 
+  //LOGOUT
+  const handleLogoutClick = () => {
+    if (window.confirm('로그아웃 하시겠습니까?')) {
+      navigate('/logout');
+    }
+  }
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
