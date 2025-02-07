@@ -1248,6 +1248,10 @@ body {
   .fc-header-toolbar.fc-toolbar .fc-button-group {
     margin: 0 !important;
   }
+  .calendar-header>*{
+    margin-bottom : 10px;
+
+  }
 }
 
 /* 태블릿 (768px - 1023px) */
