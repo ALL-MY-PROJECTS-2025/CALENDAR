@@ -230,8 +230,8 @@ public class SecurityConfig {
 
         // 허용할 도메인 추가
         config.setAllowedOriginPatterns(Arrays.asList(
-//                "*"
-                "http://52.79.188.126:3000"
+                "*"
+//                "http://52.79.188.126:3000"
 //                "http://192.168.1.10:3000",
 //                "http://react-container:3000",
 //                "http://localhost",
