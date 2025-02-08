@@ -46,49 +46,11 @@ const Login = () => {
   return (
     <div className="login-container">
       {/* 배경스타일 */}
-      <div className="login-background">
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/1.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/2.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/3.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/4.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/5.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/6.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/7.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/8.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/9.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/10.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/11.jpg`} alt="login" />
-        </div>
-        <div className="item">
-          <img src={`${process.env.PUBLIC_URL}/login/12.jpg`} alt="login" />
-        </div>
-      </div>
+      
       {/* 로그인 이미지 */}
 
       <form className="login-form" onSubmit={(e) => e.preventDefault()}>
         <div className="login-title">
-          {/* <img src={`${process.env.PUBLIC_URL}/login_bak.jpg`} alt="login" /> */}
           <div className="item">
             <img src={`${process.env.PUBLIC_URL}/login.png`} alt="login" />
           </div>
@@ -134,10 +96,53 @@ const Login = () => {
         </button>
 
         <div className="register-link">
-          계정이 없으신가요?
-          <Link to="">회원가입(현재사용불가)</Link>
+          {
+            /* 계정이 없으신가요?
+            <Link to="">회원가입(현재사용불가)</Link>
+             */
+          }
         </div>
       </form>
+
+      <div className="login-background">
+        {/* <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/1.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/2.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/3.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/4.jpg`} alt="login" />
+        </div> */}
+        {/* <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/5.jpg`} alt="login" />
+        </div> */}
+        {/* <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/6.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/7.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/8.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/9.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/10.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/11.jpg`} alt="login" />
+        </div>
+        <div className="item">
+          <img src={`${process.env.PUBLIC_URL}/login/12.jpg`} alt="login" />
+        </div> */}
+
+      </div>
     </div>
   );
 };

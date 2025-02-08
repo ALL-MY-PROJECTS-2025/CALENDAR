@@ -1,67 +1,40 @@
 .login-container {
   width: 100%;
-
   margin: 0 auto;
-  
   height: 100vh;
   position:relative;
 }
 
 .login-background{
-  display:grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-  width:100%;
-  height:100%;
-  gap:15px;
-  padding : 10px 0;
-  
-}
-.login-background .item{
-  
   width : 100%;
-  height : 100%;
-  min-height:300px;
-  overflow: hidden;
-  box-shadow: 5px 5px 5px lightgray;
-  border-radius: 10px;
-  opacity: .7;
+  height:0;
+  position:fixed;
+  left:0;top:0;
+  right:0;bottom:0;
+  margin : auto;
+  height : 0px;
+  background-color: rgb(233, 233, 233);
+  z-index : -1;
+  transition: .5s;
 }
-.login-background .item img{
-  width:100%;
-  height:100%;
-  object-fit: cover;
-  transition: 1s;
 
-}
-.login-background .item:hover{
-  opacity: 1;
-}
-.login-background .item:hover img{
-  transform: scale(1.2);
+.login-form:hover ~ .login-background {
+  width: 100%;
+  height: 100vh;
+
   
 }
 
-.login-container .login-image{
-  height : 100%;
-  position:absolute;
-  left:0;
-  top:0;
-  max-width : 500px;
-  z-index:100;
-  border : 1px solid;
-}
-.login-container .login-image>img{
-  width : 100%;
-  height : 100%;
-  object-fit: contain;
-}
+
+
+
+
 
 .login-form {
   width:350px;
-  height : 500px;
+  height : 450px;
   padding : 15px;
-  border : 1px solid gray;
+  border : 1px solid lightgray;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -73,12 +46,20 @@
   right:0;
   bottom:0;
   margin : auto;
+
 }
 
 .login-form input{
-  font-size : .5rem;
+  font-size : 1rem;
 }
-
+.login-form button{
+  font-size : .9rem;
+}
+.login-form label{
+  font-size  : .7rem;
+  margin-bottom : 10px;
+  color:gray;
+}
 .login-title {
   text-align: center;
   margin-bottom: 5px;
@@ -134,7 +115,6 @@
   position:relative;
 }
 .login-title .show-login{
-
   width:100%;
   height:150px;
   position: absolute;
@@ -154,7 +134,6 @@
   border-radius: 0;
   opacity: 1;
   transition: 1s;
-    
 }
 .login-form:hover .show-login > .material-symbols-outlined{
   color:black;
@@ -238,10 +217,13 @@
     padding-top:5px;
   }
   .login-background {
-    grid-template-columns: 1fr 1fr;
+    
+    /* grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(8, 1fr);
     gap: 10px;
-    padding: 5px 0;
+    padding: 5px 0; */
+
+
   }
 
   .login-form {
@@ -271,7 +253,7 @@
   }
 
   .login-container .login-image {
-    display: none;
+    /* display: none; */
   }
 
   .login-background .item {
@@ -286,41 +268,9 @@
 }
 
 /* 더 작은 모바일 디바이스를 위한 미디어 쿼리 */
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 380px) {
 
-  .login-background{
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    width:100%;
-    height:100%;
-    gap:15px;
-    padding : 10px 0;
-    
-  }
-  
-  .login-background .item{
-    
-    width : 100%;
-    height : 100%;
-    min-height:300px;
-    overflow: hidden;
-    box-shadow: 5px 5px 5px lightgray;
-    border-radius: 10px;
-    opacity: .7;
-  }
-  .login-background .item img{
-    width:100%;
-    height:100%;
-    object-fit: cover;
-    transition: 1s;
-  }
-  .login-background .item:hover{
-    opacity: .7;
-  }
-  .login-background .item:hover img{
-    transform: scale(1);
-  }
+
 
   .login-form{
     height : auto;
