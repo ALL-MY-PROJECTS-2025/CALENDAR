@@ -285,12 +285,12 @@ const UploadModal = ({ onClose, ...props }) => {
                 type="file"
                 className="btn"
                 onChange={handleAddFormdata}
-                multiple
+                accept="image/*"
                 style={{ display: "none" }}
                 id="file-input"
               />
-              <button className="btn btn-success">
-                <label htmlFor="file-input">파일올리기</label>
+              <button className="btn btn-success" onClick={() => document.getElementById("file-input").click()}> 
+                파일올리기
               </button>
               <button
                 type="button"
