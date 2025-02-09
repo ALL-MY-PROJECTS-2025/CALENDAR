@@ -32,39 +32,42 @@ import "./Calendar.css";
 import api from './api/apiConfig';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import UserModal from './components/UserModal';
 
 function Calendar() {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [location, setLocation] = useState('');
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+
 
 
   const navigate = useNavigate();
 
-  const [isAuthenticated, setIsAuthenticated] = useState('');
-  const [isLoading, setIsLoading] = useState('');
-  useEffect(() => {
-    const validateAuth = async () => {
-      try {
-        const response = await axios.get('/bn/validate', {
-          withCredentials: true
-        });
+  // const [isAuthenticated, setIsAuthenticated] = useState('');
+  // const [isLoading, setIsLoading] = useState('');
+  // useEffect(() => {
+  //   const validateAuth = async () => {
+  //     try {
+  //       const response = await axios.get('/bn/validate', {
+  //         withCredentials: true
+  //       });
         
-        if (response.data === 'authenticated') {
-          setIsAuthenticated(true);
-        } else {
-          navigate('/login');
-        }
-      } catch (error) {
-        console.error('인증 확인 중 오류 발생:', error);
-        navigate('/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    validateAuth();
-  }, [navigate]);
+  //       if (response.data === 'authenticated') {
+  //         setIsAuthenticated(true);
+  //       } else {
+  //         navigate('/login');
+  //       }
+  //     } catch (error) {
+  //       console.error('인증 확인 중 오류 발생:', error);
+  //       navigate('/login');
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   validateAuth();
+  // }, [navigate]);
   
 
 
@@ -621,6 +624,10 @@ function Calendar() {
           <button onClick={handleUploadClick}>
             <span className="material-symbols-outlined">upload</span>
           </button>
+          <button onClick={() => setIsUserModalOpen(true)}>
+            <span className="material-symbols-outlined">person</span>
+          </button>
+
           <button onClick={handleSettingsClick}>
             <span className="material-symbols-outlined">settings</span>
           </button>
@@ -888,8 +895,16 @@ function Calendar() {
           onSave={handleLocationSave}
           currentLocation={location}
         />
+
+        {/* User  Modal  */}
+        <UserModal
+          isOpen={isUserModalOpen}
+          onClose={() => setIsUserModalOpen(false)}
+          
+        />
       </div>
     </div>
+
   );
 }
 

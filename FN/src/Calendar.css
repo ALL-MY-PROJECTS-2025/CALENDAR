@@ -746,7 +746,7 @@ body {
 
 /* EVENT MODAL */
 .fullcalendar-custom-event-modal .modal-dialog{
-  width:380px;
+  width:350px;
 }
 .fullcalendar-custom-event-modal .modal-header{
   background-color: #1E2B37;;
