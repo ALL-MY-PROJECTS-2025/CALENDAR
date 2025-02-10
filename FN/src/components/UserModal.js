@@ -223,8 +223,9 @@ function UserModal({ isOpen, onClose, userInfo }) {
               <h3 className="section-title">비밀번호 변경</h3>
               <div className="input-group mb-3">
                 <label className="form-label w-100">현재 비밀번호</label>
-                <div className="d-flex gap-2">
+                <div className="d-flex gap-2 check-password-block">
                   <input
+
                     type="password"
                     className={`form-control ${errors.currentPassword ? 'is-invalid' : ''}`}
                     name="currentPassword"
@@ -236,7 +237,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
                   />
                   <button
                     type="button"
-                    className="btn btn-secondary"
+                    className=" btn btn-secondary"
                     onClick={handleVerifyPassword}
                     disabled={passwordVerified}
                   >

@@ -46,29 +46,30 @@ function Calendar() {
 
   const navigate = useNavigate();
 
-  const [isAuthenticated, setIsAuthenticated] = useState('');
-  const [isLoading, setIsLoading] = useState('');
-  useEffect(() => {
-    const validateAuth = async () => {
-      try {
-        const response = await axios.get('/bn/validate', {
-          withCredentials: true
-        });
+  // 인증여부 확인
+  // const [isAuthenticated, setIsAuthenticated] = useState('');
+  // const [isLoading, setIsLoading] = useState('');
+  // useEffect(() => {
+  //   const validateAuth = async () => {
+  //     try {
+  //       const response = await axios.get('/bn/validate', {
+  //         withCredentials: true
+  //       });
         
-        if (response.data === 'authenticated') {
-          setIsAuthenticated(true);
-        } else {
-          navigate('/login');
-        }
-      } catch (error) {
-        console.error('인증 확인 중 오류 발생:', error);
-        navigate('/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    validateAuth();
-  }, [navigate]);
+  //       if (response.data === 'authenticated') {
+  //         setIsAuthenticated(true);
+  //       } else {
+  //         navigate('/login');
+  //       }
+  //     } catch (error) {
+  //       console.error('인증 확인 중 오류 발생:', error);
+  //       navigate('/login');
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   validateAuth();
+  // }, [navigate]);
   
 
 
@@ -491,8 +492,12 @@ function Calendar() {
     fetchLocation();
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행
 
+
+  //------------------------------------
+  //사용자 정보 가져오기
+  //------------------------------------
+
   useEffect(() => {
-    // !!!!!!!!!!!!!!!!!!!!!!!!
     // 사용자 정보 가져오기
     const fetchUserInfo = async () => {
       try {
@@ -514,7 +519,6 @@ function Calendar() {
     };
 
     fetchUserInfo();
-    // !!!!!!!!!!!!!!!!!!!!!!!!
   }, []); // 컴포넌트 마운트 시 한 번만 실행
 
   //LOGOUT
