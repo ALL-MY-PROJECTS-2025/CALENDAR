@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.config.auth.PrincipalDetails;
 import com.example.demo.config.auth.jwt.JwtProperties;
 import com.example.demo.config.auth.jwt.JwtTokenProvider;
 import com.example.demo.config.auth.jwt.TokenInfo;
@@ -21,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -151,6 +153,39 @@ public class UserRestController {
         }
         return new ResponseEntity<>(null , HttpStatus.UNAUTHORIZED);
 	}
+
+    @PostMapping("/user/update")
+    public ResponseEntity<String> userUpdate(@RequestBody Map<String, String> request, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        User user = userRepository.findByUsername(principalDetails.getUsername());
+
+        // 캘린더 정보 업데이트
+        user.setCalendarApi(request.get("calendarApi"));
+        user.setCalendarId(request.get("calendarId"));
+
+        // 새 비밀번호가 있는 경우에만 비밀번호 업데이트
+        if (request.containsKey("newPassword") && !request.get("newPassword").isEmpty()) {
+            user.setPassword(passwordEncoder.encode(request.get("newPassword")));
+        }
+
+        userRepository.save(user);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
+    @PostMapping("/user/password/check")
+    public ResponseEntity<String> passwodCheck(@RequestBody Map<String, String> request,@AuthenticationPrincipal PrincipalDetails principalDetails){
+        String currentPassword = request.get("currentPassword");
+
+        User user = userRepository.findByUsername(principalDetails.getUsername());
+        log.info("/user/password/check...{} {}..", currentPassword, user.getPassword());
+
+        boolean isCorrected = passwordEncoder.matches(currentPassword, user.getPassword());
+        if (!isCorrected) {
+            return new ResponseEntity<>("failed", HttpStatus.EXPECTATION_FAILED);
+        }
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+
+    }
+
 
     @GetMapping("/validate")
     public ResponseEntity<String> validateToken() {

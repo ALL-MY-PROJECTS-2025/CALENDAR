@@ -54,6 +54,8 @@ public class JwtTokenProvider {
         this.key = key;
     }
     public JwtTokenProvider(){
+
+
     }
     @PostConstruct
     public void init(){

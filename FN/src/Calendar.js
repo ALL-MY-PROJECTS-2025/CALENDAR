@@ -40,34 +40,35 @@ function Calendar() {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [location, setLocation] = useState('');
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);  // 새로운 상태 추가
 
 
 
   const navigate = useNavigate();
 
-  // const [isAuthenticated, setIsAuthenticated] = useState('');
-  // const [isLoading, setIsLoading] = useState('');
-  // useEffect(() => {
-  //   const validateAuth = async () => {
-  //     try {
-  //       const response = await axios.get('/bn/validate', {
-  //         withCredentials: true
-  //       });
+  const [isAuthenticated, setIsAuthenticated] = useState('');
+  const [isLoading, setIsLoading] = useState('');
+  useEffect(() => {
+    const validateAuth = async () => {
+      try {
+        const response = await axios.get('/bn/validate', {
+          withCredentials: true
+        });
         
-  //       if (response.data === 'authenticated') {
-  //         setIsAuthenticated(true);
-  //       } else {
-  //         navigate('/login');
-  //       }
-  //     } catch (error) {
-  //       console.error('인증 확인 중 오류 발생:', error);
-  //       navigate('/login');
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   validateAuth();
-  // }, [navigate]);
+        if (response.data === 'authenticated') {
+          setIsAuthenticated(true);
+        } else {
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('인증 확인 중 오류 발생:', error);
+        navigate('/login');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    validateAuth();
+  }, [navigate]);
   
 
 
@@ -490,9 +491,32 @@ function Calendar() {
     fetchLocation();
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행
 
+  useEffect(() => {
+    // !!!!!!!!!!!!!!!!!!!!!!!!
+    // 사용자 정보 가져오기
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch('/bn/user', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setUserInfo(data);
+          console.log('사용자 정보:', data);
+        } else {
+          console.error('사용자 정보 가져오기 실패');
+        }
+      } catch (error) {
+        console.error('사용자 정보 요청 중 오류 발생:', error);
+      }
+    };
 
+    fetchUserInfo();
+    // !!!!!!!!!!!!!!!!!!!!!!!!
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
 
- 
   //LOGOUT
   const handleLogoutClick = () => {
     if (window.confirm('로그아웃 하시겠습니까?')) {
@@ -900,7 +924,7 @@ function Calendar() {
         <UserModal
           isOpen={isUserModalOpen}
           onClose={() => setIsUserModalOpen(false)}
-          
+          userInfo={userInfo}
         />
       </div>
     </div>

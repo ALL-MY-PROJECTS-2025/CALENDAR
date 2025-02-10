@@ -88,6 +88,8 @@ public class SecurityConfig {
 
             auth.requestMatchers("/settings/month").hasRole("USER");
             auth.requestMatchers("/settings/get").hasRole("USER");
+
+            auth.requestMatchers("/user/password/check").hasRole("USER");
             auth.anyRequest().authenticated();
         });
 
