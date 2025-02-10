@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.modal-container {
+.userinfo-modal .modal-container {
   background-color: white;
   padding: 10px;
   border-radius: 8px;
@@ -21,7 +21,7 @@
   font-family:sans-serif;
 }
 
-.modal-header {
+.userinfo-modal .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,7 +29,7 @@
   min-height : 55px;
 }
 
-.modal-title {
+.userinfo-modal.modal-title {
   margin: 0;
   font-size: 1.2rem;
   color: white;
@@ -38,7 +38,7 @@
 
 }
 
-.close-button {
+.userinfo-modal.close-button {
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -54,15 +54,15 @@
   border-radius: 5px;
 }
 
-.modal-content {
+.userinfo-modal .modal-content {
   padding: 10px 0;
 }
 
-.input-group {
+.userinfo-modal .input-group {
   margin-bottom: 15px;
 }
 
-.form-label {
+.userinfo-modal .form-label {
   display: block;
   margin-bottom: 5px;
   color: #555;
@@ -72,7 +72,7 @@
 
 }
 
-.form-control {
+.userinfo-modal.form-control {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #ddd;
@@ -80,16 +80,16 @@
   font-size: 1rem;
 }
 
-.form-control::placeholder{
+.userinfo-modal .form-control::placeholder{
   font-size : .8rem;
 }
 
-.form-control:disabled {
+.userinfo-modal .form-control:disabled {
   background-color: #f5f5f5;
   cursor: not-allowed;
 }
 
-.button-group {
+.userinfo-modal .button-group {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -98,31 +98,63 @@
   font-size : .8rem;
 }
 
-.save-button:hover {
+.userinfo-modal .save-button:hover {
   background-color: #45a049 !important;
 }
 
-.cancel-button:hover {
+.userinfo-modal .cancel-button:hover {
   background-color: #da190b !important;
 }
 
-.password-section {
+.userinfo-modal .password-section {
   border-top: 1px solid #eee;
   padding-top: 20px;
+  position:relative;
+}
+.userinfo-modal .password-section .check-password-block{
+  display:flex !important;
+  justify-content: space-between !important;
+  gap : 25px;
+
+  position:relative;
+  width : 100%;
+  padding-bottom :15px;
 }
 
-.section-title {
+.userinfo-modal .password-section .check-password-block>input[type="password"]{
+  position:relative;;
+
+  left:0;
+  width : 240px;
+
+}
+.userinfo-modal .password-section .check-password-block>button{
+  position:absolute;
+  height :70%;
+  right:0;
+
+}
+
+
+.userinfo-modal .section-title {
   font-size: 1.2rem;
   color: #333;
   margin-bottom: 15px;
 }
 
-.invalid-feedback {
+.userinfo-modal .invalid-feedback {
   display: block;
   width: 100%;
   margin-top: 0.25rem;
-  font-size: 0.875em;
+  font-size: .7em;
   color: #dc3545;
+
+  position:absolute;
+  left:0;
+  bottom:-5px;
+  z-index : 100;
+  
+  text-align:left;
 }
 
 .is-invalid {

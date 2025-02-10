@@ -174,7 +174,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay userinfo-modal">
       <div className="modal-container">
         <div className="modal-header">
           <h2 className="modal-title">사용자 설정</h2>
@@ -223,9 +223,8 @@ function UserModal({ isOpen, onClose, userInfo }) {
               <h3 className="section-title">비밀번호 변경</h3>
               <div className="input-group mb-3">
                 <label className="form-label w-100">현재 비밀번호</label>
-                <div className="d-flex gap-2 check-password-block">
+                <div className="check-password-block">
                   <input
-
                     type="password"
                     className={`form-control ${errors.currentPassword ? 'is-invalid' : ''}`}
                     name="currentPassword"
@@ -244,10 +243,13 @@ function UserModal({ isOpen, onClose, userInfo }) {
                     확인
                   </button>
                 </div>
+                
                 {errors.currentPassword && (
                   <div className="invalid-feedback">{errors.currentPassword}</div>
                 )}
               </div>
+
+
               <div className="input-group mb-3">
                 <label className="form-label w-100">새 비밀번호</label>
                 <input
