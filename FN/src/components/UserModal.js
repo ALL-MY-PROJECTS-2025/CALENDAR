@@ -85,6 +85,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
           ...prev,
           currentPassword: ''
         }));
+        alert('패스워드 확인을 완료했습니다.')
       }
     } catch (error) {
       console.error('비밀번호 확인 중 오류 발생:', error);
