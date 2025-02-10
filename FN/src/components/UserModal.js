@@ -178,7 +178,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
       <div className="modal-container">
         <div className="modal-header">
           <h2 className="modal-title">사용자 설정</h2>
-          <button className="close-button" onClick={onClose}>
+          <button className="btn btn-secondary close-button" onClick={onClose}>
             <IoClose />
           </button>
         </div>
@@ -220,7 +220,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
 
             {/* 패스워드 변경 섹션 */}
             <div className="password-section mt-4">
-              <h3 className="section-title">비밀번호 변경</h3>
+              <h3 className="c">비밀번호 변경</h3>
               <div className="input-group mb-3">
                 <label className="form-label w-100">현재 비밀번호</label>
                 <div className="check-password-block">
@@ -262,7 +262,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
                   disabled={!passwordVerified}
                 />
                 {errors.newPassword && (
-                  <div className="invalid-feedback">{errors.newPassword}</div>
+                  <div className="new-password-invalid-feedback ">{errors.newPassword}</div>
                 )}
               </div>
               <div className="input-group mb-3">
@@ -277,7 +277,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
                   disabled={!passwordVerified}
                 />
                 {errors.confirmPassword && (
-                  <div className="invalid-feedback">{errors.confirmPassword}</div>
+                  <div className="new-password-invalid-feedback">{errors.confirmPassword}</div>
                 )}
               </div>
             </div>
