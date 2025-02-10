@@ -144,6 +144,8 @@ public class UserRestController {
             User user = userOptional.get();
             response.put("username",user.getUsername());
             response.put("role",user.getRole());
+            response.put("calendarApi",user.getCalendarApi());
+            response.put("calendarId",user.getCalendarId());
 
             return new ResponseEntity<>(response , HttpStatus.OK);
         }

@@ -23,4 +23,12 @@ public class User {
     //OAUTH2 CLIENT
     private String provider;
     private String providerId;
+
+    //GOOGLE CALENDER API /ID
+    private String calendarApi;
+    private String calendarId;
+
+
+
+
 }
