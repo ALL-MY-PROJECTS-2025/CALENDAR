@@ -1,426 +1,396 @@
 *{
     box-sizing: border-box;
 }
-.settingmodal{
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    bottom : 0 !important;
-    right : 0 !important;
-    margin : auto  !important;
-
-    width:  380px !important;
-    height: 100% !important;
-    background: transparent !important;
- 
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    pointer-events: auto !important;
-    z-index : 9999;
-    
-}
-
-.settingmodal.show {
-    width : 100%;
-    display: flex !important;
-    pointer-events: auto;
-}
-
-.settingmodal .modal-dialog {
-    position: relative !important;
-    width: 350px !important;
-    margin: 0 auto !important;
-    transform: none !important;
-    pointer-events: auto !important;
-    z-index: 10000 !important;
-}
-.settingmodal .modal-content{
-    position: relative !important;
-    width: 100% !important;
-    background: white !important;
-    border-radius: 4px !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-    z-index: 10001 !important;
-}
-.settingmodal .modal-header{
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 1rem !important;
-    background-color: #1E2B37 !important;
-    height: 55px !important;
-    border-top-left-radius: 4px !important;
-    border-top-right-radius: 4px !important;
-    z-index: 10002 !important;
-    
-}   
-.settingmodal .modal-header button{
-    position:absolute !important;
-    right:10px !important;
-    top:27px !important;
-  
-    margin :auto;
-    background-color: white;
-
-    
-}
-.settingmodal .modal-body{
-    position: relative !important;
-    padding: 1rem !important;
-    max-height: calc(100vh - 200px) !important;
-    overflow-y: auto !important;
-    font-family: sans-serif;
-}
-
-.settingmodal .modal-body .items{
-    padding : 5px;
-    width : 100%;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-}
-.settingmodal .modal-body .items::-webkit-scrollbar{
-    display:none;
-}
-
-.settingmodal .item {
-    position: relative !important;
-    width: 100% !important;
-}
-
-.settingmodal .modal-body .items .item{
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-    width : 100%;
-    height : 100%;
-    font-size : .9rem;
-    gap:5px;
-    border : 1px solid lightgray;
-    margin : 5px;
-    
-}
-.settingmodal .modal-body .items .item>div{
-    
-    width:100%;
-    height : 100%;
-}
-
-/* YYYY/MM 표시 스타일 */
-.settingmodal .modal-body .items .item.choose-yyyymm {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 5px;
-  padding: 2px;
-}
-
-.settingmodal .modal-body .items .item.choose-yyyymm .year-display,
-.settingmodal .modal-body .items .item.choose-yyyymm .month-display {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  
-}
-
-.settingmodal .modal-body .items .item.choose-yyyymm label {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 0;
-}
-
-.settingmodal .modal-body .items .item.choose-yyyymm input {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 5px;
-  cursor: default;
-}
-
-.settingmodal .modal-body .items .item.choose-yyyymm input:read-only {
-  background-color: #f8f9fa;
-}
-
-/* 레이아웃 선택 */
-.settingmodal .modal-body .items .item.choose-layout{
-    height : 100px !important;
-  
-}
-.settingmodal .modal-body .items .item.choose-layout:nth-child(2){
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    gap : 2px;
-    width : 100%;
-    height : 100px !important;
-  
-    
-}
-.settingmodal .modal-body .items .item.choose-layout .rowLayout{
-    width:100%;
-    height :  100px !important;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    gap:5px;
-    padding : 5px;
-
-}
-.settingmodal .modal-body .items .item.choose-layout .title{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    border-right : 1px solid lightgray;
-    border-radius: 0;
-}
-.settingmodal .modal-body .items .item.choose-layout .rowLayout .imageblock{
-    width:40%;
-    height:100%;
-    border:1px solid lightgray;
-    background-color: lightgray;
-    writing-mode:vertical-rl;
-    font-size : .8rem;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    border : 1px solid gray;
-}
-.settingmodal .modal-body .items .item.choose-layout .rowLayout .contentblock{
-    width:60%;
-    height:100%;
-    border:1px solid lightgray;
-    writing-mode:vertical-rl;
-    font-size : .8rem;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    border : 1px solid gray;
-}
 
 
-.settingmodal .modal-body .items .item.choose-layout .colLayout{
-    width:100%;
-    height :  100px !important;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap:5px;
-    padding : 5px;
-    
-
-}
-.settingmodal .modal-body .items .item.choose-layout .colLayout .imageblock{
-   
-    width:100%;
-    height:40%;
-    border : 1px solid gray;
-    background-color: lightgray;
-    font-size : .8rem;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    
-}
-
-.settingmodal .modal-body .items .item.choose-layout .colLayout .contentblock{
-    width:100%;
-    height:60%;
-    border : 1px solid gray;
-    font-size : .8rem;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.settingmodal .modal-body .items .item.choose-layout-radio{
-    width : 100%;
-    height : 100%;
-}
-.settingmodal .modal-body .items .item.choose-layout-radio .title{
-    height : 30px;
-    border-right : 1px solid lightgray;
-    
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0;
-
-}
-.settingmodal .modal-body .items .item.choose-layout-radio .rowLayout{
-    padding : 5px;
-    width : 100%;
-    height : 30px;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    border-right : 1px solid lightgray;
-    border-radius: 0;
-}
-.settingmodal .modal-body .items .item.choose-layout-radio .colLayout{
-    padding : 5px;
-    height : 30px;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-.settingmodal .modal-body .items .item.choose-layout-radio input{
-   
-}
-
-/* 이미지 배치 형태 */
-.settingmodal .modal-body .items .item.choose-image-array
-{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows :1fr 1fr;
-}
-.settingmodal .modal-body .items .item.choose-image-array .title{
-
-    border : 1px solid lightgray;
-    height : 200px;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0;
-    
-}
-.settingmodal .modal-body .items .item.choose-image-array .array-1{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    width:100%;
-    height:100%;
-    border : 1px solid lightgray;
-    padding : 5px;
-}
-.settingmodal .modal-body .items .item.choose-image-array .array-1>div{
-    border : 1px solid gray;
-    width : 100%;
-    height : 100px;
-    background-color:lightgray;
-}
-.settingmodal .modal-body .items .item.choose-image-array .array-2-row{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-   
-    gap : 2px;
-    padding : 5px;
-}
-.settingmodal .modal-body .items .item.choose-image-array .array-2-row>div{
-    width:100%;
-    height:100px;
-    border : 1px solid gray;
-    background-color:lightgray;
-    
-}
-.settingmodal .modal-body .items .item.choose-image-array .array-2-col{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    border : 1px solid lightgray;
-    gap : 2px;
-    flex-direction: column;
-    padding : 5px;
-    
-
-}
-.settingmodal .modal-body .items .item.choose-image-array .array-2-col>div{
-    width:100%;
-    height:50px;
-    border : 1px solid gray; 
-    background-color:lightgray;
-   
-}
-.settingmodal .modal-body .items .item.choose-image-array .array-4{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap : 2px;
-    padding : 5px;
-    border : 1px solid lightgray;
-
-
-}
-.settingmodal .modal-body .items .item.choose-image-array .array-4>div{
-    width : 100%;
-    height : 100%;
-    background-color :lightgray;
-    border : 1px solid gray;
-}
-
-
-.settingmodal .modal-body .items .item.choose-image-array div{
-    position:relative;
-}
-
-.settingmodal .modal-body .items .item.choose-image-array input[type="radio"]{
-    position:absolute;
-    left:0;
-    top:0;
-    right:0;
-    bottom:0;
-    width : 15px;
-
-    margin : auto;    
-    z-index:999;
-
-    
-}
-.settingmodal .modal-body .items .item.download{
-
-}
-.settingmodal .modal-body .items .item.download>.item{
-
-}
-.settingmodal .modal-body .items .item.download>.item>button{
-    width : 100%;
-    font-size : .8rem;
-
-}
-
-.settingmodal .modal-footer button{
-    font-size : .8rem;
-    background-color: #1E2B37;
-}
-
-/* 스크롤바 숨기기 */
-.settingmodal .modal-body::-webkit-scrollbar {
-    display: none !important;
-}
-
-/* 모달 닫기 버튼 */
-.settingmodal .btn-close {
-    position: absolute !important;
-    right: 1rem !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 10003 !important;
-}
-
-.modal-backdrop {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
-.settingmodal {
-  position: fixed;
-  top: 0;
-  left: 0;
+.settings-modal {
+  background-color: white;
+  border-radius: 0.25rem;
+  width: 400px;
+  max-width: 90%;
+  height : 95%;
+  overflow: hidden;
+
+  padding : 10px;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  position: relative;
+  
+}
+
+.modal-header {
+  background-color: #343a40;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height : 50px;
+}
+
+.modal-header h5 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 1rem;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
   width: 100%;
-  height: 100%;
-  z-index: 9999;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-footer {
+  
+  display: flex;
+  justify-content: end;
+  
+  gap: 0.5rem;
+  border-top: 1px solid #dee2e6;
+  padding : 10px 0 ;
+  margin : 10px 0;
+  border-top : 1px solid gray;
+}
+
+.save-button,
+.cancel-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* iOS 터치 이벤트 최적화 */
+@supports (-webkit-touch-callout: none) {
+  .settings-modal {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* 버튼 호버 효과 */
+.save-button:hover,
+.cancel-button:hover {
+  opacity: 0.9;
+}
+
+/* 버튼 활성화 효과 */
+.save-button:active,
+.cancel-button:active {
+  transform: translateY(1px);
+}
+
+.setting-modal-body{
+  padding : 1px;
+}
+
+
+.item.choose-yyyymm{
+  display: flex;
+  gap: 0.5rem;
+  
+}
+
+
+
+
+.year-display,
+.month-display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.year-display input,
+.month-display input {
+  
+  border: 1px solid #ced4da;
+  font-size: .8rem;
+  text-align: center;
+  padding: .5rem;
+  
+}
+
+/* 레이아웃 선택 영역 */          
+.choose-layout {
+  font-size : .8rem;
+  display:flex;
+  justify-content: space-between;
+  gap : 5px;
+  border : 1px solid;
+  padding : 5px;
+  margin-top : 10px;
+}
+.choose-layout>.title{
+  min-width : 100px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.choose-layout>.rowLayout,
+.choose-layout>.colLayout
+{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height:100px;
+  padding : 5px;
+  border : 1px solid;
+  width : 100%;
+}
+.choose-layout>.colLayout{
+  flex-direction: column;
+  
+}
+.choose-layout>.rowLayout>*,
+.choose-layout>.colLayout>*
+{
+  width : 100%;
+  height : 100%;
+}
+
+.choose-layout>.rowLayout>.contentblock{
+  background-color: white;;
+}
+
+
+/*  */
+
+/* 레이아웃 선택 영역 */          
+
+
+.choose-layout-radio {
+  font-size : .8rem;
+  display:flex;
+  justify-content: space-between;
+  gap : 5px;
+}
+.choose-layout-radio>.title{
+  min-width : 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.choose-layout-radio>.rowLayout,
+.choose-layout-radio>.colLayout
+{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding : 5px;
+ 
+  width : 100%;
+}
+
+
+.image-title>.title{
+  margin : 10px 0;
+  border : 1px solid;
+}
+
+/*  */
+
+
+
+.rowLayout,
+.colLayout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.imageblock,
+.contentblock {
+  border: 1px solid #6c757d;
+  background-color: #f8f9fa;
+  font-size: 0.875rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.choose-layout-radio {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+/* 이미지 배치 선택 영역 */ 
+/*  */
+
+.choose-image-array {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2rem;
+  border : 1px solid;
+}
+
+
+.array-1,
+.array-2-row,
+.array-2-col,
+.array-4 {
+  
+  position:relative;
+  width:100%;
+  height:100px;
+  border : 1px solid;
+  
+}
+
+.choose-image-array input[type="radio"]{
+  position:absolute;
+  left:0;
+  bottom:10px;
+}
+
+.array-1 div,
+.array-2-row div,
+.array-2-col div,
+.array-4 div {
+  width: 100%;
+  height : 100%;
+  background-color: #f8f9fa;
+  border: 1px solid #6c757d;
+ 
+}
+.array-1{
+  padding : 5px;
+}
+.array-2-row{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  gap:5px;
+  padding : 5px;
+}
+.array-2-col{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  gap:5px;
+  padding : 5px;
+}
+.array-4{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  padding : 5px;
+  gap:5px;
+}
+
+
+.download-title {
+  margin : 10px 0;
+  border : 1px solid;
+}
+.download {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+
+.download-btn-block{
+  display:flex;
+  justify-content: space-between;
+  gap:10px;
+}
+.download-btn-block>.item{
+  width : 100%;
+  height : 100%;
+}
+.download-btn-block button{
+  width : 100%;
+  outline : 0;
+  border : 0;
+  height : 35px;
+  color : white;
+  background-color: black;
+  
+}
+
+
+
+.apply-button {
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+ 
+  cursor: pointer;
+}
+
+/* iOS 터치 이벤트 최적화 */
+@supports (-webkit-touch-callout: none) {
+  .settings-modal {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* 버튼 호버 효과 */
+.download-button:hover,
+.apply-button:hover {
+  opacity: 0.9;
+}
+
+/* 버튼 활성화 효과 */
+.download-button:active,
+.apply-button:active {
+  transform: translateY(1px);
 }

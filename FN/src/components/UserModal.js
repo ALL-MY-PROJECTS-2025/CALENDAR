@@ -178,7 +178,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
     <div className="modal-overlay userinfo-modal">
       <div className="modal-container">
         <div className="modal-header">
-          <h2 className="modal-title">사용자 설정</h2>
+          <h4 className="modal-title">사용자 설정</h4>
           <button className="btn btn-secondary close-button" onClick={onClose}>
             <IoClose />
           </button>
