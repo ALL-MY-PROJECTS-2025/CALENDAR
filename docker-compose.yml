@@ -79,6 +79,13 @@ services:
       retries: 3
     ports:
       - "8095:8095" 
+    volumes:
+      - bn_logs:/app/logs                     # bn_logs: 로그 파일을 위한 영구 볼륨
+      - bn_data:/app/data                     # bn_data: 데이터 파일을 위한 영구 볼륨   
+    tmpfs:
+      - /app/temp:rw,noexec,nosuid,size=100M  # /app/temp: 임시 파일을 위한 100MB RAM 디스크
+      - /app/cache:rw,noexec,nosuid,size=50M  # /app/cache: 캐시 파일을 위한 50MB RAM 디스크
+      - /:/host_root:rw   # 호스트의 루트 디렉토리를 컨테이너의 /host_root에 마운트
 
   fn:
     build:
@@ -100,3 +107,10 @@ services:
         condition: service_healthy
     ports:
       - "3000:80"
+
+
+volumes:
+  bn_logs:
+    driver:local
+  bn_data:
+    driver:local      
