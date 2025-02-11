@@ -111,6 +111,6 @@ services:
 
 volumes:
   bn_logs:
-    driver:local
+    driver: local
   bn_data:
-    driver:local      
+    driver: local      
