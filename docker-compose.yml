@@ -35,6 +35,7 @@ services:
       MYSQL_DATABASE: bookdb
       MYSQL_USER: dbonn
       MYSQL_PASSWORD: Zhfldk11!
+      MYSQL_ROOT_HOST: '%'  # 모든 호스트에서의 접근 허용
 
   redis:
     build:
@@ -64,8 +65,10 @@ services:
       resources:
         limits:
           memory: 512M
+          cpus: '2'  # CPU 제한 추가
         reservations:
           memory: 256M
+          cpus: '1'  # 최소 CPU 보장
     networks:
       my-custom-network:
         ipv4_address: 192.168.1.40
@@ -77,15 +80,22 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+      start_period: 40s  # 초기 시작 대기 시간
     ports:
-      - "8095:8095" 
+      - "8095:8095"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql8-container:3306/bookdb?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: dbonn
+      SPRING_DATASOURCE_PASSWORD: Zhfldk11!
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
     volumes:
-      - bn_logs:/app/logs                     # bn_logs: 로그 파일을 위한 영구 볼륨
-      - bn_data:/app/data                     # bn_data: 데이터 파일을 위한 영구 볼륨   
+      - bn_logs:/app/logs
+      - bn_data:/app/data
+      - /:/host_root:ro  # 호스트 루트를 읽기 전용으로 마운트
     tmpfs:
-      - /app/temp:rw,noexec,nosuid,size=100M  # /app/temp: 임시 파일을 위한 100MB RAM 디스크
-      - /app/cache:rw,noexec,nosuid,size=50M  # /app/cache: 캐시 파일을 위한 50MB RAM 디스크
-      - /:/host_root:rw   # 호스트의 루트 디렉토리를 컨테이너의 /host_root에 마운트
+      - /app/temp:rw,noexec,nosuid,size=100M
+      - /app/cache:rw,noexec,nosuid,size=50M
 
   fn:
     build:
@@ -97,8 +107,10 @@ services:
       resources:
         limits:
           memory: 256M
+          cpus: '1'
         reservations:
           memory: 128M
+          cpus: '0.5'
     networks:
       my-custom-network:
         ipv4_address: 192.168.1.10
@@ -107,7 +119,9 @@ services:
         condition: service_healthy
     ports:
       - "3000:80"
-
+    environment:
+      NODE_ENV: production
+      REACT_APP_API_URL: /bn  # nginx가 프록시할 경로
 
 volumes:
   bn_logs:
