@@ -288,6 +288,7 @@ const UploadModal = ({ onClose, ...props }) => {
                 accept="image/*"
                 style={{ display: "none" }}
                 id="file-input"
+                multiple
               />
               <button className="btn btn-success" onClick={() => document.getElementById("file-input").click()}> 
                 파일올리기
