@@ -157,7 +157,7 @@ const SettingsModal = ({
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="settings-modal-overlay modal-overlay">
       <div className="settings-modal">
         <div className="modal-header">
           <h5>환경설정</h5>
