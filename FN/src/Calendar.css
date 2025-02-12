@@ -886,6 +886,11 @@ body {
   animation: pulse 2s infinite;
 }
 
+/* 모바일 CONTROLLER 숨김 */
+.mobile-controller{
+  display:none;
+}
+
 /* 모바일 반응형 스크롤 설정 */
 @media screen and (max-width: 767px) {
   /* 기존 모바일 스타일 유지 */
@@ -896,7 +901,9 @@ body {
     min-height: 100vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    
   }
+
 
   .calendar-container {
     height: auto;
@@ -1036,29 +1043,157 @@ body {
 
 /* 작은 모바일 화면 대응 */
 @media screen and (max-width: 480px) {
-  .calendar-container {
-    padding-bottom: 30px;
+  *{
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .App{
+    width:100%;
+    height : 100%;
+    margin : 0 auto !important;
+    padding : 0 !important;
+   
   }
 
-  .fc-view-harness.fc-view-harness-active {
-    min-height: 400px;
+  /* 이미지블럭 */
+  .photo-frame{
+    width : 100% !important;
+    height : calc(100vh - 100px) !important;
+    border : 1px solid lightgray!important;
+    padding : 5px !important;
+    position:absolute;
+    left:0;
+    top:0;
+    border-radius: 0;
+    display:block !important;
+    
+  }
+  .photo-frame .item{
+    width :100%;
+    height : 100%;
+  }
+  .photo-frame .item img{
+    width : 100%;
+    height : 100%;
+    object-fit: cover;
+
+  }
+  .App::-webkit-scrollbar{
+    display:none;
   }
 
-  /* 더 작은 모바일 화면 대응 */
-  .fc-header-toolbar.fc-toolbar {
-    gap: 2px;
-    padding: 0 2px;
+  .postcard-container .mobile-controller{
+    position:fixed;
+    left:0;
+    bottom:0;
+    width : 100%;
+    height : 100px;
+   
+    display:block;
+    z-index : 888 !important;
+    
+  }
+  .postcard-container .mobile-controller>.btn-group-header{
+    width : 100%;
+    height : 30%;
+    
+    position:relative;
+    z-index: -1;
+    ;
+  }
+  .postcard-container .mobile-controller>.btn-group-body{
+    
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: orange;
+    height : 70%;
+    z-index : 555 !important;
+    
   }
 
-  .fc-toolbar-title {
-    font-size: 0.8rem !important;
+  .postcard-container .mobile-controller>.btn-group-body>button{
+    border : 1px solid;
+    width : 50px;
+    height : 50px;
+    z-index : 888 !important;
+  }
+  .postcard-container .controller{
+    
   }
 
-  .fc-button-group button,
-  .fc-today-button {
-    padding: 2px 4px !important;
-    font-size: 0.6rem !important;
+  .postcard-container>.calendar-header{
+    position:fixed;
+    border : 1px solid gray;
+    left:0;
+    bottom:70px;
+    width : 100%;
+    height : 30px;
+    min-height: 30px;
+    
   }
+
+  /* 캘린더 */
+  .postcard-container .calendar-container {
+    position:fixed !important;
+    left:0 !important;
+    top:0 !important;
+    width:100% !important;
+    min-height:calc(100vh - 100px);
+    max-height:calc(100vh - 100px);
+    display:none;
+    padding : 10px;
+    background-color: #FF6B6B;
+
+  }
+
+  /* 좌우버튼 */
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3){
+    position:fixed !important;
+    left:0 !important;
+    right:0;
+    bottom:50px !important;
+    margin: auto;;
+    
+    /* border : 1px solid !important; */
+    /* background-color: black !important; */
+    width : 100px !important;
+    height : 80px;
+    z-index : 9999;
+    
+  }
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>.fc-button-group{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap : 10px;
+    margin :0;
+    padding : 0;
+  }
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>.fc-button-group button{
+    width : 100%;
+    height : 100%;
+    margin : 0;
+    padding : 0;
+  }
+
+  /* 투데이버튼 */
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>button{
+    position:fixed !important;
+    top:15px;
+    right:10px;
+    
+    height : 30px !important ;
+    height: 35px;
+   
+  }
+
+  /*  */
+  .postcard-container .controller>button{
+    display:none;
+    
+  } 
+
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {

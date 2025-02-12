@@ -46,31 +46,31 @@ function Calendar() {
 
   const navigate = useNavigate();
 
-  // 인증여부 확인
-  const [isAuthenticated, setIsAuthenticated] = useState('');
-  const [isLoading, setIsLoading] = useState('');
-  useEffect(() => {
-    const validateAuth = async () => {
-      try {
-        const response = await axios.get('/bn/validate', {
-          withCredentials: true
-        });
-        
-        if (response.data === 'authenticated') {
-          setIsAuthenticated(true);
-        } else {
-          navigate('/login');
-        }
-      } catch (error) {
-        console.error('인증 확인 중 오류 발생:', error);
-        navigate('/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    validateAuth();
-  }, [navigate]);
-  
+  // // 인증여부 확인
+  // const [isAuthenticated, setIsAuthenticated] = useState('');
+  // const [isLoading, setIsLoading] = useState('');
+  // useEffect(() => {
+  //   const validateAuth = async () => {
+  //     try {
+  //       const response = await axios.get('/bn/validate', {
+  //         withCredentials: true
+  //       });
+
+  //       if (response.data === 'authenticated') {
+  //         setIsAuthenticated(true);
+  //       } else {
+  //         navigate('/login');
+  //       }
+  //     } catch (error) {
+  //       console.error('인증 확인 중 오류 발생:', error);
+  //       navigate('/login');
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   validateAuth();
+  // }, [navigate]);
+
 
 
   // Bootstrap 모달 초기화 및 제어
@@ -505,7 +505,7 @@ function Calendar() {
           method: 'GET',
           credentials: 'include',
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           setUserInfo(data);
@@ -557,11 +557,10 @@ function Calendar() {
                       style={{ objectFit: "cover" }}
                     />
 
-{/* 
+                    {/* 
                     <video autoPlay muted loop>
                       <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
                     </video> */}
-
 
                   </div>
                 </SwiperSlide>
@@ -575,7 +574,7 @@ function Calendar() {
                     className="month-image default-image"
                   />
 
-{/* 
+                  {/* 
                   <video autoPlay muted loop>
                     <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
                   </video> */}
@@ -597,7 +596,7 @@ function Calendar() {
                     className="month-image"
                   />
 
-{/* 
+                  {/* 
                   <video autoPlay muted loop>
                     <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
                   </video>
@@ -614,7 +613,7 @@ function Calendar() {
                     className="month-image default-image"
                   />
 
-{/* 
+                  {/* 
                   <video autoPlay muted loop>
                     <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_00.mp4" />
                   </video> */}
@@ -634,6 +633,33 @@ function Calendar() {
         </div>
 
         <div className="controller">
+          {/* 모바일 전용 컨트롤러 */}
+          <div className="mobile-controller">
+            <div className="btn-group-header">
+              
+            </div>
+            <div className="btn-group-body">
+              <button onClick={handleRefresh}>
+                <span className="material-symbols-outlined">refresh</span>
+              </button>
+              <button onClick={handleLocationClick}>
+                <span className="material-symbols-outlined">location_on</span>
+              </button>
+              <button onClick={handleUploadClick}>
+                <span className="material-symbols-outlined">upload</span>
+              </button>
+              <button onClick={() => setIsUserModalOpen(true)}>
+                <span className="material-symbols-outlined">person</span>
+              </button>
+              <button  onClick={handleLogoutClick}>
+                <span className="material-symbols-outlined">logout</span>
+              </button>
+              <button onClick={handleSettingsClick}>
+                <span className="material-symbols-outlined">settings</span>
+              </button>
+            </div>
+          </div>
+
           <button onClick={handleRefresh}>
             <span className="material-symbols-outlined refresh">refresh</span>
           </button>
@@ -843,7 +869,7 @@ function Calendar() {
                       src={`${process.env.PUBLIC_URL}/modal_1.png`}
                       alt="Example"
                     />
-{/* 
+                    {/* 
                     <video autoPlay muted loop>
                       <source src="https://mcard.fromtoday.co.kr/mcard/assets/flower_01.mp4" />
                     </video>
