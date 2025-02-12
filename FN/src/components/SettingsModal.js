@@ -165,7 +165,7 @@ const SettingsModal = ({
         </div>
         <div className="setting-modal-body">
           <form>
-            <div className="items">
+            <div className="">
               
               <div className="item choose-yyyymm">
                 <div className="year-display">

@@ -20,7 +20,7 @@
   border-radius: 0.25rem;
   width: 400px;
   max-width: 90%;
-  height : 95%;
+  height : auto;
   overflow: hidden;
 
   padding : 10px;
@@ -164,15 +164,17 @@
   display:flex;
   justify-content: space-between;
   gap : 5px;
-  border : 1px solid;
+  border : 1px solid lightgray;
   padding : 5px;
   margin-top : 10px;
+  margin-bottom:5px;
 }
 .settings-modal-overlay .choose-layout>.title{
   min-width : 100px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border : 1px solid lightgray;
 }
 .settings-modal-overlay .choose-layout>.rowLayout,
 .settings-modal-overlay .choose-layout>.colLayout
@@ -182,24 +184,38 @@
   align-items: center;
   height:100px;
   padding : 5px;
-  border : 1px solid;
+  border : 1px solid lightgray;
   width : 100%;
+  
 }
 .settings-modal-overlay .choose-layout>.colLayout{
   flex-direction: column;
   
 }
+
+
 .settings-modal-overlay .choose-layout>.rowLayout>*,
 .settings-modal-overlay .choose-layout>.colLayout>*
 {
   width : 100%;
   height : 100%;
+  color:gray;
+  font-size : .7rem;
 }
-
+.settings-modal-overlay .choose-layout>.rowLayout>.imageblock{
+  background-color: lightgray;
+}
 .settings-modal-overlay .choose-layout>.rowLayout>.contentblock{
   background-color: white;;
+  border : 1px solid lightgray;
 }
-
+.settings-modal-overlay .choose-layout>.colLayout>.imageblock{
+  background-color: lightgray;
+}
+.settings-modal-overlay .choose-layout>.colLayout>.contentblock{
+  background-color: white;;
+  border : 1px solid lightgray;
+}
 
 /*  */
 
@@ -211,6 +227,7 @@
   display:flex;
   justify-content: space-between;
   gap : 5px;
+  border : 1px solid lightgray;
 }
 .settings-modal-overlay .choose-layout-radio>.title{
   min-width : 100px;
@@ -232,12 +249,12 @@
 
 .settings-modal-overlay .image-title>.title{
   margin : 10px 0;
-  border : 1px solid;
+  border : 1px solid lightgray;
+  padding : 5px 0;
+  font-size : .9rem;
 }
 
-/*  */
-
-
+/* */
 
 .settings-modal-overlay .rowLayout,
 .settings-modal-overlay .colLayout {
@@ -274,7 +291,7 @@
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: 2rem;
-  border : 1px solid;
+  
 }
 
 
@@ -286,14 +303,18 @@
   position:relative;
   width:100%;
   height:100px;
-  border : 1px solid;
+  border : 1px solid gray;
   
 }
 
 .settings-modal-overlay .choose-image-array input[type="radio"]{
   position:absolute;
   left:0;
-  bottom:10px;
+  right:0;
+  top:0;
+  bottom:0px;
+  margin : auto;
+  width:15px;
 }
 
 .settings-modal-overlay .array-1 div,
@@ -302,8 +323,8 @@
 .settings-modal-overlay .array-4 div {
   width: 100%;
   height : 100%;
-  background-color: #f8f9fa;
-  border: 1px solid #6c757d;
+  background-color: lightgray;
+  border: 1px solid lightgray;
  
 }
 .settings-modal-overlay .array-1{
@@ -334,7 +355,10 @@
 
 .settings-modal-overlay .download-title {
   margin : 10px 0;
-  border : 1px solid;
+  border : 1px solid lightgray  ;
+  font-size : .9rem;
+  padding : 5px 0;
+
 }
 .settings-modal-overlay .download {
   display: flex;
