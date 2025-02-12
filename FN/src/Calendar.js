@@ -46,30 +46,30 @@ function Calendar() {
 
   const navigate = useNavigate();
 
-  // // 인증여부 확인
-  // const [isAuthenticated, setIsAuthenticated] = useState('');
-  // const [isLoading, setIsLoading] = useState('');
-  // useEffect(() => {
-  //   const validateAuth = async () => {
-  //     try {
-  //       const response = await axios.get('/bn/validate', {
-  //         withCredentials: true
-  //       });
+  // 인증여부 확인
+  const [isAuthenticated, setIsAuthenticated] = useState('');
+  const [isLoading, setIsLoading] = useState('');
+  useEffect(() => {
+    const validateAuth = async () => {
+      try {
+        const response = await axios.get('/bn/validate', {
+          withCredentials: true
+        });
         
-  //       if (response.data === 'authenticated') {
-  //         setIsAuthenticated(true);
-  //       } else {
-  //         navigate('/login');
-  //       }
-  //     } catch (error) {
-  //       console.error('인증 확인 중 오류 발생:', error);
-  //       navigate('/login');
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   validateAuth();
-  // }, [navigate]);
+        if (response.data === 'authenticated') {
+          setIsAuthenticated(true);
+        } else {
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('인증 확인 중 오류 발생:', error);
+        navigate('/login');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    validateAuth();
+  }, [navigate]);
   
 
 
