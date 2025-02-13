@@ -1091,32 +1091,38 @@ body {
    
     display:block;
     z-index : 888 !important;
+    border-radius: 0;
     
   }
-  .postcard-container .mobile-controller>.btn-group-header{
+  /* .postcard-container .mobile-controller>.btn-group-header{
     width : 100%;
     height : 30%;
     
     position:relative;
     z-index: -1;
     ;
-  }
+  } */
   .postcard-container .mobile-controller>.btn-group-body{
     
     display:flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    background-color: orange;
-    height : 70%;
+    /* background-color: orange; */
+    background-color: white;
+    height : 100%;
     z-index : 555 !important;
+    padding : 0 10px;
+    border-radius: 0;
     
   }
 
   .postcard-container .mobile-controller>.btn-group-body>button{
-    border : 1px solid;
+    border : 1px solid lightgray;
     width : 50px;
     height : 50px;
     z-index : 888 !important;
+   
+    
   }
   .postcard-container .controller{
     
@@ -1130,62 +1136,153 @@ body {
     width : 100%;
     height : 30px;
     min-height: 30px;
-    
   }
 
   /* 캘린더 */
   .postcard-container .calendar-container {
-    position:fixed !important;
-    left:0 !important;
-    top:0 !important;
-    width:100% !important;
-    min-height:calc(100vh - 100px);
-    max-height:calc(100vh - 100px);
-    display:none;
-    padding : 10px;
-    background-color: #FF6B6B;
-
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: calc(100vh - 100px) !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    padding: 10px;
+    background-color: white;
   }
 
-  /* 좌우버튼 */
-  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3){
-    position:fixed !important;
-    left:0 !important;
+  /* FullCalendar 전체 컨테이너 */
+  .fc.fc-media-screen {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  
+  /* 헤더 툴바 */
+  .fc-header-toolbar {
+    flex-shrink: 0;
+    margin-bottom: 10px !important;
+    padding: 0 5px !important;
+  }
+  .fc-toolbar-title{
+  
+    margin : 0 auto;
+    position:absolute;
+    width :100%;
+    height : 100% !important;
+    line-height: 30px;
+    left:0;
     right:0;
-    bottom:50px !important;
-    margin: auto;;
+    top:0;
+    margin : auto;
+    display:block;
+    font-size :2rem;
+    z-index : -1;
     
-    /* border : 1px solid !important; */
-    /* background-color: black !important; */
-    width : 100px !important;
-    height : 80px;
-    z-index : 9999;
-    
-  }
-  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>.fc-button-group{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    gap : 10px;
-    margin :0;
-    padding : 0;
-  }
-  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>.fc-button-group button{
-    width : 100%;
-    height : 100%;
-    margin : 0;
-    padding : 0;
   }
 
-  /* 투데이버튼 */
-  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>button{
-    position:fixed !important;
-    top:15px;
-    right:10px;
-    
-    height : 30px !important ;
-    height: 35px;
-   
+  /* 캘린더 뷰 컨테이너 */
+  .fc-view-harness {
+    flex: 1 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  /* 스크롤 방지 */
+  .fc-scroller {
+    height: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* 테이블 크기 조정 */
+  .fc-scrollgrid,
+  .fc-scrollgrid-sync-table {
+    height: 100% !important;
+  }
+
+  /* 날짜 셀 크기 자동 조정 */
+  .fc-daygrid-body {
+    height: 100% !important;
+  }
+
+  .fc-daygrid-body-balanced {
+    height: auto !important;
+  }
+
+  /* 날짜 셀 내부 여백 및 크기 조정 */
+  .fc-daygrid-day-frame {
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+
+  /* 날짜 숫자 크기 조정 */
+  .fc-daygrid-day-number {
+    font-size: 0.9rem !important;
+    padding: 2px !important;
+  }
+
+  /* 이벤트 텍스트 크기 조정 */
+  .fc-event-title {
+    font-size: 0.8rem !important;
+  }
+
+  /* 스크롤바 숨기기 */
+  .fc-scroller::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* 좌우 버튼 위치 조정 */
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3) {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 90px !important;
+    margin: auto !important;
+    width: 100px !important;
+    height: 80px !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  /* 월주일 버튼 크룹 스타일링 */
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(1)>.fc-button-group{
+    height : 100%;
+  }
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(1)>.fc-button-group button{
+    height : 35px;
+    width : 25px;
+  }
+  /* 버튼 그룹 스타일링 */
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>.fc-button-group {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 버튼 크기 조정 */
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>.fc-button-group button {
+    width: 40px !important;
+    height: 40px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Today 버튼 위치 조정 */
+  .postcard-container .calendar-container .fc-header-toolbar>.fc-toolbar-chunk:nth-child(3)>button {
+    position: fixed !important;
+    top: 15px !important;
+    right: 10px !important;
+    height: 30px !important;
+    font-size: 0.8rem !important;
   }
 
   /*  */
@@ -1193,6 +1290,16 @@ body {
     display:none;
     
   } 
+
+  .mobile-controller .sitemenu-button{
+    position:relative;
+  }
+  .mobile-controller .sitemenu-button>.menu-container{
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+  }
 
 }
 
@@ -1427,5 +1534,102 @@ body {
   .fc-header-toolbar.fc-toolbar .fc-button {
     padding: 0.2em 0.4em !important;
     font-size: 0.75rem !important;
+  }
+}
+
+.mobile-controller .sitemenu-button {
+  position: relative;
+}
+
+.mobile-controller .sitemenu-button .menu-container {
+  width: 100%;
+  height:0px;
+  position: fixed;
+  left:0;
+  top:calc(100% - 170px);
+  border :1px solid lightgray;
+  
+  padding: 10px;
+  display: none;
+  transition: .5s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background-color: white;;
+ 
+}
+
+.mobile-controller .sitemenu-button .menu-container.open {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;;
+  gap: 10px;
+  height : 70px;
+  transition:1s;
+}
+
+.mobile-controller .sitemenu-button .menu-container button {
+  width: 50px;
+  border : 1px solid lightgray;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.2s;
+  border-radius: 3px;
+}
+
+.mobile-controller .sitemenu-button .menu-container button:hover {
+  background-color: #f5f5f5;
+}
+
+.calendar-album-toggle-btn {
+  position: relative;
+}
+
+.calendar-album-toggle-btn .material-symbols-outlined {
+  transition: transform 0.3s ease;
+}
+
+.calendar-album-toggle-btn:hover .material-symbols-outlined {
+  transform: scale(1.1);
+}
+
+/* 모바일에서 캘린더/앨범 전환 시 애니메이션 */
+.photo-frame, .calendar-container {
+  transition: opacity 0.3s ease;
+}
+
+/* 기본 레이아웃 (480px 초과) */
+.photo-frame, .calendar-container {
+  display: block !important;
+}
+
+/* 작은 모바일 화면에서만 view 모드 전환 적용 */
+@media screen and (max-width: 480px) {
+  .photo-frame, .calendar-container {
+    display: none !important;  /* 기본값 */
+  }
+
+  .photo-frame[style*="display: block"],
+  .calendar-container[style*="display: block"] {
+    display: block !important;
+    opacity: 1;
+  }
+
+  .photo-frame[style*="display: none"],
+  .calendar-container[style*="display: none"] {
+    display: none !important;
+    opacity: 0;
+  }
+
+  /* 모바일 전용 토글 버튼 */
+  .calendar-album-toggle-btn {
+    display: block;
+  }
+}
+
+/* 480px 초과 화면에서는 토글 버튼 숨김 */
+@media screen and (min-width: 481px) {
+  .calendar-album-toggle-btn {
+    display: none;
   }
 }

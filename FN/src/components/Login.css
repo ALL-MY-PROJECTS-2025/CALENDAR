@@ -4,8 +4,6 @@
   
   
   
-  
-  
 }
 
 .login-background{
@@ -265,9 +263,6 @@
 
 /* 더 작은 모바일 디바이스를 위한 미디어 쿼리 */
 @media screen and (max-width: 380px) {
-
-
-
   .login-form{
     height : auto;
     width : 80%;
@@ -281,5 +276,12 @@
     max-height:400px;
     min-height:400px;
     height:100%;
+
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    margin:auto;
   }
 } 

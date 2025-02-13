@@ -42,7 +42,7 @@ function Calendar() {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [userInfo, setUserInfo] = useState(null);  // 새로운 상태 추가
 
-
+  const [isSitemenuOpen, setIsSitemenuOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -155,6 +155,9 @@ function Calendar() {
   });
 
   const [holidays, setHolidays] = useState([]);
+
+  // 새로운 상태 추가
+  const [viewMode, setViewMode] = useState('album'); // 'album' 또는 'calendar'
 
   //----------------------------
   // DATA FETCHING AND SETTINGS MANAGEMENT
@@ -527,12 +530,46 @@ function Calendar() {
       navigate('/logout');
     }
   }
+
+
+  const sitemenuHandler = () => {
+    setIsSitemenuOpen(!isSitemenuOpen); // 토글 상태 변경
+  }
+
+  // 토글 핸들러 추가
+  const handleViewModeToggle = async () => {
+    const newMode = viewMode === 'album' ? 'calendar' : 'album';
+    setViewMode(newMode);
+    
+    // try {
+    //   // 서버에 상태 저장
+    //   await api.post('/settings/viewMode', { mode: newMode });
+    // } catch (error) {
+    //   console.error('뷰 모드 저장 실패:', error);
+    // }
+  };
+
+  // 컴포넌트 마운트 시 저장된 뷰 모드 가져오기
+  useEffect(() => {
+    const fetchViewMode = async () => {
+      try {
+        const response = await api.get('/settings/viewMode');
+        setViewMode(response.data.mode || 'album');
+      } catch (error) {
+        console.error('뷰 모드 가져오기 실패:', error);
+      }
+    };
+    
+    fetchViewMode();
+  }, []);
+
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
         }`}
     >
-      <div className={`photo-frame ${getPhotoFrameLayoutClass(selectedSettings.imageArray)}`}>
+      <div className={`photo-frame ${getPhotoFrameLayoutClass(selectedSettings.imageArray)}`}
+           style={{ display: window.innerWidth <= 480 ? (viewMode === 'album' ? 'block' : 'none') : 'block' }}>
         {selectedSettings.imageArray === "1" ? (
           // Swiper로 단일 이미지 슬라이드 구현
           <Swiper
@@ -635,27 +672,37 @@ function Calendar() {
         <div className="controller">
           {/* 모바일 전용 컨트롤러 */}
           <div className="mobile-controller">
-            <div className="btn-group-header">
-              
-            </div>
+           
+            {/* <div className="btn-group-header">
+
+            </div> */}
+
             <div className="btn-group-body">
-              <button onClick={handleRefresh}>
-                <span className="material-symbols-outlined">refresh</span>
-              </button>
-              <button onClick={handleLocationClick}>
-                <span className="material-symbols-outlined">location_on</span>
-              </button>
-              <button onClick={handleUploadClick}>
-                <span className="material-symbols-outlined">upload</span>
-              </button>
-              <button onClick={() => setIsUserModalOpen(true)}>
-                <span className="material-symbols-outlined">person</span>
-              </button>
-              <button  onClick={handleLogoutClick}>
-                <span className="material-symbols-outlined">logout</span>
-              </button>
-              <button onClick={handleSettingsClick}>
-                <span className="material-symbols-outlined">settings</span>
+              {window.innerWidth <= 480 && (
+                <button onClick={handleViewModeToggle} className="calendar-album-toggle-btn">
+                  <span className="material-symbols-outlined">
+                    {viewMode === 'album' ? 'calendar_month' : 'image'}
+                  </span>
+                </button>
+              )}
+
+              <button onClick={sitemenuHandler} className="sitemenu-button">
+                <span className="material-symbols-outlined">menu</span>
+
+                <div className={`menu-container ${isSitemenuOpen ? 'open' : ''}`}>
+                  <button onClick={handleLocationClick}>
+                    <span className="material-symbols-outlined">location_on</span>
+                  </button>
+                  <button onClick={handleUploadClick}>
+                    <span className="material-symbols-outlined">upload</span>
+                  </button>
+                  <button onClick={() => setIsUserModalOpen(true)}>
+                    <span className="material-symbols-outlined">person</span>
+                  </button>
+                  <button onClick={handleLogoutClick}>
+                    <span className="material-symbols-outlined">logout</span>
+                  </button>
+                </div>
               </button>
             </div>
           </div>
@@ -691,7 +738,8 @@ function Calendar() {
           </button>
         </div>
 
-        <div className="calendar-container" style={{}}>
+        <div className="calendar-container" 
+             style={{ display: window.innerWidth <= 480 ? (viewMode === 'calendar' ? 'block' : 'none') : 'block' }}>
           <FullCalendar
             ref={calendarRef}
             plugins={[
