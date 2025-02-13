@@ -46,7 +46,9 @@ function Calendar() {
 
   const navigate = useNavigate();
 
-  // // 인증여부 확인
+  //----------------------------------------------
+  // 인증여부 확인
+  //----------------------------------------------
   const [isAuthenticated, setIsAuthenticated] = useState('');
   const [isLoading, setIsLoading] = useState('');
   useEffect(() => {
@@ -701,6 +703,9 @@ function Calendar() {
                   </button>
                   <button onClick={handleLogoutClick}>
                     <span className="material-symbols-outlined">logout</span>
+                  </button>
+                  <button onClick={handleSettingsClick}>
+                    <span className="material-symbols-outlined">settings</span>
                   </button>
                 </div>
               </button>

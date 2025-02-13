@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "./css/UploadModal.css";
 import api from '../api/apiConfig';
 
 const UploadModal = ({ onClose, ...props }) => {
+  const [isUploading, setIsUploading] = useState(false);
+
   //--------------------------------------
   // 드래그시 스타일링
   //--------------------------------------
@@ -85,36 +87,40 @@ const UploadModal = ({ onClose, ...props }) => {
   // 업로드 버튼 클릭 시 호출
   //--------------------------------------
   const handleUpload = async () => {
-    if (!props.uploadedImages.length) return;
+    if (props.uploadedImages.length === 0) {
+      alert('이미지를 선택해주세요.');
+      return;
+    }
 
-    const formData = new FormData();
-    props.uploadedImages.forEach((file) => {
-      formData.append("files", file);
-    });
-
-    const year = props.currentDate.getFullYear();
-    const month = String(props.currentDate.getMonth() + 1).padStart(2, "0");
-    formData.append("yyyy", year);
-    formData.append("mm", month);
-
+    setIsUploading(true);
     try {
-      await api.post('/upload', formData, {
+      const formData = new FormData();
+      props.uploadedImages.forEach((file) => {
+        formData.append("files", file);
+      });
+
+      const year = props.currentDate.getFullYear();
+      const month = String(props.currentDate.getMonth() + 1).padStart(2, "0");
+      formData.append("yyyy", year);
+      formData.append("mm", month);
+
+      const response = await api.post('/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
 
-      alert("이미지 업로드가 완료되었습니다.");
-      props.setUploadedImages([]);
+      props.setUploadedImages(response.data);
+      props.setImages([]);
+      props.setPreviewImages([]);
+      alert('업로드가 완료되었습니다.');
       fetchImagesFromServer();
       onClose();
     } catch (error) {
-      console.error("업로드 중 오류 발생:", error);
-      if (error.response) {
-        alert(`업로드 실패: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
-      } else {
-        alert("업로드에 실패했습니다. 네트워크 연결을 확인해주세요.");
-      }
+      console.error('업로드 실패:', error);
+      alert('업로드 중 오류가 발생했습니다.');
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -204,12 +210,19 @@ const UploadModal = ({ onClose, ...props }) => {
           >
             파일올리기
           </button>
-          <button
-            className="upload-button"
-            onClick={handleUpload}
-          >
-            업로드 요청
-          </button>
+          <div className="upload-buttons">
+            <button 
+              onClick={handleUpload} 
+              disabled={isUploading}
+              className={`upload-button ${isUploading ? 'uploading' : ''}`}
+            >
+              {isUploading ? (
+                <div className="spinner">
+                  <div className="spinner-inner"></div>
+                </div>
+              ) : '업로드'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1552,7 +1552,7 @@ body {
   padding: 10px;
   display: none;
   transition: .5s;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+ 
   background-color: white;;
  
 }
@@ -1563,7 +1563,7 @@ body {
   align-items: center;;
   gap: 10px;
   height : 70px;
-  transition:1s;
+
 }
 
 .mobile-controller .sitemenu-button .menu-container button {
@@ -1573,8 +1573,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: background-color 0.2s;
-  border-radius: 3px;
+ 
 }
 
 .mobile-controller .sitemenu-button .menu-container button:hover {
