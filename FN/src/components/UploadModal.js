@@ -92,7 +92,6 @@ const UploadModal = ({ onClose, ...props }) => {
       return;
     }
 
-    setIsUploading(true);
     try {
       const formData = new FormData();
       props.uploadedImages.forEach((file) => {
@@ -119,8 +118,6 @@ const UploadModal = ({ onClose, ...props }) => {
     } catch (error) {
       console.error('업로드 실패:', error);
       alert('업로드 중 오류가 발생했습니다.');
-    } finally {
-      setIsUploading(false);
     }
   };
 
@@ -213,14 +210,9 @@ const UploadModal = ({ onClose, ...props }) => {
           <div className="upload-buttons">
             <button 
               onClick={handleUpload} 
-              disabled={isUploading}
-              className={`upload-button ${isUploading ? 'uploading' : ''}`}
+              className="upload-button"
             >
-              {isUploading ? (
-                <div className="spinner">
-                  <div className="spinner-inner"></div>
-                </div>
-              ) : '업로드'}
+              업로드
             </button>
           </div>
         </div>
