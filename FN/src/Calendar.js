@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -49,29 +49,29 @@ function Calendar() {
   //----------------------------------------------
   // 인증여부 확인
   //----------------------------------------------
-  const [isAuthenticated, setIsAuthenticated] = useState('');
-  const [isLoading, setIsLoading] = useState('');
-  useEffect(() => {
-    const validateAuth = async () => {
-      try {
-        const response = await axios.get('/bn/validate', {
-          withCredentials: true
-        });
+  // const [isAuthenticated, setIsAuthenticated] = useState('');
+  // const [isLoading, setIsLoading] = useState('');
+  // useEffect(() => {
+  //   const validateAuth = async () => {
+  //     try {
+  //       const response = await axios.get('/bn/validate', {
+  //         withCredentials: true
+  //       });
 
-        if (response.data === 'authenticated') {
-          setIsAuthenticated(true);
-        } else {
-          navigate('/login');
-        }
-      } catch (error) {
-        console.error('인증 확인 중 오류 발생:', error);
-        navigate('/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    validateAuth();
-  }, [navigate]);
+  //       if (response.data === 'authenticated') {
+  //         setIsAuthenticated(true);
+  //       } else {
+  //         navigate('/login');
+  //       }
+  //     } catch (error) {
+  //       console.error('인증 확인 중 오류 발생:', error);
+  //       navigate('/login');
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   validateAuth();
+  // }, [navigate]);
 
 
 
@@ -160,6 +160,24 @@ function Calendar() {
 
   // 새로운 상태 추가
   const [viewMode, setViewMode] = useState('album'); // 'album' 또는 'calendar'
+
+  // 새로운 상태 추가
+  const [eventBackgroundColor, setEventBackgroundColor] = useState(
+    localStorage.getItem('eventBackgroundColor') || '#4285f4'
+  );
+
+  // localStorage에서 색상 불러오기
+  useEffect(() => {
+    const savedColor = localStorage.getItem('eventBackgroundColor');
+    if (savedColor) {
+      setEventBackgroundColor(savedColor);
+    }
+  }, []);
+
+  // 이벤트 색상이 변경될 때마다 CSS 변수 업데이트
+  useEffect(() => {
+    document.documentElement.style.setProperty('--event-color', eventBackgroundColor);
+  }, [eventBackgroundColor]);
 
   //----------------------------
   // DATA FETCHING AND SETTINGS MANAGEMENT
@@ -331,6 +349,10 @@ function Calendar() {
   };
 
   const handleCloseSettingsModal = () => {
+    const savedColor = localStorage.getItem('eventBackgroundColor');
+    if (savedColor) {
+      setEventBackgroundColor(savedColor);
+    }
     setIsSettingsModalOpen(false);
   };
 
@@ -565,6 +587,19 @@ function Calendar() {
     fetchViewMode();
   }, []);
 
+  // FullCalendar 이벤트 소스 수정
+  const eventSources = useMemo(() => [
+    {
+      googleCalendarId: '505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com',
+      className: 'gcal-event',
+      backgroundColor: eventBackgroundColor,
+      borderColor: eventBackgroundColor,
+      textColor: 'white',
+      editable: false
+    },
+    holidays
+  ], [eventBackgroundColor]);
+
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
@@ -767,14 +802,20 @@ function Calendar() {
             }} // 버튼 텍스트를 한글로 변경
             googleCalendarApiKey="AIzaSyA_rJ5q1Jjde3tdinjhSUx9m-ZbpCSkS58" // API 키 설정
             eventSources={[
-              // Google Calendar 이벤트
               {
                 googleCalendarId: '505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com',
-                className: 'gcal-event'  // 구글 캘린더 이벤트용 클래스
+                className: 'gcal-event',
+                // backgroundColor와 borderColor 제거
               },
-              // 공휴일 이벤트
               holidays
             ]}
+            eventClassNames={(arg) => {
+              // 구글 캘린더 이벤트에만 적용
+              if (arg.event.source?.googleCalendarId) {
+                return ['gcal-event'];
+              }
+              return [];
+            }}
             initialDate={currentDate}
             datesSet={handleDatesSet}
             dateClick={(info) => {
@@ -880,6 +921,12 @@ function Calendar() {
                 </div>
               );
             }}
+            eventDidMount={(info) => {
+              if (info.event.classNames.includes('gcal-event')) {
+                info.el.style.backgroundColor = eventBackgroundColor;
+                info.el.style.borderColor = eventBackgroundColor;
+              }
+            }}
           />
         </div>
 
@@ -976,6 +1023,8 @@ function Calendar() {
             currentYear={currentYear}
             currentMonth={currentMonth}
             onClose={handleCloseSettingsModal}
+            eventBackgroundColor={eventBackgroundColor}
+            setEventBackgroundColor={setEventBackgroundColor}
           />
         )}
         {/* END */}

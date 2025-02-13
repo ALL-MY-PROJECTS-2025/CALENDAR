@@ -10,9 +10,12 @@ const SettingsModal = ({
   currentYear,
   currentMonth,
   onClose,
+  eventBackgroundColor,
+  setEventBackgroundColor
 }) => {
   const [modalYear, setModalYear] = useState(currentYear);
   const [modalMonth, setModalMonth] = useState(currentMonth);
+  const [selectedColor, setSelectedColor] = useState(eventBackgroundColor);
 
   useEffect(() => {
     const fetchInitialSettings = async () => {
@@ -156,6 +159,17 @@ const SettingsModal = ({
     onClose();
   };
 
+  const handleColorChange = (e) => {
+    const newColor = e.target.value;
+    setSelectedColor(newColor);
+  };
+
+  const handleSave = () => {
+    localStorage.setItem('eventBackgroundColor', selectedColor);
+    setEventBackgroundColor(selectedColor);
+    onClose();
+  };
+
   return (
     <div className="settings-modal-overlay modal-overlay">
       <div className="settings-modal">
@@ -287,6 +301,17 @@ const SettingsModal = ({
                   </button>
                 </div>
               </div>
+              
+              <div className="setting-group event-color">
+                <label>이벤트 색상</label>
+                <input
+                  type="color"
+                  value={selectedColor}
+                  onChange={handleColorChange}
+                  className="color-picker"
+                />
+
+              </div>
             </div>
           </form>
         </div>
@@ -302,6 +327,12 @@ const SettingsModal = ({
             onClick={handleApplyMonth}
           >
             월 적용
+          </button>
+          <button
+            className="apply-button"
+            onClick={handleSave}
+          >
+            저장
           </button>
         </div>
       </div>

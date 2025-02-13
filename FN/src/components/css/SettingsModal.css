@@ -397,6 +397,28 @@
   cursor: pointer;
 }
 
+.settings-modal-overlay .event-color{
+  display:flex;
+  justify-content: left;
+  align-items: center;
+  gap:10px;
+  margin : 10px 0 ;;
+}
+.settings-modal-overlay .event-color>label{
+  display:block !important;
+  border : 1px solid lightgray;
+  padding : 5px;
+  text-align:left;
+  margin :0 !important;
+  
+}
+.settings-modal-overlay .event-color input[type="color"]{
+  
+  height : 20px;
+  margin :0;
+  padding : 0;
+}
+
 /* iOS 터치 이벤트 최적화 */
 @supports (-webkit-touch-callout: none) {
   .settings-modal-overlay  .settings-modal {
@@ -471,5 +493,38 @@
   .settings-modal-overlay .download-title {
     margin: 8px 0 !important;
     padding: 3px 0 !important;
+  }
+}
+
+/* 색상 선택기 스타일링 */
+.settings-modal .setting-group {
+  margin-bottom: 15px;
+}
+
+.settings-modal .color-picker {
+  width: 50px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.settings-modal .setting-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* 모바일 대응 */
+@media screen and (max-width: 480px) {
+  .settings-modal .setting-group label {
+    font-size: 0.85rem;
+  }
+  
+  .settings-modal .color-picker {
+    width: 40px;
+    height: 25px;
   }
 }
