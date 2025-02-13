@@ -120,8 +120,8 @@ const SettingsModal = ({
 
       const blob = new Blob([response.data]);
       if (blob.size === 0) {
-        throw new Error(option === "월별 사진" ? 
-          '해당 월에 다운로드할 사진이 없습니다.' : 
+        throw new Error(option === "월별 사진" ?
+          '해당 월에 다운로드할 사진이 없습니다.' :
           '다운로드할 사진이 없습니다.'
         );
       }
@@ -180,7 +180,7 @@ const SettingsModal = ({
         <div className="setting-modal-body">
           <form>
             <div className="">
-              
+
               <div className="item choose-yyyymm">
                 <div className="year-display">
                   <input
@@ -233,7 +233,7 @@ const SettingsModal = ({
                 <div className="title">이미지 배치 설정</div>
               </div>
               <div className="item choose-image-array">
-                
+
                 <div className="array-1">
                   <input
                     type="radio"
@@ -301,7 +301,7 @@ const SettingsModal = ({
                   </button>
                 </div>
               </div>
-              
+
               <div className="setting-group event-color">
                 <label>이벤트 색상</label>
                 <input
@@ -310,7 +310,12 @@ const SettingsModal = ({
                   onChange={handleColorChange}
                   className="color-picker"
                 />
-
+                <button
+                  className="apply-button"
+                  onClick={handleSave}
+                >
+                  저장
+                </button>
               </div>
             </div>
           </form>
@@ -328,12 +333,7 @@ const SettingsModal = ({
           >
             월 적용
           </button>
-          <button
-            className="apply-button"
-            onClick={handleSave}
-          >
-            저장
-          </button>
+
         </div>
       </div>
     </div>
