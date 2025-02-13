@@ -1239,14 +1239,16 @@ body {
     position: fixed !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: 90px !important;
+    bottom: 110px !important;
     margin: auto !important;
-    width: 100px !important;
-    height: 80px !important;
-    z-index: 9999 !important;
+    width: 60px !important;
+    height: 20px !important;
+    z-index: 99999 !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+
+  
   }
 
   /* 월주일 버튼 크룹 스타일링 */
@@ -1630,5 +1632,45 @@ body {
 @media screen and (min-width: 481px) {
   .calendar-album-toggle-btn {
     display: none;
+  }
+}
+
+/* 구글 캘린더 이벤트 스타일링 */
+.fc-event.gcal-event {
+  background-color: #4285f4;  /* 구글 블루 색상 */
+  border-color: #4285f4;
+  color: white;
+}
+
+/* 이벤트 호버 효과 */
+.fc-event.gcal-event:hover {
+  background-color: #357abd;
+  border-color: #357abd;
+}
+
+/* 이벤트 내부 텍스트 스타일링 */
+.fc-event.gcal-event .fc-event-title {
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+/* 이벤트 시간 표시 스타일링 */
+.fc-event.gcal-event .fc-event-time {
+  font-size: 0.8em;
+  opacity: 0.9;
+}
+
+/* 모바일에서의 이벤트 스타일링 */
+@media screen and (max-width: 480px) {
+  .fc-event.gcal-event {
+    padding: 2px 4px;
+  }
+  
+  .fc-event.gcal-event .fc-event-title {
+    font-size: 0.8em;
+  }
+  
+  .fc-event.gcal-event .fc-event-time {
+    font-size: 0.7em;
   }
 }
