@@ -1794,10 +1794,10 @@ body {
 .fc .fc-daygrid-event::before {
   content: '';
   position: absolute !important;
-  left: 4px !important;
+  left: 8px !important;
   top: 0 !important;
   bottom: 0 !important;
-  width: 2px !important;  /* 1.5px에서 2px로 약간 더 굵게 */
+  width: 3px !important;  /* 1.5px에서 2px로 약간 더 굵게 */
   background: rgba(255, 255, 255, 0.9) !important;
 }
 

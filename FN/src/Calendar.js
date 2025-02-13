@@ -600,6 +600,24 @@ function Calendar() {
     holidays
   ], [eventBackgroundColor]);
 
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        // 기존 설정...
+    });
+
+    calendar.render();
+
+    // 좌우 버튼 클릭 이벤트 추가
+    document.querySelector('.btn-group-body .left-arrow').addEventListener('click', function() {
+        calendar.prev(); // 이전 달로 이동
+    });
+
+    document.querySelector('.btn-group-body .right-arrow').addEventListener('click', function() {
+        calendar.next(); // 다음 달로 이동
+    });
+  });
+
   return (
     <div
       className={`App ${selectedSettings.layout === "row" ? "layout-row" : "layout-col"
