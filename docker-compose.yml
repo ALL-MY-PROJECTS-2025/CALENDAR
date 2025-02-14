@@ -34,6 +34,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    volumes:
+      - ./DB/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: Zhfldk11!
       MYSQL_DATABASE: bookdb
@@ -155,6 +157,60 @@ services:
     ports:
       - "3000:80"
 
+  mysql-exporter:
+    build:
+      context: ./exporters/mysql
+      dockerfile: Dockerfile
+    image: custom-mysql-exporter:latest
+    container_name: mysql-exporter
+    command:
+      - --web.listen-address=:9104
+      - --collect.info_schema.tables
+      - --collect.info_schema.innodb_metrics
+      - --collect.global_status
+      - --collect.global_variables
+      - --collect.slave_status
+      - --collect.info_schema.processlist
+      - --config.my-cnf=/etc/mysqld-exporter/.my.cnf
+    networks:
+      my-custom-network:
+        ipv4_address: 192.168.1.31
+    ports:
+      - "9104:9104"
+    depends_on:
+      mysql8:
+        condition: service_healthy
+    restart: unless-stopped
+
+
+  redis-exporter:
+    build:
+      context: ./exporters/redis
+      dockerfile: Dockerfile
+    image: custom-redis-exporter:latest
+    container_name: redis-exporter
+    networks:
+      my-custom-network:
+        ipv4_address: 192.168.1.51
+    ports:
+      - "9121:9121"
+    depends_on:
+      - redis
+
+  nodejs-exporter:
+    build:
+      context: ./exporters/nginx
+      dockerfile: Dockerfile
+    image: custom-nginx-exporter:latest
+    container_name: fn-exporter
+    networks:
+      my-custom-network:
+        ipv4_address: 192.168.1.11
+    ports:
+      - "9113:9113"
+    depends_on:
+      - fn
+
 volumes:
   bn_logs:
     driver: local
@@ -162,4 +218,4 @@ volumes:
     driver: local
   nginx_upload_cache:
     driver: local
-  # prometheus_data와 grafana_data 볼륨 제거      
+ 
