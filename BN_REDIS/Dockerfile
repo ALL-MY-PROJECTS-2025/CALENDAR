@@ -13,3 +13,4 @@ EXPOSE 6379
 # Redis 시작 명령 (사용자 정의 설정 파일이 있는 경우 주석 해제)
 # CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
 CMD ["redis-server"]
+    
