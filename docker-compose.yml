@@ -92,20 +92,21 @@ services:
     depends_on:
       mysql8:
         condition: service_healthy
+    ports:
+      - "8095:8095"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8095/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8095/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 40s  # 초기 시작 대기 시간
-    ports:
-      - "8095:8095"
+      start_period: 40s
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql8-container:3306/bookdb?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: dbonn
-      SPRING_DATASOURCE_PASSWORD: Zhfldk11!
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JPA_SHOW_SQL: "true"
+      - NODE_ENV=development
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql8-container:3306/bookdb?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=dbonn
+      - SPRING_DATASOURCE_PASSWORD=Zhfldk11!
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
     volumes:
       - bn_logs:/app/logs
       - bn_data:/app/data
@@ -113,6 +114,9 @@ services:
     tmpfs:
       - /app/temp:rw,noexec,nosuid,size=100M
       - /app/cache:rw,noexec,nosuid,size=50M
+    x-docker-registry-auth:
+      username: ${DOCKER_USERNAME}
+      password: ${DOCKER_PASSWORD}
 
   fn:
     build:
@@ -140,79 +144,16 @@ services:
     volumes:
       - /tmp/nginx/client-body:/var/lib/nginx/client-body
     environment:
-      NODE_ENV: production
-      REACT_APP_API_URL: /bn  # nginx가 프록시할 경로
-      NGINX_MAX_UPLOAD_SIZE: 10G
-      NGINX_PROXY_TIMEOUT: 600
-      NGINX_CONNECT_TIMEOUT: 600
+      - NODE_ENV=development
+      - REACT_APP_API_URL=/bn  # nginx가 프록시할 경로
+      - NGINX_MAX_UPLOAD_SIZE=10G
+      - NGINX_PROXY_TIMEOUT=600
+      - NGINX_CONNECT_TIMEOUT=600
     depends_on:
       bn:
         condition: service_healthy
     ports:
       - "3000:80"
-
-  prometheus:
-    build:
-      context: ./prometheus
-      dockerfile: Dockerfile
-    image: custom-prometheus:latest
-    container_name: prometheus-container
-    volumes:
-      - prometheus_data:/prometheus
-    ports:
-      - "9090:9090"
-    networks:
-      my-custom-network:
-        ipv4_address: 192.168.1.70
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.7'
-        reservations:
-          memory: 256M
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-S", "http://localhost:9090/-/healthy"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    restart: unless-stopped
-    depends_on:
-      bn:
-        condition: service_healthy
-      redis:
-        condition: service_started
-      mysql8:
-        condition: service_healthy
-
-  grafana:                                                # [모니터링 - Grafana]
-    image: grafana/grafana:latest
-    container_name: grafana-container
-    volumes:
-      - grafana_data:/var/lib/grafana                    # 데이터 저장
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin                     # Grafana 관리자 계정
-      - GF_SECURITY_ADMIN_PASSWORD=admin123              # Grafana 관리자 비밀번호
-    ports:
-      - "3001:3000"                                      # Grafana UI 포트
-    networks:
-      my-custom-network:
-        ipv4_address: 192.168.1.71
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-          cpus: '0.4'
-    depends_on:
-      prometheus:
-        condition: service_healthy
-      bn:
-        condition: service_healthy
-      redis:
-        condition: service_started
-      mysql8:
-        condition: service_healthy
-    restart: unless-stopped
 
 volumes:
   bn_logs:
@@ -221,7 +162,4 @@ volumes:
     driver: local
   nginx_upload_cache:
     driver: local
-  prometheus_data:                                        # [모니터링 데이터]
-    driver: local
-  grafana_data:                                          # [대시보드 데이터]
-    driver: local      
+  # prometheus_data와 grafana_data 볼륨 제거      
