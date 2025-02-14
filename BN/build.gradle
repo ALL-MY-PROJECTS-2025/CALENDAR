@@ -73,7 +73,8 @@ dependencies {
 	//HEALTH_CHECK DOCKER COMPOSE
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-
+    // Prometheus 관련 의존성 추가
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 
 	//TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
