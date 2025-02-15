@@ -73,7 +73,7 @@ public class SecurityConfig {
         //권한 체크
         http.authorizeHttpRequests((auth)->{
 
-            auth.requestMatchers("/join","/login","/validate","/health").permitAll();
+            auth.requestMatchers("/join","/login","/validate","/health","/actuator/prometheus").permitAll();
 
 
             auth.requestMatchers("/upload").hasRole("USER");
