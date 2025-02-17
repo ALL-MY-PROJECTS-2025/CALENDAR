@@ -181,9 +181,11 @@
 
 .error-message {
   color: #ff4444;
-  
   margin-top: 5px;
   text-align: center;
+  font-size : .8rem;
+  position:absolute;
+  bottom:5px;
 }
 
 .register-link {
