@@ -157,7 +157,7 @@ services:
 
   mysql-exporter:
     build:
-      context: ./EXPORTERS/mysql
+      context: ./exporters/mysql
       dockerfile: Dockerfile
     image: custom-mysql-exporter:latest
     container_name: mysql-exporter
@@ -183,7 +183,7 @@ services:
 
   redis-exporter:
     build:
-      context: ./EXPORTERS/redis
+      context: ./exporters/redis
       dockerfile: Dockerfile
     image: custom-redis-exporter:latest
     container_name: redis-exporter
@@ -197,7 +197,7 @@ services:
 
   nodejs-exporter:
     build:
-      context: ./EXPORTERS/nginx
+      context: ./exporters/nginx
       dockerfile: Dockerfile
     image: custom-nginx-exporter:latest
     container_name: fn-exporter
