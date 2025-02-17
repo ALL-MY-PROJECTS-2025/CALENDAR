@@ -598,18 +598,24 @@ function Calendar() {
     fetchViewMode();
   }, []);
 
-  // FullCalendar 이벤트 소스 수정
-  const eventSources = useMemo(() => [
-    {
-      googleCalendarId: '505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com',
-      className: 'gcal-event',
-      backgroundColor: eventBackgroundColor,
-      borderColor: eventBackgroundColor,
-      textColor: 'white',
-      editable: false
-    },
-    holidays
-  ], [eventBackgroundColor]);
+  // eventSources를 userInfo에 따라 동적으로 생성
+  const eventSources = useMemo(() => {
+    if (!userInfo) return [holidays]; // userInfo가 없을 경우 공휴일만 표시
+
+    return [
+      {
+        googleCalendarId: userInfo.calendarId,
+        className: 'gcal-event',
+        backgroundColor: eventBackgroundColor,
+        borderColor: eventBackgroundColor,
+        textColor: 'white',
+        editable: false
+      },
+      holidays
+    ];
+  }, [userInfo, eventBackgroundColor, holidays]);
+
+  
 
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -841,15 +847,8 @@ function Calendar() {
               week: "주",
               day: "일",
             }} // 버튼 텍스트를 한글로 변경
-            googleCalendarApiKey="AIzaSyA_rJ5q1Jjde3tdinjhSUx9m-ZbpCSkS58" // API 키 설정
-            eventSources={[
-              {
-                googleCalendarId: '505ad0eb41755b07ffaab2b3b77c58ab9c34e6f6b38d619b3894a5816d162004@group.calendar.google.com',
-                className: 'gcal-event',
-                // backgroundColor와 borderColor 제거
-              },
-              holidays
-            ]}
+            googleCalendarApiKey={userInfo?.calendarApi} // Optional chaining 사용
+            eventSources={eventSources}
             eventClassNames={(arg) => {
               // 구글 캘린더 이벤트에만 적용
               if (arg.event.source?.googleCalendarId) {
