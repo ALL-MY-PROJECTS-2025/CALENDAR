@@ -263,25 +263,87 @@
 
 /* 더 작은 모바일 디바이스를 위한 미디어 쿼리 */
 @media screen and (max-width: 380px) {
-  .login-form{
-    height : auto;
-    width : 80%;
-    max-width : 80%;
-    min-width : 80%;
+  .login-container {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+  }
+
+  .login-form {
+    width: 80%;
+    max-width: 80%;
+    min-width: 80%;
+    height: auto;
+    min-height: 400px;
+    max-height: 400px;
     
-    border : 0px solid lightgray;
+    /* 폼 위치 고정을 위한 수정 */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    
+    border: 0;
     border-radius: 0;
+    padding: 15px;
+    background-color: white;
+    
+    /* 스크롤 방지 */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    margin : 100px auto;
-    max-height:400px;
-    min-height:400px;
-    height:100%;
+  /* 입력 필드가 포커스될 때도 위치 유지 */
+  .login-form input:focus {
+    position: relative;
+    z-index: 1;
+  }
 
-    position:absolute;
-    left:0;
-    top:0;
-    right:0;
-    bottom:0;
-    margin:auto;
+  /* 배경 스타일 */
+  .login-background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgb(233, 233, 233);
+    z-index: -1;
+  }
+
+  /* 로그인 타이틀 영역 조정 */
+  .login-title {
+    height: 100px;
+    margin-bottom: 20px;
+  }
+
+  .login-form:hover .login-title>div.item {
+    height: 100px;
+  }
+
+  .login-title .show-login {
+    height: 100px;
+  }
+
+  /* 입력 필드 간격 조정 */
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group input {
+    height: 40px;
+    font-size: 16px; /* iOS에서 자동 확대 방지 */
+  }
+}
+
+/* iOS 가상 키보드 대응을 위한 추가 스타일 */
+@supports (-webkit-touch-callout: none) {
+  .login-form {
+    /* iOS에서 -webkit-transform 사용 시 fixed position 문제 해결 */
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
   }
 } 
