@@ -212,6 +212,17 @@ function Calendar() {
     setCurrentDate(newCurrentDate);
   };
 
+  // 이전/다음 달 이동 핸들러 추가
+  const handlePrevMonth = () => {
+    const calendarApi = calendarRef.current.getApi();
+    calendarApi.prev();
+  };
+
+  const handleNextMonth = () => {
+    const calendarApi = calendarRef.current.getApi();
+    calendarApi.next();
+  };
+
   // currentDate가 변경될 때마다 실행되는 useEffect
   useEffect(() => {
     const year = currentDate.getFullYear();
@@ -734,11 +745,23 @@ function Calendar() {
 
             <div className="btn-group-body">
               {window.innerWidth <= 480 && (
-                <button onClick={handleViewModeToggle} className="calendar-album-toggle-btn">
-                  <span className="material-symbols-outlined">
-                    {viewMode === 'album' ? 'calendar_month' : 'image'}
-                  </span>
-                </button>
+                <>
+                  <button onClick={handleViewModeToggle} className="calendar-album-toggle-btn">
+                    <span className="material-symbols-outlined">
+                      {viewMode === 'album' ? 'calendar_month' : 'image'}
+                    </span>
+                  </button>
+                  {viewMode === 'album' && (
+                    <>
+                      <button onClick={handlePrevMonth} className="nav-button prev">
+                        <span className="material-symbols-outlined">chevron_left</span>
+                      </button>
+                      <button onClick={handleNextMonth} className="nav-button next">
+                        <span className="material-symbols-outlined">chevron_right</span>
+                      </button>
+                    </>
+                  )}
+                </>
               )}
 
               <button onClick={sitemenuHandler} className="sitemenu-button">

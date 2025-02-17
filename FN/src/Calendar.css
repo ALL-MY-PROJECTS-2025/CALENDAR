@@ -1930,3 +1930,39 @@ body {
     padding: 2px !important;
   }
 }
+
+/* 모바일 네비게이션 버튼 스타일 추가 */
+.mobile-controller .nav-button {
+  background: transparent;
+  border: 1px solid lightgray;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.mobile-controller .nav-button:hover {
+  background-color: #f5f5f5;
+}
+
+.mobile-controller .nav-button .material-symbols-outlined {
+  font-size: 1.5rem;
+  color: #1E2B37;
+}
+
+/* 모바일 컨트롤러 버튼 그룹 레이아웃 수정 */
+.mobile-controller .btn-group-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+}
+
+/* 네비게이션 버튼 활성화 효과 */
+.mobile-controller .nav-button:active {
+  background-color: #e0e0e0;
+}
