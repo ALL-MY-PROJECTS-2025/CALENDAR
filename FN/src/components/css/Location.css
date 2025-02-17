@@ -40,10 +40,27 @@
 }
 
 .location-modal .modal-header {
-  position: relative;
- 
-  pointer-events: auto;
-  background-color: #1E2B37;
+  background-color: #343a40;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.location-modal .modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.location-modal .close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .modal-backdrop {

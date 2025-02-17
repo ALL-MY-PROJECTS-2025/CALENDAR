@@ -208,7 +208,7 @@ function UserModal({ isOpen, onClose, userInfo }) {
               />
             </div>
             <div className="input-group mb-3">
-              <label className="form-label w-100">캘린더 ID</label>
+              <label className="form-label w-100">캘린더 ID</label>{/* 페이지 보여주는 모달창을 위한 버튼 작게 추가 */}
               <input
                 type="text"
                 className="form-control"
@@ -220,68 +220,71 @@ function UserModal({ isOpen, onClose, userInfo }) {
             </div>
 
             {/* 패스워드 변경 섹션 */}
-            <div className="password-section mt-4">
-              <h3 className="c">비밀번호 변경</h3>
-              <div className="input-group mb-3">
-                <label className="form-label w-100">현재 비밀번호</label>
-                <div className="check-password-block">
-                  <input
-                    type="password"
-                    className={`form-control ${errors.currentPassword ? 'is-invalid' : ''}`}
-                    name="currentPassword"
-                    value={editedInfo.currentPassword}
-                    onChange={handleInputChange}
-                    onKeyPress={handlePasswordKeyPress}
-                    placeholder="현재 비밀번호를 입력하세요"
-                    disabled={passwordVerified}
-                  />
-                  <button
-                    type="button"
-                    className=" btn btn-secondary"
-                    onClick={handleVerifyPassword}
-                    disabled={passwordVerified}
-                  >
-                    확인
-                  </button>
+
+
+            <div className="input-group  mb-3">
+              <label className="form-label w-100">현재 비밀번호</label>
+              <div className="check-password-block">
+                <input
+                  type="password"
+                  className={`form-control ${errors.currentPassword ? 'is-invalid' : ''}`}
+                  name="currentPassword"
+                  value={editedInfo.currentPassword}
+                  onChange={handleInputChange}
+                  onKeyPress={handlePasswordKeyPress}
+                  placeholder="현재 비밀번호를 입력하세요"
+                  disabled={passwordVerified}
+                />
+                <button
+                  type="button"
+                  className=" btn btn-secondary"
+                  onClick={handleVerifyPassword}
+                  disabled={passwordVerified}
+                >
+                  확인
+                </button>
+              </div>
+
+              {errors.currentPassword && (
+                <div className="invalid-feedback">
+                  {errors.currentPassword}
                 </div>
-                
-                {errors.currentPassword && (
-                  <div className="invalid-feedback">{errors.currentPassword}</div>
-                )}
-              </div>
-
-
-              <div className="input-group mb-3">
-                <label className="form-label w-100">새 비밀번호</label>
-                <input
-                  type="password"
-                  className={`form-control ${errors.newPassword ? 'is-invalid' : ''}`}
-                  name="newPassword"
-                  value={editedInfo.newPassword}
-                  onChange={handleInputChange}
-                  placeholder="새 비밀번호를 입력하세요"
-                  disabled={!passwordVerified}
-                />
-                {errors.newPassword && (
-                  <div className="new-password-invalid-feedback ">{errors.newPassword}</div>
-                )}
-              </div>
-              <div className="input-group mb-3">
-                <label className="form-label w-100">새 비밀번호 확인</label>
-                <input
-                  type="password"
-                  className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
-                  name="confirmPassword"
-                  value={editedInfo.confirmPassword}
-                  onChange={handleInputChange}
-                  placeholder="새 비밀번호를 다시 입력하세요"
-                  disabled={!passwordVerified}
-                />
-                {errors.confirmPassword && (
-                  <div className="new-password-invalid-feedback">{errors.confirmPassword}</div>
-                )}
-              </div>
+              )}
             </div>
+
+
+            <div className="input-group mb-3">
+              <label className="form-label w-100">새 비밀번호</label>
+              <input
+                type="password"
+                className={`form-control ${errors.newPassword ? 'is-invalid' : ''}`}
+                name="newPassword"
+                value={editedInfo.newPassword}
+                onChange={handleInputChange}
+                placeholder="새 비밀번호를 입력하세요"
+                disabled={!passwordVerified}
+              />
+              {errors.newPassword && (
+                <div className="new-password-invalid-feedback ">{errors.newPassword}</div>
+              )}
+
+            </div>
+            <div className="input-group mb-3">
+              <label className="form-label w-100">새 비밀번호 확인</label>
+              <input
+                type="password"
+                className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                name="confirmPassword"
+                value={editedInfo.confirmPassword}
+                onChange={handleInputChange}
+                placeholder="새 비밀번호를 다시 입력하세요"
+                disabled={!passwordVerified}
+              />
+              {errors.confirmPassword && (
+                <div className="new-password-invalid-feedback">{errors.confirmPassword}</div>
+              )}
+            </div>
+
 
             <div className="button-group mt-4">
               <button

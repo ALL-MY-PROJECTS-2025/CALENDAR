@@ -1,3 +1,6 @@
+body{
+  box-sizing: border-box;
+}
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -22,38 +25,33 @@
 }
 
 .userinfo-modal .modal-header {
+  background-color: #343a40;
+  color: white;
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  min-height: 55px;
+  height: 50px;
+  margin-bottom: 10px;
 }
 
-.userinfo-modal.modal-title {
+.userinfo-modal .modal-title {
   margin: 0;
-  font-size: 1.2rem;
-  color: white;
-  text-align: left;
-  padding-left: 5px;
+  font-size: 1.25rem;
 
+  position:relative;
 }
 
 .userinfo-modal .close-button {
-
+  background: none;
   border: none;
-  outline: none;
-  font-size: 1.2rem;
+  color: white;
+  font-size: 1.5rem;
   cursor: pointer;
-  color: #666;
-  position: relative;
-  right: 5px;
-  border-radius: 5px;
-  padding: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 35px;
-  border-radius: 5px;
+  position:relative;
+  ;
+
+  
 }
 
 .userinfo-modal .modal-content {
@@ -62,6 +60,7 @@
 
 .userinfo-modal .input-group {
   margin-bottom: 15px;
+  padding : 0 5px;
 }
 
 .userinfo-modal .form-label {
@@ -71,6 +70,7 @@
   font-weight: 500;
   text-align: left;
   font-size: .8rem;
+
 
 }
 
@@ -108,13 +108,9 @@
   background-color: #da190b !important;
 }
 
-.userinfo-modal .password-section {
-  border-top: 1px solid #eee;
-  padding-top: 20px;
-  position: relative;
-}
 
-.userinfo-modal .password-section .check-password-block {
+
+.userinfo-modal  .check-password-block {
   display: flex !important;
   justify-content: space-between !important;
   gap: 25px;
@@ -124,7 +120,7 @@
   padding-bottom: 15px;
 }
 
-.userinfo-modal .password-section .check-password-block>input[type="password"] {
+.userinfo-modal  .check-password-block>input[type="password"] {
   position: relative;
   ;
 
@@ -133,13 +129,12 @@
 
 }
 
-.userinfo-modal .password-section .check-password-block>button {
+.userinfo-modal  .check-password-block>button {
   position: absolute;
   height: 70%;
   right: 0;
 
 }
-
 
 .userinfo-modal .section-title {
   font-size: 1rem !important;
@@ -208,6 +203,14 @@ h3 {
   padding: 5px 0;
   border: 1px solid lightgray;
 }
+.userinfo-modal .modal-header {
+ 
+}
+.userinfo-modal .modal-header  .close-button{
+  position:relative;
+  right:-20px;
+  top:-5px;
+}
 
 /* 작은 모바일 화면 대응 */
 @media screen and (max-width: 480px) {
@@ -219,16 +222,16 @@ h3 {
     height: 0 !important;
   }
 
-  input[type="text"],
-  input[type="password"] {
-
-    width: 90%;
-
+  .userinfo-modal .modal-header  .close-button{
+    position:absolute;
+    right:15px;
+    top:37px;
+    
   }
 
   .userinfo-modal .modal-content {
     /* border: 1px solid; */
-    padding : 5px;
+    padding : 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -241,6 +244,34 @@ h3 {
     padding : 5px;
 
     overflow:auto;
+  }
+  .check-password-block  button{
+    height : 100%  !important;
+  }
+  .check-password-block {
+    padding-bottom : 0 !important;
+  }
+  .check-password-block input[type="password"]{
+    width: 200px !important;
+  }
+  .input-group{
+    position:relative;
+  }
+  .input-group  .invalid-feedback{
+    position:absolute;
+    left:105px;
+    top : -7px;
+    border : 1px solid;
+    width : 200px;
+    font-size : .5rem;
+    display:flex;
+    justify-content: left;
+    align-items: center;
+    /*  */
+    white-space : nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
   }
 
 }
